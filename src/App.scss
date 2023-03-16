@@ -1,7 +1,35 @@
-.logo.vite:hover {
-  filter: drop-shadow(0 0 2em #747bff);
+html,
+body,
+#app {
+  min-width: 100%;
+  min-height: 100%;
 }
-
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafb);
+html,
+body,
+div,
+main,
+section,
+p,
+h1,
+h2,
+h3,
+h4 {
+  padding: 0;
+  margin: 0;
+}
+body {
+  .btn_default {
+    font-weight: 700;
+    padding: 10px;
+    color: rgb(62, 62, 63);
+    background-color: #fff;
+    border-radius: 5px;
+    border: 0.5px solid rgb(62, 62, 63);
+    margin: 20px;
+  }
+  .btn_default:hover {
+    transition: 300ms;
+    background-color: rgb(233, 233, 233);
+    cursor: pointer;
+  }
 }
