@@ -15,7 +15,7 @@ function App() {
   return (
     <div className="container">
       <h1>Welcome to Tauri!</h1>
-
+      <h4>TEST</h4>
       <div className="row">
         <a href="https://vitejs.dev" target="_blank">
           <img src="/vite.svg" className="logo vite" alt="Vite logo" />
