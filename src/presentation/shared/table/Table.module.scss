@@ -1,55 +1,61 @@
-.table_box{
-    padding: 10px;
+.table_box {
+  padding: 10px;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  .table_control {
     display: grid;
     justify-items: center;
     align-items: center;
-    .table_control{
-        display: grid;
-        justify-items: center;
-        align-items: center;
-        grid-template-columns: repeat(2 , 1fr);
-        .btn_add_column{
-            margin: 0;
-            // 
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-        }
-        .input_add_column{
-            font-weight: 700;
-            padding: 10px;
-            color: rgb(62, 62, 63);
-            background-color: #fff;
-            border-radius: 5px;
-            border: 0.5px solid rgb(62, 62, 63);
-            //
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
-        }
-        .input_add_column:focus{
-            outline: none;
-        }
+    grid-template-columns: repeat(2, 1fr);
+    .btn_add_column {
+      margin: 0;
+      //
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
     }
-    .table_wrapper{
-        overflow-y: scroll;
-        overflow-x: scroll;
-        max-height: 600px;
-        max-width: 90%;
-        .table{
-            padding: 10px;
-            border-collapse: collapse;
-            width: 70%;
-            td, th{
-                border: 1px solid #dddddd;
-                text-align: left;
-                padding: 5px;
-            }
-            tr:nth-child(even){
-                background-color: #dddddd;
-            }
-        }
+    .input_add_column {
+      font-weight: 700;
+      padding: 10px;
+      color: rgb(62, 62, 63);
+      background-color: #fff;
+      border-radius: 5px;
+      border: 0.5px solid rgb(62, 62, 63);
+      //
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    .input_add_column:focus {
+      outline: none;
+    }
+  }
+  .table_wrapper {
+    overflow-y: scroll;
+    overflow-x: scroll;
+    // overflow: hidden;
+    max-height: 600px;
+    max-width: 90%;
+    .table {
+      padding: 10px;
+      border-collapse: collapse;
+      // width: 70%;
+      td,
+      th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 5px;
+      }
 
+      tr:nth-child(even) {
+        background-color: #dddddd;
+      }
+      // tbody {
+      //   // overflow-y: hidden;
+      //   // overflow-x: auto;
+      // }
     }
-    .silent_a{
-        display: none;
-    }
+  }
+  .silent_a {
+    display: none;
+  }
 }
