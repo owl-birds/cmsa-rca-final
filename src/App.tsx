@@ -19,6 +19,12 @@ import {
   use_country_file_store,
 } from "./application/states/country.state";
 import Table from "./presentation/shared/table/Table";
+import Choose_Input_Type from "./presentation/shared/choose_input_type/Choose_Input_Type";
+import {
+  Country_Ui_Interface,
+  use_country_ui,
+} from "./application/states/country_ui.state";
+import { shallowCopy } from "immer/dist/internal";
 
 function App() {
   const data = use_country_file_store(
@@ -28,9 +34,32 @@ function App() {
     (state: Uploaded_Country_File_State) => state.columns
   );
 
+  const is_self_input = use_country_ui(
+    (state: Country_Ui_Interface) => state.is_self_input
+  );
+  const is_choosed = use_country_ui(
+    (state: Country_Ui_Interface) => state.is_choosed
+  );
+  const set_self_input = use_country_ui(
+    (state: Country_Ui_Interface) => state.set_self_input
+  );
+  const set_upload_input = use_country_ui(
+    (state: Country_Ui_Interface) => state.set_upload_input
+  );
+  const set_choosed = use_country_ui(
+    (state: Country_Ui_Interface) => state.set_choosed
+  );
+
   return (
     <div className="container">
       <h1>Welcome to Tauri!</h1>
+      <Choose_Input_Type
+        is_self_input={is_self_input}
+        is_choosed={is_choosed}
+        self_input={set_self_input}
+        upload_input={set_upload_input}
+        choose_handler={set_choosed}
+      />
       <Drop_file
         read_file={read_country_file_service}
         is_ext_allowed={is_ext_allowed}
