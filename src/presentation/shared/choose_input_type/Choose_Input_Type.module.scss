@@ -1,2 +1,11 @@
 .input_type_box {
+  display: grid;
+  justify-items: center;
+  .input_type {
+    width: 60%;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
