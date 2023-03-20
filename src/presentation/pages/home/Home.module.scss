@@ -1,0 +1,25 @@
+.home {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  section {
+    font-family: "Montserrat-regular";
+    font-size: 1.5rem;
+    font-weight: 600;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    width: 200px;
+    height: 200px;
+    margin: 50px;
+    color: #ffff;
+    background-color: #090011;
+    border-radius: 20px;
+  }
+  section:hover {
+    transition: ease-in-out 300ms;
+    background-color: #f7eeff;
+    cursor: pointer;
+    color: #090011;
+  }
+}
