@@ -1,3 +1,4 @@
+@use "scss-global/colors";
 // fonts
 @font-face {
   font-family: "Montserrat-regular";
@@ -5,7 +6,10 @@
 }
 
 html {
-  background-color: #d9d9d9;
+  // background-color: #d9d9d9;
+  // background-color: #090011;
+  background-color: colors.$main-color;
+  color: colors.$font-color;
 }
 html,
 body,

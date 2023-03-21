@@ -1,0 +1,52 @@
+@use "./colors";
+
+$font: "Montserrat-regular";
+
+@mixin general-menu {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  font-family: $font;
+  // font-size: 2rem;
+  font-weight: 600;
+  width: 200px;
+  height: 200px;
+  margin: 50px;
+  // color: colors.$font-color;
+  border: 2px solid colors.$secondary-color;
+  border-radius: 20px;
+}
+
+@mixin link-box {
+  font-family: $font;
+  max-width: fit-content;
+  justify-self: left;
+  padding: 0 10px;
+  margin: 5px;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+}
+
+@mixin link-default {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  color: colors.$font-color;
+  min-width: 100%;
+  min-height: 100%;
+  border-radius: 20px;
+  text-decoration: none;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+@mixin link-default-back-hover {
+  transition: ease-in-out 300ms;
+  text-decoration: underline;
+}
+
+@mixin link-default-hover {
+  transition: ease-in-out 300ms;
+  color: colors.$main-color;
+}

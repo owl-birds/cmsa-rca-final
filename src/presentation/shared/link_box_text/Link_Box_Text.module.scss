@@ -1,0 +1,10 @@
+@use "../../../scss-global/general";
+.link_box {
+  @include general.link-box;
+  .link {
+    @include general.link-default;
+  }
+  .link:hover {
+    @include general.link-default-back-hover;
+  }
+}

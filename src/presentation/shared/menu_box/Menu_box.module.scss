@@ -1,0 +1,20 @@
+@use "../../../scss-global/general";
+@use "../../../scss-global/colors";
+.cmsa_menu {
+  @include general.general-menu;
+  .link {
+    @include general.link-default;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  .link:hover {
+    @include general.link-default-hover;
+  }
+}
+.cmsa_menu:hover {
+  transition: ease-in-out 300ms;
+  background-color: colors.$hover-color;
+  cursor: pointer;
+  color: colors.$main-color;
+}

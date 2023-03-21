@@ -1,0 +1,6 @@
+@use "../../../../scss-global/general";
+@use "../../../../scss-global/colors";
+.cmsa_menu_box {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
