@@ -22,7 +22,7 @@ const Cell = (props: Props) => {
     set_is_input(() => false);
     if (input_ref && input_ref.current) {
       const new_value = input_ref.current.value;
-      //console.log("new",new_value);
+      // console.log("new", new_value);
       if (
         new_value !== "-" &&
         (new_value === "0" || new_value) &&
@@ -60,7 +60,7 @@ const Cell = (props: Props) => {
           type={"text"}
           defaultValue={value || value === 0 ? `${value}` : "-"}
           size={
-            `${value}`.length === 0 || !value
+            `${value}`.length === 0 || !value || value === null
               ? column_name.length
               : `${value}`.length + 1
           }

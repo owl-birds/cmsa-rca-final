@@ -1,6 +1,8 @@
 import { csvParse, autoType } from "d3-dsv";
 import { extensions_map } from "../../infrastructure/ext_allowed";
 
+// TRY AND EXCEPTION NEEDED, IM LAZY
+
 export const data_to_csv_string = (
   data: { [col_name: string | number]: string | number }[],
   columns: string[]
@@ -46,6 +48,14 @@ export const csv_string_to_csv_file = (
   a_ref.setAttribute("href", url);
   a_ref.setAttribute("download", "data.csv");
   a_ref.click();
+};
+
+export const initiate_self_input_service = (
+  data_kind: string,
+  initiate_self_input_state: (data_kind: string) => void
+) => {
+  //
+  initiate_self_input_state(data_kind);
 };
 
 export const read_file = (

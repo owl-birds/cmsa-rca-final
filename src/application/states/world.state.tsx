@@ -5,7 +5,7 @@ export interface Data {
   [col_name: string]: number | string | null;
 }
 
-export interface Uploaded_Country_File_State {
+export interface Uploaded_World_File_State {
   data: any[] | null; // BAND AID
   columns: string[] | null;
   clear_state: () => void;
@@ -25,7 +25,7 @@ export interface Uploaded_Country_File_State {
   add_column: (new_column: string) => void;
 }
 
-export const use_country_file_store = create<Uploaded_Country_File_State>()(
+export const use_world_file_store = create<Uploaded_World_File_State>()(
   (set: any, get: any) => ({
     // PROBLEM HERE, BAND AID, NEED TO FIND OUT MORE
     data: null,
@@ -34,36 +34,36 @@ export const use_country_file_store = create<Uploaded_Country_File_State>()(
     initiate_data: (new_data: any[], new_columns: string[]) =>
       set(() => ({ data: new_data, columns: new_columns })),
     initiate_self_input: (data_kind: string) =>
-      set((_state: Uploaded_Country_File_State) => {
+      set((_state: Uploaded_World_File_State) => {
         const new_columns: string[] = [];
         if (data_kind === "three_level") {
           new_columns.push(
             //
-            "country",
-            "commodity",
-            "region/partner"
+            // "country",
+            "commodity"
+            // "region/partner"
           );
         }
         if (data_kind === "two_level_commodity") {
           new_columns.push(
-            "country",
+            // "country",
             "commodity"
             // "region/partner",
           );
         }
         if (data_kind === "two_level_region") {
           new_columns.push(
-            "country",
+            // "country",
             // "commodity",
             "region/partner"
           );
         }
         if (data_kind === "one_level") {
-          new_columns.push(
-            "country"
-            // "commodity",
-            // "region/partner"
-          );
+          // new_columns.push(
+          //   "country"
+          //   // "commodity",
+          //   // "region/partner"
+          // );
         }
         if (data_kind === "rca") {
           new_columns.push(
@@ -86,7 +86,7 @@ export const use_country_file_store = create<Uploaded_Country_File_State>()(
       row_index: number,
       col_name: string
     ) => {
-      set((state: Uploaded_Country_File_State) => {
+      set((state: Uploaded_World_File_State) => {
         const new_data = state.data ? [...state.data] : null;
         //const new_data = state.data.map((row)=>({...row}));
         if (new_data) {
@@ -104,7 +104,7 @@ export const use_country_file_store = create<Uploaded_Country_File_State>()(
       col_name: string
     ) => {
       set(
-        produce((state: Uploaded_Country_File_State) => {
+        produce((state: Uploaded_World_File_State) => {
           if (state.data) {
             state.data[row_index][col_name] =
               Number(new_value) || Number(new_value) === 0
@@ -116,7 +116,7 @@ export const use_country_file_store = create<Uploaded_Country_File_State>()(
     },
     add_row: () => {
       set(
-        produce((state: Uploaded_Country_File_State) => {
+        produce((state: Uploaded_World_File_State) => {
           const new_row: Data = {};
           if (state.columns && state.data) {
             for (const col of state.columns) {
@@ -129,7 +129,7 @@ export const use_country_file_store = create<Uploaded_Country_File_State>()(
     },
     add_column: (new_column: string) => {
       set(
-        produce((state: Uploaded_Country_File_State) => {
+        produce((state: Uploaded_World_File_State) => {
           if (state.columns && state.columns.indexOf(new_column) !== -1) return;
           if (state.columns && state.data) {
             state.columns.push(new_column);

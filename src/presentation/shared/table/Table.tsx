@@ -23,8 +23,8 @@ interface Props {
   table_name?: string;
   is_download_able?: boolean;
   is_edit_able?: boolean;
-  data: any[]; // problem here ANY, THE ROOT OF ALL EVIL
-  columns: string[];
+  data: any[] | null; // problem here ANY, THE ROOT OF ALL EVIL
+  columns: string[] | null;
   add_row_service: () => void;
   add_column_service: (column_name: string) => void;
   data_to_csv_string: (data: any[], columns: string[]) => string;
@@ -83,7 +83,7 @@ const Table = (props: Props) => {
   };
 
   const download_data_to_csv = () => {
-    if (data.length > 0) {
+    if (data && columns && data.length > 0) {
       const csv_string = data_to_csv_string(data, columns);
       //console.log(csv_string);
       if (silent_a_ref) {
@@ -99,12 +99,18 @@ const Table = (props: Props) => {
   return (
     <div className={classes.table_box}>
       <h4>{table_name ? table_name : "Table's Title"}</h4>
-      {data.length > 0 && is_edit_able ? (
+      {data && is_edit_able ? (
         <div className={classes.table_control}>
-          <button className={`btn_default`} onClick={add_row}>
-            Add row
+          <button className={`btn_default ${classes.btn_control}`}>
+            RESET DATA
           </button>
-          <div>
+          <button
+            className={`btn_default ${classes.btn_control}`}
+            onClick={add_row}
+          >
+            ADD ROW
+          </button>
+          <div className={classes.add_column_wrapper}>
             <input
               type={"text"}
               className={classes.input_add_column}
@@ -114,12 +120,13 @@ const Table = (props: Props) => {
               className={`btn_default ${classes.btn_add_column}`}
               onClick={add_column}
             >
-              Add column
+              ADD COLUMN
             </button>
           </div>
         </div>
       ) : null}
-      {data.length > 0 ? (
+      {/* {data.length > 0 ? ( */}
+      {data && columns ? (
         <div className={classes.table_wrapper}>
           <table
             className={classes.table}

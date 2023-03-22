@@ -3,8 +3,15 @@ import {
   update_cell_service,
   add_column_service,
   add_row_service,
+  initiate_self_input_service,
 } from "./general_data.service";
 import { use_country_file_store } from "../states/country.state";
+
+export const initiate_country_self_input_service = (data_kind: string) => {
+  const initiate_self_input_state =
+    use_country_file_store.getState().initiate_self_input;
+  initiate_self_input_service(data_kind, initiate_self_input_state);
+};
 
 export const read_country_file_service = (file: File) => {
   const initiate_file_state_data =

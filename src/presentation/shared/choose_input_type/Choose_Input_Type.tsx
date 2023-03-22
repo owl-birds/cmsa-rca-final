@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import classes from "./Choose_Input_Type.module.scss";
 
 interface Props {
-  is_self_input: boolean;
+  is_self_input: boolean | null;
   is_choosed: boolean;
   choose_handler: () => void;
   self_input: () => void;

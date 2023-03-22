@@ -10,6 +10,7 @@ html {
   // background-color: #090011;
   background-color: colors.$main-color;
   color: colors.$font-color;
+  font-family: "Montserrat-regular";
 }
 html,
 body,
@@ -34,10 +35,11 @@ body {
   .btn_default {
     font-weight: 700;
     padding: 10px;
-    color: rgb(62, 62, 63);
-    background-color: #fff;
-    border-radius: 5px;
-    border: 0.5px solid rgb(62, 62, 63);
+    // color: rgb(62, 62, 63);
+    color: colors.$main-color;
+    background-color: colors.$font-color;
+    border-radius: 10px;
+    border: 0.5px solid colors.$secondary-color;
     margin: 20px;
   }
   .btn_default:hover {
