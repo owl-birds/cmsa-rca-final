@@ -4,18 +4,22 @@ import classes from "./Choose_Input_Type.module.scss";
 interface Props {
   is_self_input: boolean | null;
   is_choosed: boolean;
+  data_kind: string;
   choose_handler: () => void;
   self_input: () => void;
   upload_input: () => void;
+  initiate_self_input_service: (data_kind: string) => void;
 }
 
 const Choose_Input_Type = (props: Props) => {
   const {
     is_choosed,
     is_self_input,
+    data_kind,
     choose_handler,
     self_input,
     upload_input,
+    initiate_self_input_service,
   } = props;
   // const [is_self_input, set_is_self_input] = useState<boolean>(false);
   // const [is_choosed, set_is_choosed] = useState<boolean>(false);
@@ -42,6 +46,7 @@ const Choose_Input_Type = (props: Props) => {
             onClick={() => {
               choose_handler();
               self_input();
+              initiate_self_input_service(data_kind);
             }}
             className="btn_default"
           >

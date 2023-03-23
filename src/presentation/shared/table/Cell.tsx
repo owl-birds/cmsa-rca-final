@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, memo, ChangeEvent } from "react";
 //import { update_cell_service } from '../../../application/services/data.service';
 import classes from "./Cell.module.scss";
 
@@ -13,10 +13,13 @@ interface Props {
   ) => void;
 }
 
-const Cell = (props: Props) => {
+const Cell = memo((props: Props) => {
   const { value, row_index, column_name, update_cell_service } = props;
   const [is_input, set_is_input] = useState(false);
   const input_ref = useRef<HTMLInputElement | null>(null);
+
+  // making input GROWABLE
+  const [input_value, set_input_value] = useState(value);
 
   const out_of_focus = () => {
     set_is_input(() => false);
@@ -52,29 +55,42 @@ const Cell = (props: Props) => {
     set_is_input(() => true);
   };
 
+  const input_size_handler = (event: ChangeEvent<HTMLInputElement>) => {
+    if (input_ref && input_ref.current) {
+      set_input_value(() => event.target.value);
+      // console.log("HELLO CELL");
+    }
+  };
+  // console.log("CELL");
   return (
     <>
       {is_input ? (
         <input
+          // MAKE IT GROWABLE
           ref={input_ref}
           type={"text"}
           defaultValue={value || value === 0 ? `${value}` : "-"}
           size={
-            `${value}`.length === 0 || !value || value === null
-              ? column_name.length
-              : `${value}`.length + 1
+            `${input_value}`.length === 0 ||
+            !input_value ||
+            input_value === null
+              ? column_name.length + 1
+              : //
+                // `${value}`.length + 1
+                `${input_value}`.length + 1
           }
           autoFocus
           onBlur={out_of_focus}
           className={classes.cell}
+          onChange={input_size_handler}
         />
       ) : (
-        <span onClick={enter_input_mode} className={classes.cell}>
+        <div onClick={enter_input_mode} className={`${classes.cell_span}`}>
           {value || value === 0 ? `${value}` : "-"}
-        </span>
+        </div>
       )}
     </>
   );
-};
+});
 
 export default Cell;

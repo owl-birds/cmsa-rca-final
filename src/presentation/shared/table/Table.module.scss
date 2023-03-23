@@ -47,7 +47,8 @@
     // overflow: hidden;
     max-height: 600px;
     max-width: 90%;
-    // padding: 10px;
+    padding-bottom: 10px;
+    // padding-right: 100px;
     border: 1px solid colors.$secondary-color;
     .table {
       padding: 10px;
@@ -74,6 +75,16 @@
       // }
     }
   }
+  // hiding scrollbar
+  // chrome safari opera
+  // .table_wrapper::-webkit-scrollbar {
+  //   display: none;
+  // }
+  // .table_wrapper {
+  //   -ms-overflow-style: none; /* IE and Edge */
+  //   scrollbar-width: none; /* Firefox */
+  // }
+
   .silent_a {
     display: none;
   }

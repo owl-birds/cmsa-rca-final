@@ -5,6 +5,7 @@ import classes from "./Layout.module.scss";
 const Layout = () => {
   // const { pathname } = useLocation();
   // console.log(pathname);
+  // console.log("LAYOUT");
   return (
     <div className={classes.layout}>
       {/* {pathname === "/main/rca" ? (

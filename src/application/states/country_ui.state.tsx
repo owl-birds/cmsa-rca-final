@@ -4,6 +4,7 @@ import { create } from "zustand";
 export interface Country_Ui_Interface {
   is_self_input: boolean | null;
   is_choosed: boolean;
+  clear_state: () => void;
   set_self_input: () => void;
   set_upload_input: () => void;
   set_choosed: () => void;
@@ -14,6 +15,7 @@ export const use_country_ui = create<Country_Ui_Interface>()(
   (set, get) => ({
     is_self_input: null,
     is_choosed: false,
+    clear_state: () => set(() => ({ is_self_input: null, is_choosed: false })),
     set_self_input: () => set(() => ({ is_self_input: true })),
     set_upload_input: () => set(() => ({ is_self_input: false })),
     set_choosed: () =>

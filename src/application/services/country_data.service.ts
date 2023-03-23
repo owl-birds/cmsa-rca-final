@@ -7,6 +7,11 @@ import {
 } from "./general_data.service";
 import { use_country_file_store } from "../states/country.state";
 
+export const clear_country_data_service = () => {
+  const clear_state = use_country_file_store.getState().clear_state;
+  clear_state();
+};
+
 export const initiate_country_self_input_service = (data_kind: string) => {
   const initiate_self_input_state =
     use_country_file_store.getState().initiate_self_input;

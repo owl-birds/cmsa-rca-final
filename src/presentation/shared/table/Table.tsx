@@ -37,6 +37,8 @@ interface Props {
     row_index: number,
     column_name: string
   ) => void;
+  clear_data_service: () => void;
+  clear_ui_state: () => void;
 }
 
 const Table = (props: Props) => {
@@ -54,6 +56,8 @@ const Table = (props: Props) => {
     add_column_service,
     add_row_service,
     update_cell_service,
+    clear_data_service,
+    clear_ui_state,
   } = props;
 
   //const table_ref = useRef<HTMLTableElement | null>(null);
@@ -96,12 +100,20 @@ const Table = (props: Props) => {
     }
   };
 
+  const clear_data_handler = () => {
+    clear_data_service();
+    clear_ui_state();
+  };
+
   return (
     <div className={classes.table_box}>
       <h4>{table_name ? table_name : "Table's Title"}</h4>
       {data && is_edit_able ? (
         <div className={classes.table_control}>
-          <button className={`btn_default ${classes.btn_control}`}>
+          <button
+            className={`btn_default ${classes.btn_control}`}
+            onClick={clear_data_handler}
+          >
             RESET DATA
           </button>
           <button
