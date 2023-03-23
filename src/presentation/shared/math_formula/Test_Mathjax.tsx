@@ -10,6 +10,7 @@ const Test_Mathjax = (props: Props) => {
   const input_ref = useRef<null | HTMLDivElement>(null);
   const process_handler = () => {
     if (input_ref && output_ref) {
+      const output_element = output_ref.current as HTMLDivElement;
     }
   };
   return (
@@ -27,3 +28,12 @@ const Test_Mathjax = (props: Props) => {
 };
 
 export default Test_Mathjax;
+
+// %
+// % Enter TeX commands below
+// %
+// x = {-b \pm \sqrt{b^2-4ac} \over 2a} \eth \Sigma \over a.
+// %
+// %c = \summation{n}{i=1} i=\frac{n(n+1)}{2}
+
+// \Sigma_{i=1}^k x_i \qquad \sum_{j=1}^k x_i
