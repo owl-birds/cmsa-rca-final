@@ -37,26 +37,44 @@ const Choose_Input_Type = (props: Props) => {
   //   set_is_self_input(() => false);
   // };
 
+  const self_input_curried = (data_kind: string) => {
+    return () => {
+      choose_handler();
+      self_input();
+      initiate_self_input_service(data_kind);
+    };
+  };
+  const upload_file_curried = () => () => {
+    choose_handler();
+    upload_input();
+  };
+
   return (
     <div className={classes.input_type_box}>
       {/* two buttons */}
       {!is_choosed ? (
         <div className={classes.input_type}>
           <button
-            onClick={() => {
-              choose_handler();
-              self_input();
-              initiate_self_input_service(data_kind);
-            }}
+            onClick={
+              self_input_curried(data_kind)
+              // () => {
+              // choose_handler();
+              // self_input();
+              // initiate_self_input_service(data_kind);
+              // }
+            }
             className="btn_default"
           >
             SELF INPUT
           </button>
           <button
-            onClick={() => {
-              choose_handler();
-              upload_input();
-            }}
+            onClick={
+              upload_file_curried()
+              // () => {
+              // choose_handler();
+              // upload_input();
+              // }
+            }
             className="btn_default"
           >
             UPLOAD FILE
