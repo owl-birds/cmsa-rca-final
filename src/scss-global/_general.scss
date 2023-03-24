@@ -50,3 +50,31 @@ $font: "Montserrat-regular";
   transition: ease-in-out 300ms;
   color: colors.$main-color;
 }
+
+// CMSA
+@mixin method-informations {
+  max-width: 90%;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  border: 2px solid colors.$secondary-color;
+  border-radius: 20px;
+  padding: 30px;
+  gap: 1rem;
+}
+@mixin descriptions {
+  justify-self: left;
+  display: grid;
+  justify-items: left;
+  align-items: center;
+  gap: 0.3rem;
+  grid-template-columns: repeat(2, 1fr);
+}
+@mixin descriptions-effects {
+  grid-template-columns: 1fr;
+}
+@mixin formula {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+}

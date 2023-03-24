@@ -64,7 +64,8 @@ const Table = (props: Props) => {
   const silent_a_ref = useRef<HTMLAnchorElement | null>(null);
   const input_add_col_ref = useRef<HTMLInputElement | null>(null);
 
-  //console.log("data", data);
+  console.log("table's name", table_name);
+  // console.log("data", data);
   //console.log("columns", columns);
 
   const add_row = () => {

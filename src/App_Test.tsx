@@ -25,6 +25,15 @@ import {
   use_country_ui,
 } from "./application/states/country_ui.state";
 import { shallowCopy } from "immer/dist/internal";
+import Test_Katex from "./presentation/shared/math_formula/Test_Katex";
+import {
+  tex_cmsa_three_level,
+  tex_cmsa_two_level_commodity,
+  tex_cmsa_two_level_region,
+  tex_cmsa_one_level,
+  tex_rca_classic,
+} from "./infrastructure/all_formula";
+import Render_Tex_to_Formula from "./presentation/shared/math_formula/Katex_Math_Formula";
 
 function App() {
   const data = use_country_file_store(
@@ -53,6 +62,12 @@ function App() {
   return (
     <div className="container">
       <h1>Welcome to Tauri!</h1>
+      {/* <Test_Katex latex_string={tex_cmsa_three_level} />
+      <Test_Katex latex_string={tex_cmsa_two_level_region} />
+      <Test_Katex latex_string={tex_cmsa_two_level_commodity} />
+      <Test_Katex latex_string={tex_cmsa_one_level} /> */}
+      <h4>THREE LEVEL</h4>
+      <Render_Tex_to_Formula tex_string={tex_cmsa_three_level} />
       <Choose_Input_Type
         is_self_input={is_self_input}
         is_choosed={is_choosed}

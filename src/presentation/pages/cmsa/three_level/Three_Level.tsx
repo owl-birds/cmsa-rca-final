@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import classes from "./Three_Level.module.scss";
 import Link_Box_Text from "../../../shared/link_box_text/Link_Box_Text";
 import {
@@ -42,10 +42,17 @@ import {
 } from "../../../../application/states/world.state";
 // import Table from "../../../shared/table/Table";
 import Data_Box from "../../../shared/data_box/Data_Box";
+import Render_Tex_to_Formula from "../../../shared/math_formula/Katex_Math_Formula";
+import {
+  tex_cmsa_three_level,
+  tex_cmsa_three_level_components,
+} from "../../../../infrastructure/all_formula";
+import Desc from "../../../shared/formula_description/Desc";
 
 const Three_Level = () => {
   // component specific vars
   const data_kind = "three_level";
+  const [is_info_show, set_is_info_show] = useState<boolean>(false);
 
   // COUNTRY UI
   const clear_country_ui_state = use_country_ui(
@@ -103,11 +110,62 @@ const Three_Level = () => {
   // console.log("country columns", country_columns);
   // console.log("world data", world_data);
   // console.log("world columns", world_columns);
+
+  // LOCAL UI
+  const show_method_informations_handler = () => {
+    set_is_info_show((prev_value: boolean) => !prev_value);
+  };
+
   return (
     <>
       <Link_Box_Text link="/main/cmsa" title="BACK" />
       <section className={classes.three_level_box}>
         <h1 className={classes.title}>THREE LEVEL</h1>
+        {/* method information and data structure for inputting  */}
+        {/* for hiding the additional information */}
+        <section
+          className={classes.is_info_show}
+          onClick={show_method_informations_handler}
+        >
+          {is_info_show
+            ? "Hide Method Informations"
+            : "Show Method Informations"}
+        </section>
+        {is_info_show ? (
+          <section className={classes.method_informations}>
+            <div className={classes.formula}>
+              <Render_Tex_to_Formula tex_string={tex_cmsa_three_level} />
+            </div>
+            <br />
+            <div className={classes.descriptions}>
+              <Desc tex_symbol_string="X" explanation="Export" />
+              <Desc tex_symbol_string="r" explanation="Country r" />
+              <Desc tex_symbol_string="i" explanation="Commodity i" />
+              <Desc tex_symbol_string="p" explanation="Partner or Region" />
+              <Desc tex_symbol_string="0" explanation="First Period" />
+              <Desc tex_symbol_string="1" explanation="Second Period" />
+              <Desc
+                tex_symbol_string="g"
+                explanation="export growth rate (if there is no r in the symbol its mean in the value of world exports)"
+              />
+            </div>
+            <br />
+            <div
+              className={`${classes.descriptions} ${classes.descriptions_effects}`}
+            >
+              {tex_cmsa_three_level_components.map(
+                (comp: string[], idx: number) => (
+                  <Desc
+                    key={idx}
+                    tex_symbol_string={comp[0]}
+                    explanation={comp[1]}
+                  />
+                )
+              )}
+            </div>
+          </section>
+        ) : null}
+
         {/* <div className={classes.country_data_box}>
           {country_data ? null : (
             <div className={classes.input_data}>
@@ -146,6 +204,7 @@ const Three_Level = () => {
             />
           ) : null}
         </div> */}
+
         <Data_Box
           data_box_title={"Input Country Data"}
           table_name={"Country Table"}
@@ -195,7 +254,11 @@ const Three_Level = () => {
           initiate_self_input_service={initiate_world_self_input_service}
         />
       </section>
-      <section className={classes.three_level_options}>OPTIONS</section>
+      {country_data && world_data ? (
+        <section className={classes.three_level_options}>
+          <h4>OPTIONS</h4>
+        </section>
+      ) : null}
     </>
   );
 };

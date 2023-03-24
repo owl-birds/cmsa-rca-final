@@ -1,9 +1,62 @@
+@use "../../../../scss-global/colors";
+@use "../../../../scss-global/general";
 .three_level_box {
   display: grid;
   justify-items: center;
   align-items: center;
+  gap: 1rem;
   .title {
     font-size: 2.5rem;
+  }
+  .method_informations {
+    @include general.method-informations;
+    // max-width: 90%;
+    // display: grid;
+    // justify-items: center;
+    // align-items: center;
+    // border: 2px solid colors.$secondary-color;
+    // border-radius: 20px;
+    // padding: 30px;
+    // gap: 1rem;
+    .formula {
+      @include general.formula;
+      // display: grid;
+      // justify-items: center;
+      // align-items: center;
+    }
+    .descriptions {
+      @include general.descriptions;
+      // justify-self: left;
+      // display: grid;
+      // justify-items: left;
+      // align-items: center;
+      // gap: 0.3rem;
+      // grid-template-columns: repeat(2, 1fr);
+      // .desc {
+      //   display: grid;
+      //   grid-template-columns: 1fr 1fr 20fr;
+      //   span {
+      //     text-align: center;
+      //   }
+      //   span:nth-child(3) {
+      //     text-align: left;
+      //   }
+      // }
+    }
+    .descriptions_effects {
+      // grid-template-columns: 1fr;
+      @include general.descriptions-effects;
+    }
+  }
+  .is_info_show {
+    padding: 10px 20px;
+    border: 2px solid colors.$secondary-color;
+    border-radius: 20px;
+  }
+  .is_info_show:hover {
+    background-color: colors.$hover-color;
+    color: colors.$main-color;
+    cursor: pointer;
   }
   // .country_data_box {
   //   margin: 10px;
