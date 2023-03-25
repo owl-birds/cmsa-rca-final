@@ -16,6 +16,7 @@ import {
   read_country_file_service,
   initiate_country_self_input_service,
   clear_country_data_service,
+  get_country_years_service,
 } from "../../../../application/services/country_data.service";
 import {
   add_world_column_service,
@@ -24,6 +25,7 @@ import {
   read_world_file_service,
   initiate_world_self_input_service,
   clear_world_data_service,
+  get_world_years_service,
 } from "../../../../application/services/world_data.service";
 import {
   csv_string_to_csv_file,
@@ -48,6 +50,8 @@ import {
   tex_cmsa_three_level_components,
 } from "../../../../infrastructure/all_formula";
 import Desc from "../../../shared/formula_description/Desc";
+// import Years_Select from "../../../shared/year_select/Years_Select";
+import Calculation_Options from "../../../shared/calculation_options/Calculation_Options";
 
 const Three_Level = () => {
   // component specific vars
@@ -80,6 +84,9 @@ const Three_Level = () => {
   const country_columns = use_country_file_store(
     (state: Uploaded_Country_File_State) => state.columns
   );
+  // const country_year = use_country_file_store(
+  //   (state: Uploaded_Country_File_State) => state.year
+  // );
   // WORLD UI
   const clear_world_ui_state = use_world_ui(
     (state: World_Ui_Interface) => state.clear_state
@@ -106,10 +113,15 @@ const Three_Level = () => {
   const world_columns = use_world_file_store(
     (state: Uploaded_World_File_State) => state.columns
   );
+  // const world_year = use_world_file_store(
+  //   (state: Uploaded_World_File_State) => state.year
+  // );
   // console.log("country data", country_data);
   // console.log("country columns", country_columns);
   // console.log("world data", world_data);
   // console.log("world columns", world_columns);
+  // console.log("world", world_year);
+  // console.log("country", country_year);
 
   // LOCAL UI
   const show_method_informations_handler = () => {
@@ -131,7 +143,7 @@ const Three_Level = () => {
             ? "Hide Method Informations"
             : "Show Method Informations"}
         </section>
-        {is_info_show ? (
+        {is_info_show && (
           <section className={classes.method_informations}>
             <div className={classes.formula}>
               <Render_Tex_to_Formula tex_string={tex_cmsa_three_level} />
@@ -145,8 +157,12 @@ const Three_Level = () => {
               <Desc tex_symbol_string="0" explanation="First Period" />
               <Desc tex_symbol_string="1" explanation="Second Period" />
               <Desc
+                tex_symbol_string="g = \frac{X^1 - X^0}{X^0}"
+                explanation=""
+              />
+              <Desc
                 tex_symbol_string="g"
-                explanation="export growth rate (if there is no r in the symbol its mean in the value of world exports)"
+                explanation="export growth rate (if there is no r in the symbol its in the value of world exports)"
               />
             </div>
             <br />
@@ -164,7 +180,7 @@ const Three_Level = () => {
               )}
             </div>
           </section>
-        ) : null}
+        )}
 
         {/* <div className={classes.country_data_box}>
           {country_data ? null : (
@@ -253,12 +269,20 @@ const Three_Level = () => {
           data_kind={data_kind}
           initiate_self_input_service={initiate_world_self_input_service}
         />
+        {country_data && world_data && (
+          <section className={classes.three_level_options}>
+            <h4>METHOD OPTIONS</h4>
+            <Calculation_Options
+              method_type="three_level"
+              years={get_world_years_service()}
+              // years={world_year}
+              // PROBLEM HERE :: NOT UPDATING CAUSE
+              // ITS A FUNCTION WHEN A NEW YEAR ADDED THE OPTIONS
+              // ARE NOT UPDATED
+            />
+          </section>
+        )}
       </section>
-      {country_data && world_data ? (
-        <section className={classes.three_level_options}>
-          <h4>OPTIONS</h4>
-        </section>
-      ) : null}
     </>
   );
 };

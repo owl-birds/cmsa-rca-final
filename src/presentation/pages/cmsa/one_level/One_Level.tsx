@@ -16,6 +16,7 @@ import {
   read_country_file_service,
   initiate_country_self_input_service,
   clear_country_data_service,
+  get_country_years_service,
 } from "../../../../application/services/country_data.service";
 import {
   add_world_column_service,
@@ -24,6 +25,7 @@ import {
   read_world_file_service,
   initiate_world_self_input_service,
   clear_world_data_service,
+  get_world_years_service,
 } from "../../../../application/services/world_data.service";
 import {
   csv_string_to_csv_file,
@@ -48,6 +50,7 @@ import {
   tex_cmsa_one_level_components,
 } from "../../../../infrastructure/all_formula";
 import Desc from "../../../shared/formula_description/Desc";
+import Calculation_Options from "../../../shared/calculation_options/Calculation_Options";
 
 const One_Level = () => {
   // component specific vars
@@ -140,8 +143,12 @@ const One_Level = () => {
               <Desc tex_symbol_string="0" explanation="First Period" />
               <Desc tex_symbol_string="1" explanation="Second Period" />
               <Desc
+                tex_symbol_string="g = \frac{X^1 - X^0}{X^0}"
+                explanation=""
+              />
+              <Desc
                 tex_symbol_string="g"
-                explanation="export growth rate (if there is no r in the symbol its mean in the value of world exports)"
+                explanation="export growth rate (if there is no r in the symbol its in the value of world exports)"
               />
             </div>
             <br />
@@ -209,6 +216,15 @@ const One_Level = () => {
           data_kind={data_kind}
           initiate_self_input_service={initiate_world_self_input_service}
         />
+        {country_data && world_data && (
+          <section className={classes.one_level_options}>
+            <h4>METHOD OPTIONS</h4>
+            <Calculation_Options
+              method_type="one_level"
+              years={get_world_years_service()}
+            />
+          </section>
+        )}
       </section>
     </>
   );

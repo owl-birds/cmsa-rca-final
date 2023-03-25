@@ -1,0 +1,28 @@
+@use "../../../scss-global/colors";
+.years_select {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  .menu {
+    display: flex;
+    flex-direction: row;
+    // gap: 1rem;
+    div {
+      padding: 5px;
+    }
+    div:hover {
+      cursor: pointer;
+    }
+    .menu_selected {
+      background-color: colors.$hover-color;
+      color: colors.$main-color;
+    }
+  }
+  .two_points {
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}

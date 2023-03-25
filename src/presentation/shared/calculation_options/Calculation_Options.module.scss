@@ -1,0 +1,39 @@
+@use "../../../scss-global/colors";
+
+.calculation_options {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  gap: 1rem;
+  .menus {
+    max-width: fit-content;
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    grid-template-columns: repeat(4, 1fr);
+    // gap: 0.2rem;
+    .menu {
+      padding: 10px 20px;
+      // margin: 0;
+      border: 2px solid colors.$secondary-color;
+      // border-radius: 10px;
+      font-weight: bold;
+    }
+    .menu:hover {
+      cursor: pointer;
+      background-color: colors.$hover-color;
+      color: colors.$main-color;
+      border: 2px solid #fff;
+    }
+    .menu_selected {
+      border: 2px solid #fff;
+      background-color: colors.$hover-color;
+      color: colors.$main-color;
+    }
+  }
+  .select {
+    display: grid;
+    justify-items: center;
+    align-items: center;
+  }
+}

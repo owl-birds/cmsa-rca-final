@@ -7,6 +7,11 @@ import {
 } from "./general_data.service";
 import { use_world_file_store } from "../states/world.state";
 
+export const get_world_years_service = (): number[] => {
+  const years: number[] = use_world_file_store.getState().get_years();
+  return years;
+};
+
 export const clear_world_data_service = () => {
   const clear_state = use_world_file_store.getState().clear_state;
   clear_state();

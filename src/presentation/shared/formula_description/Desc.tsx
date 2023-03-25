@@ -12,8 +12,8 @@ const Desc = (props: Props) => {
   return (
     <div className={classes.desc}>
       <Render_Tex_to_Formula tex_string={tex_symbol_string} />
-      <span>=</span>
-      <span>{explanation}</span>
+      {explanation.length > 0 && <span>=</span>}
+      {explanation.length > 0 && <span>{explanation}</span>}
     </div>
   );
 };

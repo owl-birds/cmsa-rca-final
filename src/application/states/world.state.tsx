@@ -8,6 +8,8 @@ export interface Data {
 export interface Uploaded_World_File_State {
   data: any[] | null; // BAND AID
   columns: string[] | null;
+  year: number[];
+  add_year: (year_or_years: number[] | number | string | string[]) => void;
   clear_state: () => void;
   initiate_data: (new_data: any[], columns: string[]) => void;
   initiate_self_input: (data_kind: string) => void;
@@ -23,6 +25,7 @@ export interface Uploaded_World_File_State {
   ) => void;
   add_row: () => void;
   add_column: (new_column: string) => void;
+  get_years: () => number[];
 }
 
 export const use_world_file_store = create<Uploaded_World_File_State>()(
@@ -30,9 +33,46 @@ export const use_world_file_store = create<Uploaded_World_File_State>()(
     // PROBLEM HERE, BAND AID, NEED TO FIND OUT MORE
     data: null,
     columns: null,
-    clear_state: () => set(() => ({ data: null, columns: null })),
+    year: [],
+    add_year: (year_or_years: number[] | number | string | string[]) =>
+      set(
+        produce((state: Uploaded_World_File_State) => {
+          //
+          if (Number(year_or_years)) {
+            const year: number = new Date(`${year_or_years}`).getFullYear();
+            if (!Number.isNaN(year)) {
+              state.year.push(year);
+              state.year.sort((a, b) => a - b);
+            }
+            // state.year.push(year_or_years);
+            // state.year.sort((a, b) => a - b);
+          }
+          if (typeof year_or_years === "object") {
+            for (let year of year_or_years) {
+              const temp_year: number = new Date(year).getFullYear();
+              // if (Number(col)) years.push(Number(col));
+              if (!Number.isNaN(temp_year)) {
+                state.year.push(temp_year);
+                state.year.sort((a, b) => a - b);
+              }
+            }
+          }
+        })
+      ),
+    clear_state: () => set(() => ({ data: null, columns: null, year: [] })),
     initiate_data: (new_data: any[], new_columns: string[]) =>
-      set(() => ({ data: new_data, columns: new_columns })),
+      set(
+        produce((state: Uploaded_World_File_State) => {
+          state.data = new_data;
+          state.columns = new_columns;
+          for (let col of new_columns) {
+            const temp_year: number = new Date(col).getFullYear();
+            // if (Number(col)) years.push(Number(col));
+            if (!Number.isNaN(temp_year)) state.year.push(temp_year);
+            state.year.sort((a, b) => a - b);
+          }
+        })
+      ),
     initiate_self_input: (data_kind: string) =>
       set((_state: Uploaded_World_File_State) => {
         const new_columns: string[] = [];
@@ -133,12 +173,31 @@ export const use_world_file_store = create<Uploaded_World_File_State>()(
           if (state.columns && state.columns.indexOf(new_column) !== -1) return;
           if (state.columns && state.data) {
             state.columns.push(new_column);
+            const year: number = new Date(new_column).getFullYear();
+            if (!Number.isNaN(year)) {
+              state.year.push(year);
+              state.year.sort((a, b) => a - b);
+            }
             for (const row of state.data) {
               row[new_column] = null;
             }
           }
         })
       );
+    },
+    get_years: () => {
+      const year = get().year;
+      return year;
+      // const current_columns: string[] | null = get().columns;
+      // const years: number[] = [];
+      // if (current_columns) {
+      //   for (let col of current_columns) {
+      //     const temp_year: number = new Date(col).getFullYear();
+      //     // if (Number(col)) years.push(Number(col));
+      //     if (!Number.isNaN(temp_year)) years.push(temp_year);
+      //   }
+      // }
+      // return years;
     },
   })
 );

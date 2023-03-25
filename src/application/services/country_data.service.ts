@@ -7,6 +7,11 @@ import {
 } from "./general_data.service";
 import { use_country_file_store } from "../states/country.state";
 
+export const get_country_years_service = (): number[] => {
+  const years: number[] = use_country_file_store.getState().get_years();
+  return years;
+};
+
 export const clear_country_data_service = () => {
   const clear_state = use_country_file_store.getState().clear_state;
   clear_state();
