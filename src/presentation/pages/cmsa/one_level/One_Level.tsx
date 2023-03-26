@@ -28,6 +28,7 @@ import {
   get_world_years_service,
 } from "../../../../application/services/world_data.service";
 import {
+  clear_all_state_service,
   csv_string_to_csv_file,
   data_to_csv_string,
   is_ext_allowed,
@@ -50,7 +51,7 @@ import {
   tex_cmsa_one_level_components,
 } from "../../../../infrastructure/all_formula";
 import Desc from "../../../shared/formula_description/Desc";
-import Calculation_Options from "../../../shared/calculation_options/Calculation_Options";
+import Calculation_Options from "../../../shared/cmsa_calculation_options/CMSA_Calculation_Options";
 
 const One_Level = () => {
   // component specific vars
@@ -117,7 +118,11 @@ const One_Level = () => {
 
   return (
     <>
-      <Link_Box_Text link="/main/cmsa" title="BACK" />
+      <Link_Box_Text
+        click_functions_handler={clear_all_state_service}
+        link="/main/cmsa"
+        title="BACK"
+      />
       <section className={classes.one_level_box}>
         <h1 className={classes.title}>ONE LEVEL</h1>
 

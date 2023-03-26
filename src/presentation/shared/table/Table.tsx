@@ -25,20 +25,20 @@ interface Props {
   is_edit_able?: boolean;
   data: any[] | null; // problem here ANY, THE ROOT OF ALL EVIL
   columns: string[] | null;
-  add_row_service: () => void;
-  add_column_service: (column_name: string) => void;
+  add_row_service?: () => void;
+  add_column_service?: (column_name: string) => void;
   data_to_csv_string: (data: any[], columns: string[]) => string;
   csv_string_to_csv_file: (
     csv_string: string,
     silent_a: HTMLAnchorElement
   ) => void;
-  update_cell_service: (
+  update_cell_service?: (
     new_value: string | number,
     row_index: number,
     column_name: string
   ) => void;
-  clear_data_service: () => void;
-  clear_ui_state: () => void;
+  clear_data_service?: () => void;
+  clear_ui_state?: () => void;
 }
 
 const Table = (props: Props) => {
@@ -71,7 +71,7 @@ const Table = (props: Props) => {
   const add_row = () => {
     //console.log("ADD ROW");
     // SERVICE
-    add_row_service();
+    add_row_service && add_row_service();
   };
 
   const add_column = () => {
@@ -82,7 +82,9 @@ const Table = (props: Props) => {
       if (input_new_column && input_new_column.value) {
         //console.log("NOT EMPTY", input_add_col_ref.current.value);
         const new_column = input_new_column.value;
-        add_column_service(new_column);
+        add_column_service && add_column_service(new_column);
+        // put some notification or some feedback to the user
+        // if it failed or succeded
       }
     }
   };
@@ -102,8 +104,8 @@ const Table = (props: Props) => {
   };
 
   const clear_data_handler = () => {
-    clear_data_service();
-    clear_ui_state();
+    clear_data_service && clear_data_service();
+    clear_ui_state && clear_ui_state();
   };
 
   return (

@@ -1,7 +1,22 @@
 import { csvParse, autoType } from "d3-dsv";
 import { extensions_map } from "../../infrastructure/ext_allowed";
+import { use_country_ui } from "../states/country_ui.state";
+import { use_world_ui } from "../states/world_ui.state";
+import { clear_calculation_service } from "./calculation.service";
+import { clear_country_data_service } from "./country_data.service";
+import { clear_world_data_service } from "./world_data.service";
 
 // TRY AND EXCEPTION NEEDED, IM LAZY
+
+export const clear_all_state_service = () => {
+  const clear_world_ui = use_world_ui.getState().clear_state;
+  const clear_country_ui = use_country_ui.getState().clear_state;
+  clear_calculation_service();
+  clear_country_data_service();
+  clear_world_data_service();
+  clear_world_ui();
+  clear_country_ui();
+};
 
 export const data_to_csv_string = (
   data: { [col_name: string | number]: string | number }[],

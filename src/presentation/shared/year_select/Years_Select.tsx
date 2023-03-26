@@ -34,6 +34,17 @@ const Years_Select = (props: Props) => {
   const two_points_handler = () => {
     set_is_interval((prev_val: boolean) => false);
   };
+
+  // TEST
+  const first_period = use_calculation_store(
+    (state: Calculation_State_Interface) => state.first_period
+  );
+  const second_period = use_calculation_store(
+    (state: Calculation_State_Interface) => state.second_period
+  );
+  // console.log("first period", first_period);
+  // console.log("second_period", second_period);
+
   return (
     <div className={classes.years_select}>
       <div className={classes.menu}>
@@ -52,10 +63,22 @@ const Years_Select = (props: Props) => {
       </div>
 
       {/* first and second period selection */}
-      {is_interval ? null : (
+      {is_interval ? (
+        <div>INTERVAL HERE</div>
+      ) : (
         <div className={classes.two_points}>
-          <Select options={first_years} set_selected_opt={set_first_period} />
-          <Select options={second_years} set_selected_opt={set_second_period} />
+          <Select
+            is_number={true}
+            options={first_years}
+            set_selected_opt={set_first_period}
+            default_value={"year"}
+          />
+          <Select
+            is_number={true}
+            options={second_years}
+            set_selected_opt={set_second_period}
+            default_value={"year"}
+          />
         </div>
       )}
     </div>

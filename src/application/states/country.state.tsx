@@ -26,6 +26,7 @@ export interface Uploaded_Country_File_State {
   add_row: () => void;
   add_column: (new_column: string) => void;
   get_years: () => number[];
+  get_unique_values_columns: (col_name: string) => string[];
 }
 
 export const use_country_file_store = create<Uploaded_Country_File_State>()(
@@ -198,6 +199,16 @@ export const use_country_file_store = create<Uploaded_Country_File_State>()(
       //   }
       // }
       // return years;
+    },
+    get_unique_values_columns: (col_name: string) => {
+      const unique_values: Set<string> = new Set();
+      const data = get().data;
+      for (let row of data) {
+        if (row[col_name]) {
+          unique_values.add(row[col_name].trim().toLowerCase());
+        }
+      }
+      return [...unique_values];
     },
   })
 );

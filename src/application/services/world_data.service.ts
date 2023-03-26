@@ -7,6 +7,12 @@ import {
 } from "./general_data.service";
 import { use_world_file_store } from "../states/world.state";
 
+export const get_unique_values_world = (col_name: string): string[] => {
+  const get_uniques_values =
+    use_world_file_store.getState().get_unique_values_columns;
+  return get_uniques_values(col_name);
+};
+
 export const get_world_years_service = (): number[] => {
   const years: number[] = use_world_file_store.getState().get_years();
   return years;

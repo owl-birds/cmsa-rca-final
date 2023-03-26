@@ -6,7 +6,7 @@ interface Props {
   value: string | number | null;
   row_index: number;
   column_name: string;
-  update_cell_service: (
+  update_cell_service?: (
     new_value: string | number,
     row_index: number,
     column_name: string
@@ -33,7 +33,8 @@ const Cell = memo((props: Props) => {
       ) {
         //console.log("new",new_value);
         //console.log("old",value);
-        update_cell_service(new_value, row_index, column_name);
+        update_cell_service &&
+          update_cell_service(new_value, row_index, column_name);
       }
       //            if (Number(value)){
       //                console.log(`number: ${value}, ${new_value}`);

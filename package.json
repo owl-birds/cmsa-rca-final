@@ -12,6 +12,7 @@
   "dependencies": {
     "@tauri-apps/api": "^1.2.0",
     "d3-dsv": "^3.0.1",
+    "decimal.js": "^10.4.3",
     "immer": "^9.0.19",
     "katex": "^0.16.4",
     "react": "^18.2.0",

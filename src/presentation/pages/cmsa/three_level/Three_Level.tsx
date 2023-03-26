@@ -28,6 +28,7 @@ import {
   get_world_years_service,
 } from "../../../../application/services/world_data.service";
 import {
+  clear_all_state_service,
   csv_string_to_csv_file,
   data_to_csv_string,
   is_ext_allowed,
@@ -51,7 +52,7 @@ import {
 } from "../../../../infrastructure/all_formula";
 import Desc from "../../../shared/formula_description/Desc";
 // import Years_Select from "../../../shared/year_select/Years_Select";
-import Calculation_Options from "../../../shared/calculation_options/Calculation_Options";
+import CMSA_Calculation_Options from "../../../shared/cmsa_calculation_options/CMSA_Calculation_Options";
 
 const Three_Level = () => {
   // component specific vars
@@ -122,6 +123,7 @@ const Three_Level = () => {
   // console.log("world columns", world_columns);
   // console.log("world", world_year);
   // console.log("country", country_year);
+  // console.log("THREE LEVEL");
 
   // LOCAL UI
   const show_method_informations_handler = () => {
@@ -130,7 +132,11 @@ const Three_Level = () => {
 
   return (
     <>
-      <Link_Box_Text link="/main/cmsa" title="BACK" />
+      <Link_Box_Text
+        click_functions_handler={clear_all_state_service}
+        link="/main/cmsa"
+        title="BACK"
+      />
       <section className={classes.three_level_box}>
         <h1 className={classes.title}>THREE LEVEL</h1>
         {/* method information and data structure for inputting  */}
@@ -272,7 +278,7 @@ const Three_Level = () => {
         {country_data && world_data && (
           <section className={classes.three_level_options}>
             <h4>METHOD OPTIONS</h4>
-            <Calculation_Options
+            <CMSA_Calculation_Options
               method_type="three_level"
               years={get_world_years_service()}
               // years={world_year}
