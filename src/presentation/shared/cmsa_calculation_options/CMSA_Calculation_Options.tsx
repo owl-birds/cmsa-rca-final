@@ -8,7 +8,10 @@ import {
 import { use_world_file_store } from "../../../application/states/world.state";
 import { use_country_file_store } from "../../../application/states/country.state";
 import { get_unique_values_country } from "../../../application/services/country_data.service";
-import { get_unique_values_world } from "../../../application/services/world_data.service";
+import {
+  get_unique_values_world,
+  get_world_years_service,
+} from "../../../application/services/world_data.service";
 import {
   Calculation_State_Interface,
   use_calculation_store,
@@ -16,6 +19,7 @@ import {
 import { Uploaded_World_File_State } from "../../../application/states/world.state";
 
 import { Uploaded_Country_File_State } from "../../../application/states/country.state";
+import Select from "../select/Select";
 // import { findColDataArr } from "../../../application/analyser_module/helpers";
 // // ANALYSER MODULE
 // //1
@@ -25,13 +29,19 @@ import { Uploaded_Country_File_State } from "../../../application/states/country
 
 interface Props {
   method_type: string;
-  years: number[];
+  // years: number[];
 }
 
 const CMSA_Calculation_Options = memo((props: Props) => {
-  const { years, method_type } = props;
+  const {
+    // years,
+    method_type,
+  } = props;
 
   const [is_one_country, set_is_one_country] = useState<boolean | null>(null);
+  const [country_selected, set_country_selected] = useState<string | null>(
+    null
+  );
 
   // CALCULATION PURPOSES
   const world_data = use_world_file_store(
@@ -42,16 +52,13 @@ const CMSA_Calculation_Options = memo((props: Props) => {
   );
   const unique_countries = get_unique_values_country("country");
   // const unique_commodities = get_unique_values_world("commodity");
-  const first_period = use_calculation_store(
-    (state: Calculation_State_Interface) => state.first_period
-  );
-  const second_period = use_calculation_store(
-    (state: Calculation_State_Interface) => state.second_period
-  );
+  const unique_years = get_world_years_service();
+
   const one_country_menu_handler = () => {
     // if (is_one_country) {
     // idk if this is terrible or not, but hey at least it worked
     clear_calculation_service();
+    set_country_selected(() => null);
     // }
     set_is_one_country((prev_val: boolean | null) => !prev_val);
 
@@ -78,11 +85,14 @@ const CMSA_Calculation_Options = memo((props: Props) => {
     // const { use_world_file_store } = await import(
     //   "../../../application/states/world.state"
     // );
+    const first_period = use_calculation_store.getState().first_period;
+    const second_period = use_calculation_store.getState().second_period;
     console.log("CALCULATION DATA");
     console.log("method type", method_type);
     console.log("country", country_data);
     console.log("world", world_data);
     console.log("countries", unique_countries);
+    console.log("country selected", country_selected);
     // console.log("commodities", unique_commodities);
     console.log("first period", first_period);
     console.log("second period", second_period);
@@ -125,9 +135,15 @@ const CMSA_Calculation_Options = memo((props: Props) => {
       <div className={classes.select}>
         {is_one_country && (
           <>
-            <Years_Select years={years} />
+            <Years_Select years={unique_years} />
             {/* BELOW FOR CHOOSING ONE OF THE COUNTRY, 
             find a way to find unique country name */}
+            <Select
+              options={unique_countries}
+              default_value={`country`}
+              is_number={false}
+              set_selected_opt={set_country_selected}
+            />
             <div className="btn_default" onClick={process_handler}>
               PROCESS
             </div>

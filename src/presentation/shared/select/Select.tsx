@@ -5,7 +5,7 @@ interface Props {
   options: number[] | string[];
   is_number?: boolean;
   default_value?: string;
-  set_selected_opt: (option: any) => void;
+  set_selected_opt?: (option: any) => void;
 }
 
 const Select = (props: Props) => {
@@ -13,7 +13,7 @@ const Select = (props: Props) => {
   const select_ref = useRef<null | HTMLSelectElement>(null);
 
   const select_handler = () => {
-    if (select_ref) {
+    if (select_ref && set_selected_opt) {
       // console.log(select_ref.current?.value);
       const value = select_ref.current?.value;
       if (Number(value) && is_number) set_selected_opt(Number(value));

@@ -205,7 +205,7 @@ export const use_world_file_store = create<Uploaded_World_File_State>()(
       const data = get().data;
       for (let row of data) {
         if (row[col_name]) {
-          unique_values.add(row[col_name].trim().toLowerCase());
+          unique_values.add(`${row[col_name]}`.trim().toLowerCase());
         }
       }
       return [...unique_values];

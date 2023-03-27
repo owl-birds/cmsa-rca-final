@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { get_world_years_service } from "../../../application/services/world_data.service";
 import {
   Calculation_State_Interface,
   use_calculation_store,
@@ -12,8 +13,9 @@ interface Props {
 
 const Years_Select = (props: Props) => {
   const { years } = props;
-  const [first_years, set_first_years] = useState(years);
-  const [second_years, set_second_years] = useState(years);
+  // const unique_years = get_world_years_service();
+  // const [first_years, set_first_years] = useState(years);
+  // const [second_years, set_second_years] = useState(years);
   //
   const [is_interval, set_is_interval] = useState<boolean>(false);
   //
@@ -36,12 +38,12 @@ const Years_Select = (props: Props) => {
   };
 
   // TEST
-  const first_period = use_calculation_store(
-    (state: Calculation_State_Interface) => state.first_period
-  );
-  const second_period = use_calculation_store(
-    (state: Calculation_State_Interface) => state.second_period
-  );
+  // const first_period = use_calculation_store(
+  //   (state: Calculation_State_Interface) => state.first_period
+  // );
+  // const second_period = use_calculation_store(
+  //   (state: Calculation_State_Interface) => state.second_period
+  // );
   // console.log("first period", first_period);
   // console.log("second_period", second_period);
 
@@ -69,13 +71,13 @@ const Years_Select = (props: Props) => {
         <div className={classes.two_points}>
           <Select
             is_number={true}
-            options={first_years}
+            options={years}
             set_selected_opt={set_first_period}
             default_value={"year"}
           />
           <Select
             is_number={true}
-            options={second_years}
+            options={years}
             set_selected_opt={set_second_period}
             default_value={"year"}
           />
