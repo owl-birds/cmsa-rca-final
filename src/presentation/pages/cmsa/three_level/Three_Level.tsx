@@ -43,7 +43,7 @@ import {
   Uploaded_World_File_State,
   use_world_file_store,
 } from "../../../../application/states/world.state";
-// import Table from "../../../shared/table/Table";
+import Table from "../../../shared/table/Table";
 import Data_Box from "../../../shared/data_box/Data_Box";
 import Render_Tex_to_Formula from "../../../shared/math_formula/Katex_Math_Formula";
 import {
@@ -53,6 +53,11 @@ import {
 import Desc from "../../../shared/formula_description/Desc";
 // import Years_Select from "../../../shared/year_select/Years_Select";
 import CMSA_Calculation_Options from "../../../shared/cmsa_calculation_options/CMSA_Calculation_Options";
+import Floating_Nav from "../../../shared/navigations/Floating_Nav";
+import {
+  Calculation_State_Interface,
+  use_calculation_store,
+} from "../../../../application/states/calculation.state";
 
 const Three_Level = () => {
   // component specific vars
@@ -125,6 +130,16 @@ const Three_Level = () => {
   // console.log("country", country_year);
   // console.log("THREE LEVEL");
 
+  // calaculations
+  const calculation_result = use_calculation_store(
+    (state: Calculation_State_Interface) => state.result
+  );
+  const first_period = use_calculation_store(
+    (state: Calculation_State_Interface) => state.first_period
+  );
+  const second_period = use_calculation_store(
+    (state: Calculation_State_Interface) => state.second_period
+  );
   // LOCAL UI
   const show_method_informations_handler = () => {
     set_is_info_show((prev_value: boolean) => !prev_value);
@@ -136,6 +151,7 @@ const Three_Level = () => {
         click_functions_handler={clear_all_state_service}
         link="/main/cmsa"
         title="BACK"
+        id="top"
       />
       <section className={classes.three_level_box}>
         <h1 className={classes.title}>THREE LEVEL</h1>
@@ -228,6 +244,7 @@ const Three_Level = () => {
         </div> */}
 
         <Data_Box
+          id="country"
           data_box_title={"Input Country Data"}
           table_name={"Country Table"}
           data={country_data}
@@ -252,6 +269,7 @@ const Three_Level = () => {
           initiate_self_input_service={initiate_country_self_input_service}
         />
         <Data_Box
+          id="world"
           data_box_title={"Input World Data"}
           table_name={"World Table"}
           data={world_data}
@@ -276,7 +294,7 @@ const Three_Level = () => {
           initiate_self_input_service={initiate_world_self_input_service}
         />
         {country_data && world_data && (
-          <section className={classes.three_level_options}>
+          <section id="analyse" className={classes.three_level_options}>
             <h4>METHOD OPTIONS</h4>
             <CMSA_Calculation_Options
               method_type="three_level"
@@ -288,7 +306,26 @@ const Three_Level = () => {
             />
           </section>
         )}
+        {/* {calculation_result && (
+          <div className={classes.output}>
+            <Table
+              table_name={`CMSA for ${first_period}-${second_period}`}
+              data={calculation_result}
+              columns={Object.keys(calculation_result[0])}
+              data_to_csv_string={data_to_csv_string}
+              csv_string_to_csv_file={csv_string_to_csv_file}
+              is_download_able={true}
+            />
+          </div>
+        )} */}
       </section>
+      <Floating_Nav
+        a_hrefs={
+          country_data && world_data
+            ? ["top", "country", "world", "analyse"]
+            : ["top", "country", "world"]
+        }
+      />
     </>
   );
 };

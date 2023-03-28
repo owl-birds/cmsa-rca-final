@@ -10,6 +10,15 @@ import {
 } from "./helpers";
 import { Decimal } from "decimal.js";
 
+export interface CMSA_Three_Level_Result {
+  country: string;
+  exportDifference: Decimal;
+  worldGrowthEffect: Decimal;
+  commodityEffect: Decimal;
+  regionalMarketEffect: Decimal;
+  competitivenessEffect: Decimal;
+}
+
 // total all commodity export
 const totalExportPerYear = (
   data: any[],
@@ -182,13 +191,7 @@ export const threeLevelCMSA = (
   totalIndicator: string = "total",
   firstCol: string = "commodity",
   secondCol: string = "region"
-): {
-  country: string;
-  worldGrowthEffect: Decimal;
-  commodityEffect: Decimal;
-  regionalMarketEffect: Decimal;
-  competitivenessEffect: Decimal;
-} => {
+): CMSA_Three_Level_Result => {
   // COUNTRY
   const totalCountryExport: { [index: string]: any } = totalExportPerYear(
     countryData,
@@ -269,6 +272,9 @@ export const threeLevelCMSA = (
   );
   return {
     country: countryName,
+    exportDifference: new Decimal(totalCountryExport[secondPeriod]).minus(
+      totalCountryExport[firstPeriod]
+    ),
     worldGrowthEffect: wge,
     commodityEffect: comEffect,
     regionalMarketEffect: rge,

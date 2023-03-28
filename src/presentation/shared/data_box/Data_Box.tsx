@@ -5,6 +5,7 @@ import Drop_file from "../drop_file_input/Drop_file";
 import Table from "../table/Table";
 
 interface Props {
+  id?: string;
   data: any[] | null; // BAND AID HERE
   columns: string[] | null;
   data_box_title?: string;
@@ -42,6 +43,7 @@ interface Props {
 const Data_Box = memo((props: Props) => {
   // trying to optimize using memo function
   const {
+    id,
     data,
     columns,
     data_box_title,
@@ -69,7 +71,7 @@ const Data_Box = memo((props: Props) => {
   } = props;
   // console.log(table_name);
   return (
-    <div className={classes.data_box}>
+    <div id={id ? id : ""} className={classes.data_box}>
       {data ? null : (
         <div className={classes.input_data}>
           <h4>{data_box_title ? data_box_title : "DATA INPUT BOX"}</h4>
