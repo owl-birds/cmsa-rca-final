@@ -52,7 +52,9 @@ const CMSA_Calculation_Options = memo((props: Props) => {
     null
   );
   const [is_valid_options, set_is_valid_options] = useState<boolean>(true);
+  const [output_title, set_output_title] = useState("");
   // const [calc_result, set_calc_result] = useState<any>(null);
+
   const output_ref = useRef<null | HTMLDivElement>(null);
 
   // CALCULATION PURPOSES
@@ -142,6 +144,7 @@ const CMSA_Calculation_Options = memo((props: Props) => {
           "total"
         );
         await set_result_service([result]);
+        set_output_title(() => `CMSA for ${first_period}-${second_period}`);
         // await set_calc_result(() => result);
         // console.log("country", findColDataArr(country_data, "indoNesia"));
         // console.log("result", result);
@@ -227,7 +230,8 @@ const CMSA_Calculation_Options = memo((props: Props) => {
       {calculation_result && is_valid_options && (
         <div id="output" ref={output_ref} className={classes.output}>
           <Table
-            table_name={`CMSA for ${first_period}-${second_period}`}
+            // table_name={`CMSA for ${first_period}-${second_period}`}
+            table_name={output_title}
             data={calculation_result}
             columns={Object.keys(calculation_result[0])}
             data_to_csv_string={data_to_csv_string}

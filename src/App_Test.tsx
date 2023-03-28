@@ -68,13 +68,13 @@ function App() {
       <Test_Katex latex_string={tex_cmsa_one_level} /> */}
       <h4>THREE LEVEL</h4>
       <Render_Tex_to_Formula tex_string={tex_cmsa_three_level} />
-      <Choose_Input_Type
+      {/* <Choose_Input_Type
         is_self_input={is_self_input}
         is_choosed={is_choosed}
         self_input={set_self_input}
         upload_input={set_upload_input}
         choose_handler={set_choosed}
-      />
+      /> */}
       <Drop_file
         read_file={read_country_file_service}
         is_ext_allowed={is_ext_allowed}
