@@ -60,7 +60,7 @@ const Years_Select = (props: Props) => {
           onClick={two_points_handler}
           className={is_interval ? "" : classes.menu_selected}
         >
-          two points
+          two periods
         </div>
       </div>
 

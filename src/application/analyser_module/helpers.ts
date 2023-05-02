@@ -113,3 +113,43 @@ export const sumBased2Col = (
   }
   return totalSum;
 };
+
+// some operations
+
+// total all commodity export
+export const totalExportPerYear = (
+  data: any[] | null,
+  colName: string = "total",
+  col: string = "commodity",
+  isTotalExist: boolean = true
+): { [index: string]: any } | null => {
+  if (!data || data.length === 0) return null;
+  // finding if there total exist in our data
+  let totalExport: { [index: string]: any } | null = findColRow(
+    data,
+    colName,
+    col
+  );
+  if (totalExport && isTotalExist) return totalExport;
+  // below if we isTotalDoesnt exist in our data
+  // so we need to find it, by summing up every
+  // export value
+  totalExport = {};
+  // only the year get
+  const cols: string[] = Object.keys(data[0]).filter((col) => Number(col));
+  for (let c of cols) {
+    if (!totalExport[c]) {
+      totalExport[c] = new Decimal(0);
+      // totalExport[c] = 0;
+    }
+  }
+  for (let row of data) {
+    if (row[col] === colName) continue;
+    for (let c of cols) {
+      totalExport[c] = totalExport[c].plus(Number(row[c]));
+      // totalExport[c] += Number(row[c]);
+    }
+  }
+  totalExport[`${col}`] = colName;
+  return totalExport;
+};

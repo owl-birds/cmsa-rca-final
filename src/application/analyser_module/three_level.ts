@@ -7,6 +7,7 @@ import {
   uniqueColNames,
   uniqueCols,
   findTotalExportCol,
+  totalExportPerYear,
 } from "./helpers";
 import { Decimal } from "decimal.js";
 
@@ -19,43 +20,6 @@ export interface CMSA_Three_Level_Result {
   competitivenessEffect: Decimal;
 }
 
-// total all commodity export
-const totalExportPerYear = (
-  data: any[],
-  colName: string = "total",
-  col: string = "commodity",
-  isTotalExist: boolean = true
-): { [index: string]: any } => {
-  // finding if there total exist in our data
-  let totalExport: { [index: string]: any } | null = findColRow(
-    data,
-    colName,
-    col
-  );
-  if (totalExport && isTotalExist) return totalExport;
-  // below if we isTotalDoesnt exist in our data
-  // so we need to find it, by summing up every
-  // export value
-  totalExport = {};
-  // only the year get
-  const cols: string[] = Object.keys(data[0]).filter((col) => Number(col));
-  for (let c of cols) {
-    if (!totalExport[c]) {
-      totalExport[c] = 0;
-      continue;
-    }
-  }
-  for (let row of data) {
-    if (row[col] === colName) continue;
-    for (let c of cols) {
-      totalExport[c] += row[c];
-    }
-  }
-  totalExport[`${col}`] = colName;
-  return totalExport;
-};
-
-// world growth based on col list
 const growthRateListColArr = (
   data: { [index: string]: any }[],
   firstPeriod: string,
@@ -104,7 +68,7 @@ const growthRateNBaseExport2Col = (
 };
 
 // WORLD GROWTH EFFECT
-const worldGrowthEffect = (
+export const worldGrowthEffect = (
   // totalWorldExport: { [index: string]: any },
   worldGrowth: Decimal,
   totalCountryExport: { [index: string]: any },
@@ -120,7 +84,7 @@ const worldGrowthEffect = (
 };
 
 // COMMODITY EFFECT
-const commodityEffect = (
+export const commodityEffect = (
   worldGrowth: Decimal,
   worldCommoditiesGrowth: { [index: string]: any }[],
   countryExportPerCommodities: { [index: string]: any }[],
@@ -141,7 +105,7 @@ const commodityEffect = (
   return comEffect;
 };
 // REGIONAL MARKET EFFECT
-const regionalMarketEffect = (
+export const regionalMarketEffect = (
   worldCommoditiesGrowth: { [commodity: string]: Decimal },
   countryCommoditiesGrowth: { [commodity: string]: Decimal },
   countryExportData: { [index: string]: any }[],
@@ -163,7 +127,7 @@ const regionalMarketEffect = (
   return regMarEffect;
 };
 // COMPETITIVENESS EFFECT
-const competitivenessEffect = (
+export const competitivenessEffect = (
   countryCommodityGrowth: { [col: string]: Decimal },
   countryCommodityRegionGrowth: { [index: string]: any }[],
   col: string = "commodity"
@@ -193,12 +157,8 @@ export const threeLevelCMSA = (
   secondCol: string = "region"
 ): CMSA_Three_Level_Result => {
   // COUNTRY
-  const totalCountryExport: { [index: string]: any } = totalExportPerYear(
-    countryData,
-    totalIndicator,
-    firstCol,
-    isTotalExist
-  );
+  const totalCountryExport: { [index: string]: any } | null =
+    totalExportPerYear(countryData, totalIndicator, firstCol, isTotalExist);
   // const totalCountryGrowth: Decimal = growthRate(
   //   totalCountryExport,
   //   firstPeriod,
@@ -224,14 +184,14 @@ export const threeLevelCMSA = (
       secondCol
     );
   // WORLD
-  const totalWorldExport: { [index: string]: any } = totalExportPerYear(
+  const totalWorldExport: { [index: string]: any } | null = totalExportPerYear(
     worldData,
     totalIndicator,
     firstCol,
     isTotalExist
   );
   const totalWorldGrowth: Decimal = growthRate(
-    totalWorldExport,
+    totalWorldExport!,
     firstPeriod,
     secondPeriod
   );
@@ -244,7 +204,7 @@ export const threeLevelCMSA = (
   const wge: Decimal = worldGrowthEffect(
     // totalWorldExport,
     totalWorldGrowth,
-    totalCountryExport,
+    totalCountryExport!,
     firstPeriod,
     secondPeriod
   );
@@ -272,10 +232,10 @@ export const threeLevelCMSA = (
   );
   return {
     country: countryName,
-    exportDifference: new Decimal(totalCountryExport[secondPeriod]).minus(
-      totalCountryExport[firstPeriod]
-    ),
     worldGrowthEffect: wge,
+    exportDifference: new Decimal(totalCountryExport![secondPeriod]).minus(
+      totalCountryExport![firstPeriod]
+    ),
     commodityEffect: comEffect,
     regionalMarketEffect: rge,
     competitivenessEffect: compeEffect,
