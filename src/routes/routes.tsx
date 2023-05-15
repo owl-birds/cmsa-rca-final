@@ -6,12 +6,17 @@ import Two_Level from "../presentation/pages/cmsa/two_level/Two_Level";
 import Home from "../presentation/pages/home/Home";
 import Layout from "../presentation/pages/layout/Layout";
 import RCA from "../presentation/pages/rca/RCA";
+import App_main from "../presentation/pages/app_main/App_main";
 
 const router = createBrowserRouter([
   //
   {
     path: "/",
     element: <Home />,
+  },
+  {
+    path: "/app-main",
+    element: <App_main />,
   },
   {
     path: "/main",

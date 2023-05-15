@@ -8,6 +8,7 @@ const Home = () => {
     <div className={classes.home}>
       <Menu_Box link="/main/cmsa" title="CMSA" />
       <Menu_Box link="/main/rca" title="RCA" />
+      <Menu_Box link="/app-main" title="MAIN APP" />
       {/* <section>
         <Link className={classes.link} to={"/main/cmsa"}>
           CMSA

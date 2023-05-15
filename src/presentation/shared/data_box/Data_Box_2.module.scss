@@ -1,0 +1,18 @@
+@use "../../../scss-global/colors";
+
+.data_box {
+  // margin: 10px;
+  margin: 0 10px;
+  width: fit-content;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  padding: 50px 20px;
+  border: 2px solid colors.$secondary-color;
+  border-radius: 20px;
+  .input_data {
+    h4 {
+      text-align: center;
+    }
+  }
+}

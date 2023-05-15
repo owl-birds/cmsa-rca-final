@@ -1,0 +1,45 @@
+@use "../../../scss-global/colors";
+.main_app {
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  section {
+    width: 100%;
+    .section_title {
+      width: 100%;
+      display: flex;
+      div {
+        border-bottom: 1px solid colors.$secondary-color;
+        width: 100%;
+      }
+    }
+    .data {
+      margin: 20px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .data_menu {
+        width: fit-content;
+        margin-bottom: 5px;
+        button {
+          margin: 0;
+          border-radius: 0;
+          background-color: colors.$main-color;
+          color: colors.$font-color;
+        }
+        button:hover {
+          transition: 300ms;
+          background-color: colors.$font-color;
+          color: colors.$main-color;
+          cursor: pointer;
+        }
+      }
+      .display_data {
+        width: fit-content;
+      }
+    }
+  }
+}
