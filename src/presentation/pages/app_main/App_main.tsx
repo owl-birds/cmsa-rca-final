@@ -52,167 +52,205 @@ import {
 // WORLD
 //
 
-const App_main = () => {
-  const [is_country_data_selected, set_is_country_data_selected] =
-    useState<Boolean>(true);
+import Section_data from "../../shared/section_data/Section_data";
 
-  // COUNTRY
-  // COUNTRY DATA
-  const country_data = use_country_file_store(
-    (state: Uploaded_Country_File_State) => state.data
-  );
-  const country_columns = use_country_file_store(
-    (state: Uploaded_Country_File_State) => state.columns
-  );
+// datas
+import {
+  avail_methods,
+  cmsa_types,
+  rca_types,
+} from "../../../infrastructure/all_methods";
+import {
+  tex_general_cmsa_dec,
   //
-  // COUNTRY UI
-  const clear_country_ui_state = use_country_ui(
-    (state: Country_Ui_Interface) => state.clear_state
-  );
-  const is_country_self_input = use_country_ui(
-    (state: Country_Ui_Interface) => state.is_self_input
-  );
-  const is_country_choosed = use_country_ui(
-    (state: Country_Ui_Interface) => state.is_choosed
-  );
-  const set_country_self_input = use_country_ui(
-    (state: Country_Ui_Interface) => state.set_self_input
-  );
-  const set_country_upload_input = use_country_ui(
-    (state: Country_Ui_Interface) => state.set_upload_input
-  );
-  const set_country_choosed = use_country_ui(
-    (state: Country_Ui_Interface) => state.set_choosed
-  );
-  // COUNTRY
+  tex_cmsa_one_level,
+  tex_cmsa_one_level_components,
+  //
+  tex_cmsa_two_level_commodity,
+  tex_cmsa_two_level_commodity_components,
+  //
+  tex_cmsa_two_level_region,
+  tex_cmsa_two_level_region_components,
+  //
+  tex_cmsa_three_level,
+  tex_cmsa_three_level_components,
+  //
+  tex_rca_classic,
+  tex_general_rca_dec,
+} from "../../../infrastructure/all_formula";
+import Select from "../../shared/select/Select";
+import Formula_Desc from "../../shared/formula_desc/Formula_Desc";
 
-  // WORLD
-  // WORLD DATA
-  const world_data = use_world_file_store(
-    (state: Uploaded_World_File_State) => state.data
-  );
-  const world_columns = use_world_file_store(
-    (state: Uploaded_World_File_State) => state.columns
-  );
-  // WORLD UI
-  const clear_world_ui_state = use_world_ui(
-    (state: World_Ui_Interface) => state.clear_state
-  );
-  const is_world_self_input = use_world_ui(
-    (state: World_Ui_Interface) => state.is_self_input
-  );
-  const is_world_choosed = use_world_ui(
-    (state: World_Ui_Interface) => state.is_choosed
-  );
-  const set_world_self_input = use_world_ui(
-    (state: World_Ui_Interface) => state.set_self_input
-  );
-  const set_world_upload_input = use_world_ui(
-    (state: World_Ui_Interface) => state.set_upload_input
-  );
-  const set_world_choosed = use_world_ui(
-    (state: World_Ui_Interface) => state.set_choosed
-  );
-  // WORLD
+const App_main = () => {
+  const [method, set_method] = useState<string | null>(null);
+  const [method_sub_type, set_method_sub_type] = useState<string | null>(null);
 
-  // data state handler
-  const set_country_selected = () => {
-    set_is_country_data_selected(() => true);
+  //
+  const [is_hover_on_info_toggle, set_is_hover_on_info_toggle] =
+    useState<boolean>(false);
+  const [is_info_visible, set_is_info_visible] = useState<boolean>(false);
+
+  // event handler
+  const mouse_enter_info_toggle = () => {
+    set_is_hover_on_info_toggle(() => true);
   };
-  const set_world_selected = () => {
-    set_is_country_data_selected(() => false);
+  const mouse_exit_info_toggle = () => {
+    set_is_hover_on_info_toggle(() => false);
   };
+  const show_method_informations = () => {
+    set_is_info_visible((prev_val) => !prev_val);
+  };
+  //
 
   // TEST
-  console.log(is_country_data_selected);
+  console.log("method", method);
+  console.log("method sub type", method_sub_type);
   // TEST
 
   return (
     <div className={classes.main_app}>
-      <section>
-        <div className={classes.section_title}>
-          <div></div>
-          <h4>DATA</h4>
-          <div></div>
-        </div>
-        <div className={classes.data}>
-          <div className={classes.data_menu}>
-            <button className="btn_default" onClick={set_country_selected}>
-              country
-            </button>
-            <button className="btn_default" onClick={set_world_selected}>
-              world
-            </button>
-          </div>
-          <div className={classes.display_data}>
-            {/* country */}
-            {is_country_data_selected && (
-              <Data_Box_2
-                id="data"
-                data_box_title={"Input Country Data"}
-                table_name={"Country Table"}
-                data={country_data}
-                columns={country_columns}
-                is_edit_able={true}
-                // is_download_able={true}
-                add_column_service={add_country_column_service}
-                add_row_service={add_country_row_service}
-                csv_string_to_csv_file={csv_string_to_csv_file}
-                data_to_csv_string={data_to_csv_string}
-                update_cell_service={update_cell_country_service}
-                is_ext_allowed={is_ext_allowed}
-                read_file_service={read_country_file_service}
-                is_choosed={is_country_choosed}
-                is_self_input={is_country_self_input}
-                self_input={set_country_self_input}
-                upload_input={set_country_upload_input}
-                choose_handler={set_country_choosed}
-                clear_data_service={clear_country_data_service}
-                clear_ui_state={clear_country_ui_state}
-                // data_kind={data_kind}
-                initiate_self_input_service={
-                  initiate_country_self_input_service
-                }
-              />
-            )}
-            {/* world */}
-            {!is_country_data_selected && (
-              <Data_Box_2
-                id="data"
-                data_box_title={"Input World Data"}
-                table_name={"World Table"}
-                data={world_data}
-                columns={world_columns}
-                is_edit_able={true}
-                // is_download_able={true}
-                add_column_service={add_world_column_service}
-                add_row_service={add_world_row_service}
-                csv_string_to_csv_file={csv_string_to_csv_file}
-                data_to_csv_string={data_to_csv_string}
-                update_cell_service={update_cell_world_service}
-                is_ext_allowed={is_ext_allowed}
-                read_file_service={read_world_file_service}
-                is_choosed={is_world_choosed}
-                is_self_input={is_world_self_input}
-                self_input={set_world_self_input}
-                upload_input={set_world_upload_input}
-                choose_handler={set_world_choosed}
-                clear_data_service={clear_world_data_service}
-                clear_ui_state={clear_world_ui_state}
-                // data_kind={data_kind}
-                initiate_self_input_service={initiate_world_self_input_service}
-              />
-            )}
-          </div>
-        </div>
-      </section>
+      <Section_data />
+      {/* table here should be optimised (SLOW AS FECK), 
+      for ex: showing a limited number of data, and u 
+      can navigate with an arrow or using search box */}
+
+      {/* below need refactoring */}
       <section>
         <div className={classes.section_title}>
           <div></div>
           <h4>METHODS</h4>
           <div></div>
         </div>
-        <div></div>
+        <div className={classes.method_selection}>
+          <div className={classes.main_method}>
+            <span>method</span>
+            <Select
+              options={avail_methods}
+              is_number={false}
+              default_value={"method"}
+              set_selected_opt={set_method}
+            />
+          </div>
+          {method && method !== "method" ? (
+            <div className={classes.method_type}>
+              <span>method type</span>
+              {method === "CMSA" ? (
+                <Select
+                  options={cmsa_types}
+                  is_number={false}
+                  default_value={"type"}
+                  set_selected_opt={set_method_sub_type}
+                />
+              ) : null}
+              {method === "RCA" ? (
+                <Select
+                  options={rca_types}
+                  is_number={false}
+                  default_value={"type"}
+                  set_selected_opt={set_method_sub_type}
+                />
+              ) : null}
+            </div>
+          ) : null}
+        </div>
+        {(method === "CMSA" &&
+          method_sub_type !== null &&
+          cmsa_types.indexOf(method_sub_type!) !== -1) ||
+        (method === "RCA" &&
+          method_sub_type !== null &&
+          rca_types.indexOf(method_sub_type!) !== -1) ? (
+          <div className={classes.method_informations_box}>
+            <div
+              className={classes.info_toggle}
+              onMouseEnter={mouse_enter_info_toggle}
+              onMouseLeave={mouse_exit_info_toggle}
+              onClick={show_method_informations}
+            >
+              {!is_hover_on_info_toggle ? (
+                <>
+                  <img src="data:image/png;base64,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"></img>
+                  {is_info_visible ? (
+                    <span>Hide Method Information</span>
+                  ) : (
+                    <>
+                      <span>{method}</span> <span>{method_sub_type}</span>
+                    </>
+                  )}
+                </>
+              ) : null}
+              {is_hover_on_info_toggle ? (
+                <>
+                  <img src="data:image/png;base64,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"></img>
+                  {!is_info_visible ? (
+                    <span>Show Method Informations</span>
+                  ) : (
+                    <span>Hide Method Information</span>
+                  )}
+                </>
+              ) : null}
+              {/* <a  href="https://icons8.com/icon/80684/question-mark">Question Mark</a> icon by <a href="https://icons8.com">Icons8</a> */}
+            </div>
+            {is_info_visible ? (
+              <>
+                {/* CMSA */}
+                {method === avail_methods[0] &&
+                method_sub_type === cmsa_types[0] ? (
+                  <Formula_Desc
+                    method_name={method}
+                    method_sub_type={method_sub_type}
+                    formula_tex={tex_cmsa_three_level}
+                    formula_components_tex={tex_cmsa_three_level_components}
+                    general_desc_tex={tex_general_cmsa_dec}
+                  />
+                ) : null}
+                {method === avail_methods[0] &&
+                method_sub_type === cmsa_types[1] ? (
+                  <Formula_Desc
+                    method_name={method}
+                    method_sub_type={method_sub_type}
+                    formula_tex={tex_cmsa_two_level_commodity}
+                    formula_components_tex={
+                      tex_cmsa_two_level_commodity_components
+                    }
+                    general_desc_tex={tex_general_cmsa_dec}
+                  />
+                ) : null}
+                {method === avail_methods[0] &&
+                method_sub_type === cmsa_types[2] ? (
+                  <Formula_Desc
+                    method_name={method}
+                    method_sub_type={method_sub_type}
+                    formula_tex={tex_cmsa_two_level_region}
+                    formula_components_tex={
+                      tex_cmsa_two_level_region_components
+                    }
+                    general_desc_tex={tex_general_cmsa_dec}
+                  />
+                ) : null}
+                {method === avail_methods[0] &&
+                method_sub_type === cmsa_types[3] ? (
+                  <Formula_Desc
+                    method_name={method}
+                    method_sub_type={method_sub_type}
+                    formula_tex={tex_cmsa_one_level}
+                    formula_components_tex={tex_cmsa_one_level_components}
+                    general_desc_tex={tex_general_cmsa_dec}
+                  />
+                ) : null}
+                {/* RCA */}
+                {method === avail_methods[1] &&
+                method_sub_type === rca_types[0] ? (
+                  <Formula_Desc
+                    method_name={method}
+                    method_sub_type={method_sub_type}
+                    formula_tex={tex_rca_classic}
+                    general_desc_tex={tex_general_rca_dec}
+                  />
+                ) : null}
+              </>
+            ) : null}
+          </div>
+        ) : null}
       </section>
       <section>
         <div className={classes.section_title}>
@@ -227,3 +265,81 @@ const App_main = () => {
 };
 
 export default App_main;
+// TRASH
+// <section>
+//   <div className={classes.section_title}>
+//     <div></div>
+//     <h4>DATA</h4>
+//     <div></div>
+//   </div>
+//   <div className={classes.data}>
+//     <div className={classes.data_menu}>
+//       <button className="btn_default" onClick={set_country_selected}>
+//         country
+//       </button>
+//       <button className="btn_default" onClick={set_world_selected}>
+//         world
+//       </button>
+//     </div>
+//     <div className={classes.display_data}>
+//       {/* country */}
+//       {is_country_data_selected && (
+//         <Data_Box_2
+//           id="data"
+//           data_box_title={"Input Country Data"}
+//           table_name={"Country Table"}
+//           data={country_data}
+//           columns={country_columns}
+//           is_edit_able={true}
+//           // is_download_able={true}
+//           add_column_service={add_country_column_service}
+//           add_row_service={add_country_row_service}
+//           csv_string_to_csv_file={csv_string_to_csv_file}
+//           data_to_csv_string={data_to_csv_string}
+//           update_cell_service={update_cell_country_service}
+//           is_ext_allowed={is_ext_allowed}
+//           read_file_service={read_country_file_service}
+//           is_choosed={is_country_choosed}
+//           is_self_input={is_country_self_input}
+//           self_input={set_country_self_input}
+//           upload_input={set_country_upload_input}
+//           choose_handler={set_country_choosed}
+//           clear_data_service={clear_country_data_service}
+//           clear_ui_state={clear_country_ui_state}
+//           // data_kind={data_kind}
+//           initiate_self_input_service={
+//             initiate_country_self_input_service
+//           }
+//         />
+//       )}
+//       {/* world */}
+//       {!is_country_data_selected && (
+//         <Data_Box_2
+//           id="data"
+//           data_box_title={"Input World Data"}
+//           table_name={"World Table"}
+//           data={world_data}
+//           columns={world_columns}
+//           is_edit_able={true}
+//           // is_download_able={true}
+//           add_column_service={add_world_column_service}
+//           add_row_service={add_world_row_service}
+//           csv_string_to_csv_file={csv_string_to_csv_file}
+//           data_to_csv_string={data_to_csv_string}
+//           update_cell_service={update_cell_world_service}
+//           is_ext_allowed={is_ext_allowed}
+//           read_file_service={read_world_file_service}
+//           is_choosed={is_world_choosed}
+//           is_self_input={is_world_self_input}
+//           self_input={set_world_self_input}
+//           upload_input={set_world_upload_input}
+//           choose_handler={set_world_choosed}
+//           clear_data_service={clear_world_data_service}
+//           clear_ui_state={clear_world_ui_state}
+//           // data_kind={data_kind}
+//           initiate_self_input_service={initiate_world_self_input_service}
+//         />
+//       )}
+//     </div>
+//   </div>
+// </section>

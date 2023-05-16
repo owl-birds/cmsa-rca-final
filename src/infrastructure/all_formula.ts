@@ -1,3 +1,4 @@
+// CMSA
 export const tex_cmsa_three_level: string =
   "X_{r}^1 - X_{r}^0 = g X_{r}^0 + \\Sigma_{i}(g_{i}-g)X_{ir}^0 + \\Sigma_{i}\\Sigma_{p}(g_{ir}-g_{i})X_{irp}^0 + \\Sigma_{i}\\Sigma_{p}(g_{irp}-g_{ir})X_{irp}^0";
 export const tex_cmsa_three_level_components: string[][] = [
@@ -36,4 +37,40 @@ export const tex_cmsa_one_level_components: string[][] = [
   ["(g_{r}-g)X_{r}^0", "Competitiveness Effect"],
 ];
 
-export const tex_rca_classic: string = "";
+// general cmsa desx
+export const tex_general_cmsa_dec = [
+  ["x", "Export"],
+  ["r", "Country"],
+  ["i", "Commodity"],
+  ["p", "Region or Partner"],
+  ["0", "First Period"],
+  ["1", "Second Period"],
+  [
+    "g",
+    "export growth rate (if there is no r in the symbol its in the value of world exports)",
+  ],
+  ["g = \\frac{X^1 - X^0}{X^0}", ""],
+];
+
+// <Desc tex_symbol_string="X" explanation="Export" />
+// <Desc tex_symbol_string="r" explanation="Country r" />
+// <Desc tex_symbol_string="i" explanation="Commodity i" />
+// <Desc tex_symbol_string="p" explanation="Partner or Region" />
+// <Desc tex_symbol_string="0" explanation="First Period" />
+// <Desc tex_symbol_string="1" explanation="Second Period" />
+// <Desc
+//   tex_symbol_string="g = \frac{X^1 - X^0}{X^0}"
+//   explanation=""
+// />
+// <Desc
+//   tex_symbol_string="g"
+//   explanation="export growth rate (if there is no r in the symbol its in the value of world exports)"
+// />
+// RCA
+export const tex_rca_classic: string = "\\frac{X_{ri} / X_{wi}}{X_{r} / X_{w}}";
+export const tex_general_rca_dec = [
+  ["X", "Export"],
+  ["w", "World"],
+  ["r", "Country"],
+  ["i", "Commodity"],
+];

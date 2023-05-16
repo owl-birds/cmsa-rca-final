@@ -16,8 +16,20 @@ const Select = (props: Props) => {
     if (select_ref && set_selected_opt) {
       // console.log(select_ref.current?.value);
       const value = select_ref.current?.value;
-      if (Number(value) && is_number) set_selected_opt(Number(value));
-      if (typeof value === "string" && !is_number) set_selected_opt(value);
+      if (Number(value) && is_number) {
+        if (Number(value) === Number(default_value)) {
+          set_selected_opt(null);
+          return;
+        }
+        set_selected_opt(Number(value));
+      }
+      if (typeof value === "string" && !is_number) {
+        if (value === default_value) {
+          set_selected_opt(null);
+          return;
+        }
+        set_selected_opt(value);
+      }
     }
   };
 
