@@ -4,6 +4,7 @@ import Years_Select from "../year_select/Years_Select";
 import {
   clear_calculation_service,
   set_result_service,
+  add_result_service,
   calculation_three_level_module_service,
 } from "../../../application/services/calculation.service";
 import { use_world_file_store } from "../../../application/states/world.state";
@@ -143,7 +144,8 @@ const CMSA_Calculation_Options = memo((props: Props) => {
           true,
           "total"
         );
-        await set_result_service([result]);
+        // await set_result_service([result]);
+        await add_result_service(result);
         set_output_title(() => `CMSA for ${first_period}-${second_period}`);
         // await set_calc_result(() => result);
         // console.log("country", findColDataArr(country_data, "indoNesia"));

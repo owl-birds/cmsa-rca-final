@@ -1,3 +1,4 @@
+// u should try and catch here
 import { csvParse, autoType } from "d3-dsv";
 import { extensions_map } from "../../infrastructure/ext_allowed";
 import { use_country_ui } from "../states/country_ui.state";
@@ -5,8 +6,25 @@ import { use_world_ui } from "../states/world_ui.state";
 import { clear_calculation_service } from "./calculation.service";
 import { clear_country_data_service } from "./country_data.service";
 import { clear_world_data_service } from "./world_data.service";
-
+import { use_country_file_store } from "../states/country.state";
+import { use_world_file_store } from "../states/world.state";
 // TRY AND EXCEPTION NEEDED, IM LAZY
+
+//both country and world
+export const get_years_intersection = () => {
+  const country_years: number[] = use_country_file_store.getState().get_years();
+  const world_years: number[] = use_world_file_store.getState().get_years();
+  const world_years_set: Set<number> = new Set(world_years);
+  const result_year: number[] = [];
+
+  for (const year of country_years) {
+    if (world_years_set.has(year)) {
+      result_year.push(year);
+    }
+  }
+
+  return result_year;
+};
 
 export const clear_all_state_service = () => {
   const clear_world_ui = use_world_ui.getState().clear_state;

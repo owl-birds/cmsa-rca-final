@@ -1,6 +1,15 @@
 import React, { useState } from "react";
 import classes from "./App_main.module.scss";
 
+import {
+  use_country_file_store,
+  Uploaded_Country_File_State,
+} from "../../../application/states/country.state";
+import {
+  use_world_file_store,
+  Uploaded_World_File_State,
+} from "../../../application/states/world.state";
+
 //
 // COUNTRY
 import {
@@ -10,12 +19,12 @@ import {
   read_country_file_service,
   initiate_country_self_input_service,
   clear_country_data_service,
-  get_country_years_service,
+  // get_country_years_service,
 } from "../../../application/services/country_data.service";
-import {
-  Uploaded_Country_File_State,
-  use_country_file_store,
-} from "../../../application/states/country.state";
+// import {
+//   Uploaded_Country_File_State,
+//   use_country_file_store,
+// } from "../../../application/states/country.state";
 import {
   use_country_ui,
   Country_Ui_Interface,
@@ -39,21 +48,22 @@ import {
   read_world_file_service,
   initiate_world_self_input_service,
   clear_world_data_service,
-  get_world_years_service,
+  // get_world_years_service,
 } from "../../../application/services/world_data.service";
 import {
   use_world_ui,
   World_Ui_Interface,
 } from "../../../application/states/world_ui.state";
-import {
-  Uploaded_World_File_State,
-  use_world_file_store,
-} from "../../../application/states/world.state";
+// import {
+//   Uploaded_World_File_State,
+//   use_world_file_store,
+// } from "../../../application/states/world.state";
 // WORLD
 //
 
 import Section_data from "../../shared/section_data/Section_data";
 
+// METHODS
 // datas
 import {
   avail_methods,
@@ -78,8 +88,26 @@ import {
   tex_rca_classic,
   tex_general_rca_dec,
 } from "../../../infrastructure/all_formula";
+// state
+import {
+  use_calculation_store,
+  Calculation_State_Interface,
+} from "../../../application/states/calculation.state";
 import Select from "../../shared/select/Select";
 import Formula_Desc from "../../shared/formula_desc/Formula_Desc";
+
+// SERVICES
+import {
+  get_country_years_service,
+  get_unique_values_country,
+} from "../../../application/services/country_data.service";
+import {
+  get_unique_values_world,
+  get_world_years_service,
+} from "../../../application/services/world_data.service";
+import { get_years_intersection } from "../../../application/services/general_data.service";
+
+// METHODS
 
 const App_main = () => {
   const [method, set_method] = useState<string | null>(null);
@@ -89,6 +117,31 @@ const App_main = () => {
   const [is_hover_on_info_toggle, set_is_hover_on_info_toggle] =
     useState<boolean>(false);
   const [is_info_visible, set_is_info_visible] = useState<boolean>(false);
+
+  // global state zustand
+  const set_first_period = use_calculation_store(
+    (state: Calculation_State_Interface) => state.set_first_period
+  );
+  const set_second_period = use_calculation_store(
+    (state: Calculation_State_Interface) => state.set_second_period
+  );
+  const first_period = use_calculation_store(
+    (state: Calculation_State_Interface) => state.first_period
+  );
+  const second_period = use_calculation_store(
+    (state: Calculation_State_Interface) => state.second_period
+  );
+  // pretty bad for the memmory, i think
+  const country_data = use_country_file_store(
+    (state: Uploaded_Country_File_State) => state.data
+  );
+  const world_data = use_world_file_store(
+    (state: Uploaded_World_File_State) => state.data
+  );
+  const country_years = get_country_years_service();
+  const world_years = get_world_years_service();
+  const years_in_both = get_years_intersection();
+  //
 
   // event handler
   const mouse_enter_info_toggle = () => {
@@ -105,6 +158,11 @@ const App_main = () => {
   // TEST
   console.log("method", method);
   console.log("method sub type", method_sub_type);
+  console.log("country years", country_years);
+  console.log("world years", world_years);
+  console.log("world country years intersection", years_in_both);
+  console.log("first period", first_period);
+  console.log("second period", second_period);
   // TEST
 
   return (
@@ -134,7 +192,7 @@ const App_main = () => {
           {method && method !== "method" ? (
             <div className={classes.method_type}>
               <span>method type</span>
-              {method === "CMSA" ? (
+              {method === avail_methods[0] ? (
                 <Select
                   options={cmsa_types}
                   is_number={false}
@@ -142,7 +200,7 @@ const App_main = () => {
                   set_selected_opt={set_method_sub_type}
                 />
               ) : null}
-              {method === "RCA" ? (
+              {method === avail_methods[1] ? (
                 <Select
                   options={rca_types}
                   is_number={false}
@@ -153,10 +211,11 @@ const App_main = () => {
             </div>
           ) : null}
         </div>
-        {(method === "CMSA" &&
+        {/* SOME METHOD INFORMATIONS TAHT CAN BE TOGGLED */}
+        {(method === avail_methods[0] &&
           method_sub_type !== null &&
           cmsa_types.indexOf(method_sub_type!) !== -1) ||
-        (method === "RCA" &&
+        (method === avail_methods[1] &&
           method_sub_type !== null &&
           rca_types.indexOf(method_sub_type!) !== -1) ? (
           <div className={classes.method_informations_box}>
@@ -251,6 +310,43 @@ const App_main = () => {
             ) : null}
           </div>
         ) : null}
+        {/* SOME METHOD INFORMATIONS TAHT CAN BE TOGGLED */}
+
+        {/* METHOD OPTIONS TO DO CALCULATIONS */}
+        {world_data && country_data ? (
+          <div className={classes.method_options}>
+            {/* CMSA */}
+            {method === avail_methods[0] &&
+            method_sub_type !== null &&
+            cmsa_types.indexOf(method_sub_type!) !== -1 ? (
+              <div className={classes.year_options}>
+                <Select
+                  options={years_in_both}
+                  default_value="choose first period"
+                  set_selected_opt={set_first_period}
+                />
+                <Select
+                  options={years_in_both}
+                  default_value="choose second period"
+                  set_selected_opt={set_second_period}
+                />
+              </div>
+            ) : null}
+            {/* RCA */}
+            {method === avail_methods[1] &&
+            method_sub_type !== null &&
+            rca_types.indexOf(method_sub_type!) !== -1 ? (
+              <div className={classes.year_options}>
+                <Select
+                  options={years_in_both}
+                  default_value="choose year"
+                  set_selected_opt={set_first_period}
+                />
+              </div>
+            ) : null}
+          </div>
+        ) : null}
+        {/* METHOD OPTIONS TO DO CALCULATIONS */}
       </section>
       <section>
         <div className={classes.section_title}>

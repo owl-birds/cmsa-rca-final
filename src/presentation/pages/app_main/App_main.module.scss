@@ -57,6 +57,17 @@
         cursor: pointer;
       }
     }
+    .method_options {
+      display: flex;
+      justify-content: center;
+      align-content: center;
+      .year_options {
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        gap: 0.5rem;
+      }
+    }
     // .data {
     //   margin: 20px 0;
     //   display: flex;

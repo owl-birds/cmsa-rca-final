@@ -1,3 +1,4 @@
+// u should try and catch here
 import { use_calculation_store } from "../states/calculation.state";
 import { Decimal } from "decimal.js";
 import { CMSA_Three_Level_Result } from "../analyser_module/three_level";
@@ -10,6 +11,11 @@ export const clear_calculation_service = () => {
 export const set_result_service = (new_result: any[]) => {
   const set_result = use_calculation_store.getState().set_result;
   set_result(new_result);
+};
+
+export const add_result_service = (new_result: {}) => {
+  const add_result = use_calculation_store.getState().add_result;
+  add_result(new_result);
 };
 
 export const calculation_three_level_module_service = async (

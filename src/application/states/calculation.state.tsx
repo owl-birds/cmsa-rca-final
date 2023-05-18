@@ -13,6 +13,7 @@ export interface Calculation_State_Interface {
   set_method_type: (new_method: string) => void;
   set_year_interval: (new_interval: number) => void;
   set_result: (new_result: any[]) => void;
+  add_result: (new_result: {}) => void;
 }
 
 export const use_calculation_store = create<Calculation_State_Interface>()(
@@ -23,6 +24,18 @@ export const use_calculation_store = create<Calculation_State_Interface>()(
     year_interval: null,
     result: null,
     set_result: (new_result: any[]) => set(() => ({ result: new_result })),
+    add_result: (new_result: {}) =>
+      set(
+        produce((state: Calculation_State_Interface) => {
+          //
+          if (!state.result) {
+            state.result = [];
+            state.result.push(new_result);
+            return;
+          }
+          state.result.push(new_result);
+        })
+      ),
     clear_state: () =>
       set(() => ({
         first_period: null,
