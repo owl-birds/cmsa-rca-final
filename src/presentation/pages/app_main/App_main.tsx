@@ -110,27 +110,14 @@ import { get_years_intersection } from "../../../application/services/general_da
 // METHODS
 
 const App_main = () => {
-  const [method, set_method] = useState<string | null>(null);
-  const [method_sub_type, set_method_sub_type] = useState<string | null>(null);
+  // const [method, set_method] = useState<string | null>(null);
+  // const [method_sub_type, set_method_sub_type] = useState<string | null>(null);
 
   //
   const [is_hover_on_info_toggle, set_is_hover_on_info_toggle] =
     useState<boolean>(false);
   const [is_info_visible, set_is_info_visible] = useState<boolean>(false);
 
-  // global state zustand
-  const set_first_period = use_calculation_store(
-    (state: Calculation_State_Interface) => state.set_first_period
-  );
-  const set_second_period = use_calculation_store(
-    (state: Calculation_State_Interface) => state.set_second_period
-  );
-  const first_period = use_calculation_store(
-    (state: Calculation_State_Interface) => state.first_period
-  );
-  const second_period = use_calculation_store(
-    (state: Calculation_State_Interface) => state.second_period
-  );
   // pretty bad for the memmory, i think
   const country_data = use_country_file_store(
     (state: Uploaded_Country_File_State) => state.data
@@ -141,6 +128,43 @@ const App_main = () => {
   const country_years = get_country_years_service();
   const world_years = get_world_years_service();
   const years_in_both = get_years_intersection();
+  //
+
+  // global state zustand
+  //
+  const first_period = use_calculation_store(
+    (state: Calculation_State_Interface) => state.first_period
+  );
+  const second_period = use_calculation_store(
+    (state: Calculation_State_Interface) => state.second_period
+  );
+  const method = use_calculation_store(
+    (state: Calculation_State_Interface) => state.method_type
+  );
+  const method_sub_type = use_calculation_store(
+    (state: Calculation_State_Interface) => state.method_sub_type
+  );
+  // below need to be improved
+  // cause maybe the format for every data that will
+  // be inputted will maybe different
+  const unique_countries = country_data
+    ? get_unique_values_country("country")
+    : [];
+  //
+
+  //
+  const set_method = use_calculation_store(
+    (state: Calculation_State_Interface) => state.set_method_type
+  );
+  const set_method_sub_type = use_calculation_store(
+    (state: Calculation_State_Interface) => state.set_method_sub_type
+  );
+  const set_first_period = use_calculation_store(
+    (state: Calculation_State_Interface) => state.set_first_period
+  );
+  const set_second_period = use_calculation_store(
+    (state: Calculation_State_Interface) => state.set_second_period
+  );
   //
 
   // event handler
@@ -163,6 +187,7 @@ const App_main = () => {
   console.log("world country years intersection", years_in_both);
   console.log("first period", first_period);
   console.log("second period", second_period);
+  console.log("unique countries", unique_countries);
   // TEST
 
   return (
@@ -332,6 +357,8 @@ const App_main = () => {
                 />
               </div>
             ) : null}
+            {/* CMSA */}
+
             {/* RCA */}
             {method === avail_methods[1] &&
             method_sub_type !== null &&
@@ -344,6 +371,7 @@ const App_main = () => {
                 />
               </div>
             ) : null}
+            {/* RCA */}
           </div>
         ) : null}
         {/* METHOD OPTIONS TO DO CALCULATIONS */}
