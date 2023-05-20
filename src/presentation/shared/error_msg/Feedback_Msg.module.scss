@@ -1,0 +1,12 @@
+@use "../../../scss-global/colors";
+.feedback_box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .error {
+    color: colors.$warning-color;
+  }
+  .success {
+    color: colors.$success-color;
+  }
+}

@@ -9,6 +9,10 @@
   gap: 1rem;
   section {
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    flex-direction: column;
     .section_title {
       width: 100%;
       display: flex;
@@ -58,14 +62,36 @@
       }
     }
     .method_options {
+      border: 1px solid colors.$secondary-color;
+      border-radius: 10px;
+      padding: 20px 15px;
+      padding-top: 10px;
+      //
+      width: fit-content;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-content: center;
+      gap: 1rem;
       .year_options {
         display: flex;
         justify-content: center;
-        align-content: center;
+        align-items: center;
+        flex-direction: column;
         gap: 0.5rem;
+        .year_box {
+          display: flex;
+          justify-content: center;
+          gap: 0.25rem;
+        }
+      }
+      .btn_box {
+        width: fit-content;
+        justify-self: center;
+        align-self: center;
+        button {
+          margin: 0;
+        }
       }
     }
     // .data {

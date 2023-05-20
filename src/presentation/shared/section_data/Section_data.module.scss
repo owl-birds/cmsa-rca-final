@@ -1,6 +1,10 @@
 @use "../../../scss-global/colors";
 section {
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  flex-direction: column;
   .section_title {
     width: 100%;
     display: flex;

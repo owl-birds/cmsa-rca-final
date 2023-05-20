@@ -106,6 +106,11 @@ import {
   get_world_years_service,
 } from "../../../application/services/world_data.service";
 import { get_years_intersection } from "../../../application/services/general_data.service";
+import Feedback_Msg from "../../shared/error_msg/Feedback_Msg";
+
+// CALCULATION SERVICES
+import { calculation_three_level_module_service } from "../../../application/services/calculation.service";
+import { findColDataArr } from "../../../application/analyser_module/helpers";
 
 // METHODS
 
@@ -125,6 +130,7 @@ const App_main = () => {
   const world_data = use_world_file_store(
     (state: Uploaded_World_File_State) => state.data
   );
+  //
   const country_years = get_country_years_service();
   const world_years = get_world_years_service();
   const years_in_both = get_years_intersection();
@@ -137,6 +143,9 @@ const App_main = () => {
   );
   const second_period = use_calculation_store(
     (state: Calculation_State_Interface) => state.second_period
+  );
+  const country_name = use_calculation_store(
+    (state: Calculation_State_Interface) => state.country
   );
   const method = use_calculation_store(
     (state: Calculation_State_Interface) => state.method_type
@@ -165,6 +174,9 @@ const App_main = () => {
   const set_second_period = use_calculation_store(
     (state: Calculation_State_Interface) => state.set_second_period
   );
+  const set_country_name = use_calculation_store(
+    (state: Calculation_State_Interface) => state.set_country
+  );
   //
 
   // event handler
@@ -177,17 +189,133 @@ const App_main = () => {
   const show_method_informations = () => {
     set_is_info_visible((prev_val) => !prev_val);
   };
+  // start calculation
+  // calculation process state
+  const [calculation_msg, set_calculation_msg] = useState<string | null>(null);
+  const [is_error, set_is_error] = useState<boolean | null>(null);
+
+  const start_calculation = async () => {
+    // there is a bug in here
+    // when we cahnge the method and the conditional
+    // state is still saved
+    // do we need to clean calculation state everything
+    // the method and sub tyoe change
+
+    console.log("start calculation");
+    // validate the method options
+    if (method === avail_methods[0]) {
+      // CMSA
+      // cheking the periods
+      if (
+        !first_period ||
+        !second_period ||
+        Number(second_period) <= Number(first_period)
+      ) {
+        // console.log("INVALID PERIODS", method);
+        set_calculation_msg(() => "INVALID PERIODS");
+        set_is_error(() => true);
+        return;
+      }
+      // checking the country if it is selected
+      if (!country_name) {
+        // console.log("CHOOSE COUNTRY", method);
+        set_calculation_msg(() => "CHOOSE A COUNTRY");
+        set_is_error(() => true);
+        return;
+      }
+    } else if (method === avail_methods[1]) {
+      // RCA
+      // cheking the periods
+      if (!first_period) {
+        // console.log("INVALID PERIODS", method);
+        set_calculation_msg(() => "INVALID PERIODS");
+        set_is_error(() => true);
+        return;
+      }
+      // checking the country if it is selected
+      if (!country_name) {
+        // console.log("CHOOSE COUNTRY", method);
+        set_calculation_msg(() => "CHOOSE A COUNTRY");
+        set_is_error(() => true);
+        return;
+      }
+    }
+    // validate the method options
+
+    // clean local state everytime we pass the validations
+    set_calculation_msg(() => null);
+    set_is_error(() => null);
+
+    //////
+    // below u can return some feedback if the
+    // calculation is succesful or failed
+    //////
+
+    // start calcuilation
+    if (method === avail_methods[0]) {
+      // CMSA
+      switch (method_sub_type) {
+        case cmsa_types[0]:
+          console.log("CMSA THREE");
+
+          // should be some kinf of error cathing here
+          // to give feedback to the user
+          const result = await calculation_three_level_module_service(
+            world_data!,
+            findColDataArr(country_data!, country_name!, "country")!,
+            country_name!,
+            `${first_period}`,
+            `${second_period}`
+          );
+          console.log(result);
+          break;
+        case cmsa_types[1]:
+          console.log("CMSA TWO COM");
+          break;
+        case cmsa_types[2]:
+          console.log("CMSA TWO REG/PART");
+          break;
+        case cmsa_types[3]:
+          console.log("CMSA ONE");
+          break;
+        default:
+          set_calculation_msg(() => "METHOD NOT FOUND");
+          set_is_error(() => true);
+          return; // break;
+      }
+      // if the calculation succed
+      set_calculation_msg(() => "CALCULATION COMPLETED");
+      set_is_error(() => false);
+    } else if (method === avail_methods[1]) {
+      // RCA
+      switch (method_sub_type) {
+        case rca_types[0]:
+          console.log("RCA BASIC");
+          break;
+        default:
+          set_calculation_msg(() => "METHOD NOT FOUND");
+          set_is_error(() => true);
+          return; // break;
+      }
+      // if the calculation succed
+      set_calculation_msg(() => "CALCULATION COMPLETED");
+      set_is_error(() => false);
+    }
+  };
+
   //
 
   // TEST
-  console.log("method", method);
-  console.log("method sub type", method_sub_type);
-  console.log("country years", country_years);
-  console.log("world years", world_years);
-  console.log("world country years intersection", years_in_both);
-  console.log("first period", first_period);
-  console.log("second period", second_period);
-  console.log("unique countries", unique_countries);
+  // console.log("method", method);
+  // console.log("method sub type", method_sub_type);
+  // console.log("country years", country_years);
+  // console.log("world years", world_years);
+  // console.log("world country years intersection", years_in_both);
+  // console.log("first period selected", first_period);
+  // console.log("second period selected", second_period);
+  // console.log("unique countries", unique_countries);
+  // console.log("country selected", country_name);
+  // console.log("calculation feedback", calculation_msg);
   // TEST
 
   return (
@@ -338,24 +466,50 @@ const App_main = () => {
         {/* SOME METHOD INFORMATIONS TAHT CAN BE TOGGLED */}
 
         {/* METHOD OPTIONS TO DO CALCULATIONS */}
-        {world_data && country_data ? (
+        {world_data &&
+        country_data &&
+        ((method === avail_methods[0] && // CMSA
+          method_sub_type !== null &&
+          cmsa_types.indexOf(method_sub_type!) !== -1) ||
+          (method === avail_methods[1] && // RCA
+            method_sub_type !== null &&
+            rca_types.indexOf(method_sub_type!) !== -1)) ? (
           <div className={classes.method_options}>
             {/* CMSA */}
             {method === avail_methods[0] &&
             method_sub_type !== null &&
             cmsa_types.indexOf(method_sub_type!) !== -1 ? (
-              <div className={classes.year_options}>
-                <Select
-                  options={years_in_both}
-                  default_value="choose first period"
-                  set_selected_opt={set_first_period}
-                />
-                <Select
-                  options={years_in_both}
-                  default_value="choose second period"
-                  set_selected_opt={set_second_period}
-                />
-              </div>
+              <>
+                <div className={classes.year_options}>
+                  <h4>Choose Years</h4>
+                  <div className={classes.year_box}>
+                    <Select
+                      options={years_in_both}
+                      default_value="choose first period"
+                      set_selected_opt={set_first_period}
+                    />
+                    <Select
+                      options={years_in_both}
+                      default_value="choose second period"
+                      set_selected_opt={set_second_period}
+                    />
+                  </div>
+                  <h4>Choose a country</h4>
+                  <Select
+                    options={unique_countries}
+                    default_value="choose a country"
+                    set_selected_opt={set_country_name}
+                  />
+                </div>
+                <div className={classes.btn_box}>
+                  <button onClick={start_calculation} className="btn_default">
+                    process
+                  </button>
+                </div>
+                {calculation_msg && is_error !== null && (
+                  <Feedback_Msg message={calculation_msg} is_error={is_error} />
+                )}
+              </>
             ) : null}
             {/* CMSA */}
 
@@ -363,13 +517,32 @@ const App_main = () => {
             {method === avail_methods[1] &&
             method_sub_type !== null &&
             rca_types.indexOf(method_sub_type!) !== -1 ? (
-              <div className={classes.year_options}>
-                <Select
-                  options={years_in_both}
-                  default_value="choose year"
-                  set_selected_opt={set_first_period}
-                />
-              </div>
+              <>
+                <div className={classes.year_options}>
+                  <h4>Choose Years</h4>
+                  <div className={classes.year_box}>
+                    <Select
+                      options={years_in_both}
+                      default_value="choose year"
+                      set_selected_opt={set_first_period}
+                    />
+                  </div>
+                  <h4>Choose a country</h4>
+                  <Select
+                    options={unique_countries}
+                    default_value="choose a country"
+                    set_selected_opt={set_country_name}
+                  />
+                </div>
+                <div className={classes.btn_box}>
+                  <button onClick={start_calculation} className="btn_default">
+                    process
+                  </button>
+                </div>
+                {calculation_msg && is_error !== null && (
+                  <Feedback_Msg message={calculation_msg} is_error={is_error} />
+                )}
+              </>
             ) : null}
             {/* RCA */}
           </div>
