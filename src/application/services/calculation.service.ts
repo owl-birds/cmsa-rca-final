@@ -24,7 +24,56 @@ export const add_result_service = (new_result: {}) => {
   add_result(new_result);
 };
 
-export const calculation_cmsa_one_level_module_service = () => {};
+export const calculation_cmsa_one_level_module_service = async (
+  world_data: { [index: string]: any }, // what if the user doesnt want to find the total export,
+  // they hust put all the data in there,
+  // need to be reconsidered
+  country_data: { [index: string]: any },
+  country_name: string,
+  first_period: string,
+  second_period: string,
+  country_columns: string[]
+  // world_columns: string[]
+) => {
+  //
+  let validate_data_result: Validate_Data_Column;
+
+  // validate country
+  validate_data_result = validate_data_columns(
+    country_columns,
+    ["country"],
+    "country"
+  );
+  if (!validate_data_result.is_pass)
+    return { is_error: true, message: validate_data_result.message };
+  // validate country
+
+  // validate world
+  // world data only consist of year column
+  // validate world
+
+  try {
+    const { oneLevelCMSA } = await import("../analyser_module/one_level");
+    const temp_result: any = oneLevelCMSA(
+      world_data,
+      country_data,
+      first_period,
+      second_period,
+      country_name
+    );
+    const result: { [col_name: string]: string | number } = {};
+    for (let key of Object.keys(temp_result)) {
+      result[key] = temp_result[key].toString();
+      // console.log(key, temp_result[key].toString());
+    }
+    return { is_error: false, result };
+  } catch (error: any) {
+    return {
+      is_error: true,
+      message: `DATA MUST BE IN NUMBER, error in calculation, ${error.message}`,
+    };
+  }
+};
 
 export const calculation_cmsa_two_level_module_service = async (
   world_data: { [index: string]: any }[],
@@ -81,7 +130,7 @@ export const calculation_cmsa_two_level_module_service = async (
   } catch (error: any) {
     return {
       is_error: true,
-      message: `DATA MUST IN NUMBER, error in calculation, ${error.message}`,
+      message: `DATA MUST BE IN NUMBER, error in calculation, ${error.message}`,
     };
   }
 };
@@ -143,7 +192,7 @@ export const calculation_cmsa_three_level_module_service = async (
   } catch (error: any) {
     return {
       is_error: true,
-      message: `DATA MUST IN NUMBER, error in calculation, ${error.message}`,
+      message: `DATA MUST BE IN NUMBER, error in calculation, ${error.message}`,
     };
   }
   // for (let key of Object.keys(test)) {
