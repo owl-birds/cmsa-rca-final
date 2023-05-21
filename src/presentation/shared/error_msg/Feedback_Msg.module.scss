@@ -1,8 +1,15 @@
 @use "../../../scss-global/colors";
 .feedback_box {
+  justify-self: center;
+  align-self: center;
+  width: fit-content;
   display: flex;
   justify-content: center;
   align-items: center;
+  span {
+    width: fit-content;
+    text-align: center;
+  }
   .error {
     color: colors.$warning-color;
   }

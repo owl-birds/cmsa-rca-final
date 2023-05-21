@@ -5,7 +5,7 @@ import {
   clear_calculation_service,
   set_result_service,
   add_result_service,
-  calculation_three_level_module_service,
+  calculation_cmsa_three_level_module_service,
 } from "../../../application/services/calculation.service";
 import { use_world_file_store } from "../../../application/states/world.state";
 import { use_country_file_store } from "../../../application/states/country.state";
@@ -135,7 +135,7 @@ const CMSA_Calculation_Options = memo((props: Props) => {
         //   "../../../application/analyser_module/three_level"
         // );
 
-        const result = await calculation_three_level_module_service(
+        const result = await calculation_cmsa_three_level_module_service(
           world_data,
           findColDataArr(country_data, country_selected)!,
           country_selected,

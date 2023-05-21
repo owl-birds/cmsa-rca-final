@@ -109,7 +109,10 @@ import { get_years_intersection } from "../../../application/services/general_da
 import Feedback_Msg from "../../shared/error_msg/Feedback_Msg";
 
 // CALCULATION SERVICES
-import { calculation_three_level_module_service } from "../../../application/services/calculation.service";
+import {
+  calculation_cmsa_three_level_module_service,
+  calculation_cmsa_two_level_module_service,
+} from "../../../application/services/calculation.service";
 import { findColDataArr } from "../../../application/analyser_module/helpers";
 
 // METHODS
@@ -127,8 +130,14 @@ const App_main = () => {
   const country_data = use_country_file_store(
     (state: Uploaded_Country_File_State) => state.data
   );
+  const country_data_columns = use_country_file_store(
+    (state: Uploaded_Country_File_State) => state.columns
+  );
   const world_data = use_world_file_store(
     (state: Uploaded_World_File_State) => state.data
+  );
+  const world_data_columns = use_world_file_store(
+    (state: Uploaded_World_File_State) => state.columns
   );
   //
   const country_years = get_country_years_service();
@@ -201,6 +210,19 @@ const App_main = () => {
     // do we need to clean calculation state everything
     // the method and sub tyoe change
 
+    // checking the data
+    if (!country_data || country_data.length === 0) {
+      set_calculation_msg(() => "PLEASE INPUT COUNTRY DATA");
+      set_is_error(() => true);
+      return;
+    }
+    if (!world_data || world_data.length === 0) {
+      set_calculation_msg(() => "PLEASE INPUT WORLD DATA");
+      set_is_error(() => true);
+      return;
+    }
+    // checking the data
+
     console.log("start calculation");
     // validate the method options
     if (method === avail_methods[0]) {
@@ -240,6 +262,7 @@ const App_main = () => {
         return;
       }
     }
+
     // validate the method options
 
     // clean local state everytime we pass the validations
@@ -260,20 +283,65 @@ const App_main = () => {
 
           // should be some kinf of error cathing here
           // to give feedback to the user
-          const result = await calculation_three_level_module_service(
-            world_data!,
-            findColDataArr(country_data!, country_name!, "country")!,
-            country_name!,
-            `${first_period}`,
-            `${second_period}`
-          );
-          console.log(result);
+          const result_three =
+            await calculation_cmsa_three_level_module_service(
+              world_data!,
+              findColDataArr(country_data!, country_name!, "country")!,
+              country_name!,
+              `${first_period}`,
+              `${second_period}`,
+              country_data_columns!,
+              world_data_columns!
+            );
+          console.log(result_three);
+          if (result_three.is_error) {
+            set_calculation_msg(() => `${result_three.message}`);
+            set_is_error(() => true);
+            return;
+          }
           break;
         case cmsa_types[1]:
           console.log("CMSA TWO COM");
+          const result_two_com =
+            await calculation_cmsa_two_level_module_service(
+              world_data,
+              // // TEST
+              // findColDataArr(country_data!, "dunia", "country")!,
+              // // TEST
+              findColDataArr(country_data!, country_name!, "country")!,
+              country_name!,
+              `${first_period}`,
+              `${second_period}`,
+              country_data_columns!,
+              world_data_columns!,
+              method_sub_type
+            );
+          console.log(result_two_com);
+          if (result_two_com.is_error) {
+            set_calculation_msg(() => `${result_two_com.message}`);
+            set_is_error(() => true);
+            return;
+          }
           break;
         case cmsa_types[2]:
           console.log("CMSA TWO REG/PART");
+          const result_two_reg =
+            await calculation_cmsa_two_level_module_service(
+              world_data,
+              findColDataArr(country_data!, country_name!, "country")!,
+              country_name!,
+              `${first_period}`,
+              `${second_period}`,
+              country_data_columns!,
+              world_data_columns!,
+              method_sub_type
+            );
+          console.log(result_two_reg);
+          if (result_two_reg.is_error) {
+            set_calculation_msg(() => `${result_two_reg.message}`);
+            set_is_error(() => true);
+            return;
+          }
           break;
         case cmsa_types[3]:
           console.log("CMSA ONE");
@@ -286,6 +354,7 @@ const App_main = () => {
       // if the calculation succed
       set_calculation_msg(() => "CALCULATION COMPLETED");
       set_is_error(() => false);
+      return;
     } else if (method === avail_methods[1]) {
       // RCA
       switch (method_sub_type) {
@@ -300,7 +369,15 @@ const App_main = () => {
       // if the calculation succed
       set_calculation_msg(() => "CALCULATION COMPLETED");
       set_is_error(() => false);
+      return;
     }
+
+    ///////////////////////////////
+    set_calculation_msg(
+      () => "METHOD NOT FOUND, ERROR IN CALCULATION LOGIC/PROCESS"
+    );
+    set_is_error(() => true);
+    //////////////////////////////
   };
 
   //
@@ -316,6 +393,8 @@ const App_main = () => {
   // console.log("unique countries", unique_countries);
   // console.log("country selected", country_name);
   // console.log("calculation feedback", calculation_msg);
+  // console.log("country data", country_data);
+  // console.log("world data", world_data);
   // TEST
 
   return (
@@ -466,8 +545,8 @@ const App_main = () => {
         {/* SOME METHOD INFORMATIONS TAHT CAN BE TOGGLED */}
 
         {/* METHOD OPTIONS TO DO CALCULATIONS */}
-        {world_data &&
-        country_data &&
+        {world_data && // u can use some boolean value here
+        country_data && // and u dont have to have the data here
         ((method === avail_methods[0] && // CMSA
           method_sub_type !== null &&
           cmsa_types.indexOf(method_sub_type!) !== -1) ||
@@ -548,6 +627,12 @@ const App_main = () => {
           </div>
         ) : null}
         {/* METHOD OPTIONS TO DO CALCULATIONS */}
+
+        {/* TEST */}
+        {/* <button onClick={start_calculation} className="btn_default">
+          process
+        </button> */}
+        {/* TEST */}
       </section>
       <section>
         <div className={classes.section_title}>
