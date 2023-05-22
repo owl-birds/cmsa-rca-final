@@ -9,6 +9,7 @@ export interface Calculation_State_Interface {
   method_sub_type: string | null;
   year_interval: number | null;
   result: any[] | null;
+  result_advance: null | { [method_and_sub_type: string]: any[] };
   clear_state: () => void;
   set_first_period: (new_period: number) => void;
   set_second_period: (new_period: number) => void;
@@ -18,6 +19,11 @@ export interface Calculation_State_Interface {
   set_year_interval: (new_interval: number) => void;
   set_result: (new_result: any[]) => void;
   add_result: (new_result: {}) => void;
+  add_result_advance: (
+    new_result: {},
+    method: string,
+    method_sub_type: string
+  ) => void;
 }
 
 export const use_calculation_store = create<Calculation_State_Interface>()(
@@ -29,6 +35,7 @@ export const use_calculation_store = create<Calculation_State_Interface>()(
     method_sub_type: null,
     year_interval: null,
     result: null,
+    result_advance: null,
     set_country: (new_country: string) => set(() => ({ country: new_country })),
     set_result: (new_result: any[]) => set(() => ({ result: new_result })),
     add_result: (new_result: {}) =>
@@ -43,6 +50,23 @@ export const use_calculation_store = create<Calculation_State_Interface>()(
           state.result.push(new_result);
         })
       ),
+    add_result_advance: (
+      new_result: {},
+      method: string,
+      method_sub_type: string
+    ) =>
+      set(
+        produce((state: Calculation_State_Interface) => {
+          //
+          if (!state.result_advance) state.result_advance = {};
+          const result_key: string = `${method} ${method_sub_type}`;
+          if (!state.result_advance[result_key]) {
+            state.result_advance[result_key] = [new_result];
+            return;
+          }
+          state.result_advance[result_key].push(new_result);
+        })
+      ),
     clear_state: () =>
       set(() => ({
         first_period: null,
@@ -52,6 +76,7 @@ export const use_calculation_store = create<Calculation_State_Interface>()(
         method_sub_type: null,
         year_interval: null,
         result: null,
+        result_advance: null,
       })),
     set_first_period: (new_period: number) =>
       set(() => ({ first_period: new_period })),

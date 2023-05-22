@@ -59,6 +59,7 @@ import {
   calculation_cmsa_three_level_module_service,
   calculation_cmsa_two_level_module_service,
   calculation_cmsa_one_level_module_service,
+  calculation_rca_basic_service,
 } from "../../../application/services/calculation.service";
 import { findColDataArr } from "../../../application/analyser_module/helpers";
 
@@ -130,6 +131,15 @@ const Section_Method = () => {
     (state: Calculation_State_Interface) => state.set_country
   );
   //
+
+  // result
+  const add_result_advance = use_calculation_store(
+    (state: Calculation_State_Interface) => state.add_result_advance
+  );
+  const result_advance = use_calculation_store(
+    (state: Calculation_State_Interface) => state.result_advance
+  );
+  // result
 
   // event handler
   const mouse_enter_info_toggle = () => {
@@ -236,12 +246,16 @@ const Section_Method = () => {
               country_data_columns!,
               world_data_columns!
             );
-          console.log(result_three);
+          // console.log(result_three);
           if (result_three.is_error) {
             set_calculation_msg(() => `${result_three.message}`);
             set_is_error(() => true);
             return;
           }
+          // ADDING TO GLOBAL STATE
+          result_three.result &&
+            add_result_advance(result_three.result, method, method_sub_type);
+          // ADDING TO GLOBAL STATE
           break;
         case cmsa_types[1]:
           console.log("CMSA TWO COM");
@@ -259,12 +273,16 @@ const Section_Method = () => {
               world_data_columns!,
               method_sub_type
             );
-          console.log(result_two_com);
+          // console.log(result_two_com);
           if (result_two_com.is_error) {
             set_calculation_msg(() => `${result_two_com.message}`);
             set_is_error(() => true);
             return;
           }
+          // ADDING TO GLOBAL STATE
+          result_two_com.result &&
+            add_result_advance(result_two_com.result, method, method_sub_type);
+          // ADDING TO GLOBAL STATE
           break;
         case cmsa_types[2]:
           console.log("CMSA TWO REG/PART");
@@ -279,12 +297,16 @@ const Section_Method = () => {
               world_data_columns!,
               method_sub_type
             );
-          console.log(result_two_reg);
+          // console.log(result_two_reg);
           if (result_two_reg.is_error) {
             set_calculation_msg(() => `${result_two_reg.message}`);
             set_is_error(() => true);
             return;
           }
+          // ADDING TO GLOBAL STATE
+          result_two_reg.result &&
+            add_result_advance(result_two_reg.result, method, method_sub_type);
+          // ADDING TO GLOBAL STATE
           break;
         case cmsa_types[3]:
           console.log("CMSA ONE");
@@ -296,12 +318,16 @@ const Section_Method = () => {
             `${second_period}`,
             country_data_columns!
           );
-          console.log(result_one);
+          // console.log(result_one);
           if (result_one.is_error) {
             set_calculation_msg(() => `${result_one.message}`);
             set_is_error(() => true);
             return;
           }
+          // ADDING TO GLOBAL STATE
+          result_one.result &&
+            add_result_advance(result_one.result, method, method_sub_type);
+          // ADDING TO GLOBAL STATE
           break;
         default:
           set_calculation_msg(() => "METHOD NOT FOUND");
@@ -317,6 +343,14 @@ const Section_Method = () => {
       switch (method_sub_type) {
         case rca_types[0]:
           console.log("RCA BASIC");
+          const result_rca_basic = await calculation_rca_basic_service(
+            world_data,
+            findColDataArr(country_data, country_name!, "country")!,
+            country_name!,
+            `${first_period}`,
+            country_years
+          );
+          console.log("rca basic", result_rca_basic);
           break;
         default:
           set_calculation_msg(() => "METHOD NOT FOUND");
@@ -352,6 +386,7 @@ const Section_Method = () => {
   // console.log("calculation feedback", calculation_msg);
   // console.log("country data", country_data);
   // console.log("world data", world_data);
+  console.log("result advamce", result_advance);
   // TEST
 
   return (

@@ -11,6 +11,32 @@ import {
   totalExportPerYear,
 } from "./helpers";
 
+export const total_col_export_year = (
+  data: { [index: string]: any }[],
+  unique_years: string[] | number[],
+  col_indicator: string = "commodity"
+) => {
+  //
+  const total_result: {
+    [col_indicator_instance: string]: { [index: string]: any };
+  } = {};
+
+  for (let row of data) {
+    if (!total_result[row[col_indicator]]) {
+      //
+      total_result[row[col_indicator]] = {};
+      for (let year of unique_years) {
+        total_result[row[col_indicator]][year] = row[year];
+      }
+      continue;
+    }
+    for (let year of unique_years) {
+      total_result[row[col_indicator]][year] += row[year];
+    }
+  }
+  return total_result;
+};
+
 export const rca_basic = (
   country_commodity_export: number,
   world_commodity_export: number,

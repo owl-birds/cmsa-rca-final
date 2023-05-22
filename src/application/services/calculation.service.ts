@@ -24,6 +24,7 @@ export const add_result_service = (new_result: {}) => {
   add_result(new_result);
 };
 
+/////////////////// CMSA /////////////////////////
 export const calculation_cmsa_one_level_module_service = async (
   world_data: { [index: string]: any }, // what if the user doesnt want to find the total export,
   // they hust put all the data in there,
@@ -66,6 +67,7 @@ export const calculation_cmsa_one_level_module_service = async (
       result[key] = temp_result[key].toString();
       // console.log(key, temp_result[key].toString());
     }
+    result["periods"] = `${first_period}-${second_period}`;
     return { is_error: false, result };
   } catch (error: any) {
     return {
@@ -126,6 +128,7 @@ export const calculation_cmsa_two_level_module_service = async (
       result[key] = temp_result[key].toString();
       // console.log(key, temp_result[key].toString());
     }
+    result["periods"] = `${first_period}-${second_period}`;
     return { is_error: false, result };
   } catch (error: any) {
     return {
@@ -188,6 +191,7 @@ export const calculation_cmsa_three_level_module_service = async (
       result[key] = temp_result[key].toString();
       // console.log(key, temp_result[key].toString());
     }
+    result["periods"] = `${first_period}-${second_period}`;
     return { is_error: false, result };
   } catch (error: any) {
     return {
@@ -199,3 +203,37 @@ export const calculation_cmsa_three_level_module_service = async (
   //   console.log(key, test[key].toString());
   // }
 };
+/////////////////// CMSA /////////////////////////
+
+/////////////////// RCA /////////////////////////
+export const calculation_rca_basic_service = async (
+  world_data: { [index: string]: any }[], // what if the user doesnt want to find the total export,
+  country_data: { [index: string]: any }[],
+  country_name: string,
+  period: string,
+  unique_country_years: number[] | string[]
+) => {
+  // validate data
+  // validate data
+
+  try {
+    const { rca_basic, total_col_export_year } = await import(
+      "../analyser_module/rca"
+    );
+    const total_export_com_year = total_col_export_year(
+      country_data,
+      unique_country_years,
+      "commodity"
+    );
+    // console.log(total_export_com_year);
+    // TEST
+    return total_export_com_year;
+    // TEST
+  } catch (error: any) {
+    return {
+      is_error: true,
+      message: `DATA MUST BE IN NUMBER, error in calculation, ${error.message}`,
+    };
+  }
+};
+/////////////////// RCA /////////////////////////
