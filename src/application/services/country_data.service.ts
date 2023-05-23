@@ -8,10 +8,13 @@ import {
 } from "./general_data.service";
 import { use_country_file_store } from "../states/country.state";
 
-export const get_unique_values_country = (col_name: string): string[] => {
+export const get_unique_values_country = (
+  col_name: string,
+  is_lower: boolean = true
+): string[] => {
   const get_uniques_values =
     use_country_file_store.getState().get_unique_values_columns;
-  return get_uniques_values(col_name);
+  return get_uniques_values(col_name, is_lower);
 };
 
 export const get_country_years_service = (): number[] => {

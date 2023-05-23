@@ -10,7 +10,7 @@ import {
   Uploaded_World_File_State,
 } from "../../../application/states/world.state";
 
-//
+// DATA
 // COUNTRY
 import {
   add_country_column_service,
@@ -31,8 +31,6 @@ import {
 } from "../../../application/states/country_ui.state";
 import {
   clear_all_state_service,
-  csv_string_to_csv_file,
-  data_to_csv_string,
   is_ext_allowed,
 } from "../../../application/services/general_data.service";
 import Data_Box_2 from "../../shared/data_box/Data_Box_2";
@@ -116,11 +114,32 @@ import {
 
 // // METHODS
 
+// OUTPUT
+import {
+  use_calculation_store,
+  Calculation_State_Interface,
+} from "../../../application/states/calculation.state";
+import Table from "../../shared/table/Table";
+import {
+  csv_string_to_csv_file,
+  data_to_csv_string,
+} from "../../../application/services/general_data.service";
+// OUTPUT
+
 // COMPONENTS
 import Section_data from "../../shared/section_data/Section_data";
 import Section_Method from "../../shared/section_methods/Section_Method";
 
 const App_main = () => {
+  // output state
+  const result = use_calculation_store(
+    (state: Calculation_State_Interface) => state.result_advance
+  );
+
+  // TEST
+  console.log("output", result);
+  // TEST
+
   return (
     <div className={classes.main_app}>
       <Section_data />
@@ -136,7 +155,20 @@ const App_main = () => {
           <h4>OUTPUT</h4>
           <div></div>
         </div>
-        <div></div>
+        <div className={classes.output_box}>
+          {result &&
+            Object.keys(result).map((method_key, idx) => (
+              <Table
+                key={idx}
+                table_name={method_key}
+                data={result[method_key]}
+                columns={Object.keys(result[method_key][0])}
+                csv_string_to_csv_file={csv_string_to_csv_file}
+                data_to_csv_string={data_to_csv_string}
+                is_download_able={true}
+              />
+            ))}
+        </div>
       </section>
     </div>
   );

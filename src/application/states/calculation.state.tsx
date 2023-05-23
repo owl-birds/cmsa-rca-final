@@ -24,6 +24,11 @@ export interface Calculation_State_Interface {
     method: string,
     method_sub_type: string
   ) => void;
+  add_multiple_results_advance: (
+    new_results: {}[],
+    method: string,
+    method_sub_type: string
+  ) => void;
 }
 
 export const use_calculation_store = create<Calculation_State_Interface>()(
@@ -65,6 +70,32 @@ export const use_calculation_store = create<Calculation_State_Interface>()(
             return;
           }
           state.result_advance[result_key].push(new_result);
+        })
+      ),
+    add_multiple_results_advance: (
+      new_results: {}[],
+      method: string,
+      method_sub_type: string
+    ) =>
+      set(
+        produce((state: Calculation_State_Interface) => {
+          //
+          if (new_results.length > 0) {
+            const result_key: string = `${method} ${method_sub_type}`;
+            if (!state.result_advance) {
+              state.result_advance = {};
+            }
+            if (!state.result_advance[result_key]) {
+              state.result_advance[result_key] = [];
+              for (let result of new_results) {
+                state.result_advance[result_key].push(result);
+              }
+              return;
+            }
+            for (let result of new_results) {
+              state.result_advance[result_key].push(result);
+            }
+          }
         })
       ),
     clear_state: () =>

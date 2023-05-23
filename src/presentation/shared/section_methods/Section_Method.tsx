@@ -61,7 +61,11 @@ import {
   calculation_cmsa_one_level_module_service,
   calculation_rca_basic_service,
 } from "../../../application/services/calculation.service";
-import { findColDataArr } from "../../../application/analyser_module/helpers";
+import {
+  findColDataArr,
+  uniqueColNames,
+  // uniqueCols,
+} from "../../../application/analyser_module/helpers";
 
 // METHODS
 const Section_Method = () => {
@@ -136,6 +140,9 @@ const Section_Method = () => {
   const add_result_advance = use_calculation_store(
     (state: Calculation_State_Interface) => state.add_result_advance
   );
+  const add_multiple_result_advance = use_calculation_store(
+    (state: Calculation_State_Interface) => state.add_multiple_results_advance
+  );
   const result_advance = use_calculation_store(
     (state: Calculation_State_Interface) => state.result_advance
   );
@@ -176,7 +183,7 @@ const Section_Method = () => {
     }
     // checking the data
 
-    console.log("start calculation");
+    // console.log("start calculation");
     // validate the method options
     if (method === avail_methods[0]) {
       // CMSA
@@ -348,9 +355,29 @@ const Section_Method = () => {
             findColDataArr(country_data, country_name!, "country")!,
             country_name!,
             `${first_period}`,
-            country_years
+            country_data_columns!,
+            world_data_columns!,
+            country_years,
+            world_years,
+            uniqueColNames(
+              findColDataArr(country_data, country_name!, "country")!
+            )
+            // get_unique_values_country("commodity", false)
           );
-          console.log("rca basic", result_rca_basic);
+          // console.log("rca basic", result_rca_basic);
+          if (result_rca_basic.is_error) {
+            set_calculation_msg(() => `${result_rca_basic.message}`);
+            set_is_error(() => true);
+            return;
+          }
+          // ADDING TO GLOBAL STATE
+          result_rca_basic.result &&
+            add_multiple_result_advance(
+              result_rca_basic.result,
+              method,
+              method_sub_type
+            );
+          // ADDING TO GLOBAL STATE
           break;
         default:
           set_calculation_msg(() => "METHOD NOT FOUND");
@@ -386,7 +413,7 @@ const Section_Method = () => {
   // console.log("calculation feedback", calculation_msg);
   // console.log("country data", country_data);
   // console.log("world data", world_data);
-  console.log("result advamce", result_advance);
+  // console.log("result advamce", result_advance);
   // TEST
 
   return (

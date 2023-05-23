@@ -14,7 +14,8 @@ import {
 export const total_col_export_year = (
   data: { [index: string]: any }[],
   unique_years: string[] | number[],
-  col_indicator: string = "commodity"
+  col_indicator: string = "commodity",
+  total_indicator: string = "total"
 ) => {
   //
   const total_result: {
@@ -34,6 +35,34 @@ export const total_col_export_year = (
       total_result[row[col_indicator]][year] += row[year];
     }
   }
+
+  // finding if the total row exist in our data
+  let is_total_exist: boolean = false;
+  for (let row of data) {
+    if (row[col_indicator] === total_indicator) {
+      if (!total_result[total_indicator]) total_result[total_indicator] = {};
+      for (let year of unique_years) {
+        total_result[total_indicator][year] = row[year];
+      }
+      is_total_exist = true;
+    }
+  }
+  if (!is_total_exist) {
+    for (let row of data) {
+      if (!total_result[total_indicator]) {
+        total_result[total_indicator] = {};
+        for (let year of unique_years) {
+          total_result[total_indicator][year] = row[year];
+        }
+        continue;
+      }
+      for (let year of unique_years) {
+        total_result[total_indicator][year] += row[year];
+      }
+    }
+  }
+  // finding if the total row exist in our data
+
   return total_result;
 };
 
