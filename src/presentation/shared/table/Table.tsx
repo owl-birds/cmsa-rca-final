@@ -14,6 +14,7 @@ import React, { useRef } from "react";
 // } from "../../../application/states/file.state";
 import Cell from "./Cell";
 import classes from "./Table.module.scss";
+import cell_classes from "./Cell.module.scss";
 
 interface Data {
   [col_name: string]: number | string | null;
@@ -169,7 +170,27 @@ const Table = (props: Props) => {
                           />
                         </td>
                       ) : (
-                        <td key={col_idx}>{row[col_name]}</td>
+                        <td key={col_idx}>
+                          <div
+                            className={`${
+                              Number(row[col_name]) ||
+                              row[col_name] === "0" ||
+                              row[col_name] === 0
+                                ? cell_classes.cell_align_right
+                                : ""
+                            }`}
+                          >
+                            {row[col_name] || row[col_name] === 0
+                              ? Number(row[col_name]) &&
+                                col_name !== "period" &&
+                                col_name !== "periods"
+                                ? Number.parseFloat(`${row[col_name]}`).toFixed(
+                                    2
+                                  )
+                                : `${row[col_name]}`
+                              : "-"}
+                          </div>
+                        </td>
                       )
 
                     //                                                    <td key={idx}>{row[col_name]}</td>
@@ -189,7 +210,7 @@ const Table = (props: Props) => {
       ) : null}
       {is_download_able ? (
         <button onClick={download_data_to_csv} className="btn_default">
-          Download
+          Export
           <a ref={silent_a_ref} className={classes.silent_a}>
             SILENT A
           </a>

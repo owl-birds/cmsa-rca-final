@@ -86,7 +86,14 @@ const Cell = memo((props: Props) => {
           onChange={input_size_handler}
         />
       ) : (
-        <div onClick={enter_input_mode} className={`${classes.cell_span}`}>
+        <div
+          onClick={enter_input_mode}
+          className={`${classes.cell_span} ${
+            Number(value) || value === "0" || value === 0
+              ? classes.cell_align_right
+              : ""
+          }`}
+        >
           {value || value === 0 ? `${value}` : "-"}
         </div>
       )}
