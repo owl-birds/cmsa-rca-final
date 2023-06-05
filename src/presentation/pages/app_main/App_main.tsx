@@ -1,64 +1,134 @@
-import React, { useState } from "react";
+import React from "react";
 import classes from "./App_main.module.scss";
 
+// OUTPUT
 import {
-  use_country_file_store,
-  Uploaded_Country_File_State,
-} from "../../../application/states/country.state";
+  use_calculation_store,
+  Calculation_State_Interface,
+} from "../../../application/states/calculation.state";
+import Table from "../../shared/table/Table";
 import {
-  use_world_file_store,
-  Uploaded_World_File_State,
-} from "../../../application/states/world.state";
-
-// DATA
-// COUNTRY
-import {
-  add_country_column_service,
-  add_country_row_service,
-  update_cell_country_service,
-  read_country_file_service,
-  initiate_country_self_input_service,
-  clear_country_data_service,
-  // get_country_years_service,
-} from "../../../application/services/country_data.service";
-// import {
-//   Uploaded_Country_File_State,
-//   use_country_file_store,
-// } from "../../../application/states/country.state";
-import {
-  use_country_ui,
-  Country_Ui_Interface,
-} from "../../../application/states/country_ui.state";
-import {
-  clear_all_state_service,
-  is_ext_allowed,
+  csv_string_to_csv_file,
+  data_to_csv_string,
 } from "../../../application/services/general_data.service";
-import Data_Box_2 from "../../shared/data_box/Data_Box_2";
-// COUNTRY
-//
+// OUTPUT
 
-//
-// WORLD
-import {
-  add_world_column_service,
-  add_world_row_service,
-  update_cell_world_service,
-  read_world_file_service,
-  initiate_world_self_input_service,
-  clear_world_data_service,
-  // get_world_years_service,
-} from "../../../application/services/world_data.service";
-import {
-  use_world_ui,
-  World_Ui_Interface,
-} from "../../../application/states/world_ui.state";
+// COMPONENTS
+import Section_data from "../../shared/section_data/Section_data";
+import Section_Method from "../../shared/section_methods/Section_Method";
+import Section_Calc_Options from "../../shared/section_calc_options/Section_Calc_Options";
+import Floating_Nav from "../../shared/navigations/Floating_Nav";
+
+const App_main = () => {
+  // output state
+  const result = use_calculation_store(
+    (state: Calculation_State_Interface) => state.result_advance
+  );
+
+  // TEST
+  console.log("output", result);
+  // TEST
+
+  return (
+    <>
+      <div className={classes.main_app}>
+        <Section_Method nav_id="method" />
+        <Section_data nav_id="data" />
+        <Section_Calc_Options nav_id="calculation options" />
+        {/* table here should be optimised (SLOW AS FECK),
+      for ex: showing a limited number of data, and u
+      can navigate with an arrow or using search box */}
+
+        {/* below need refactoring */}
+        <section id="output">
+          <div className={classes.section_title}>
+            <div></div>
+            <h4>OUTPUT</h4>
+            <div></div>
+          </div>
+          <div className={classes.output_box}>
+            {result &&
+              Object.keys(result).map((method_key, idx) => (
+                <Table
+                  key={idx}
+                  table_name={method_key}
+                  data={result[method_key]}
+                  columns={Object.keys(result[method_key][0])}
+                  csv_string_to_csv_file={csv_string_to_csv_file}
+                  data_to_csv_string={data_to_csv_string}
+                  is_download_able={true}
+                />
+              ))}
+          </div>
+        </section>
+      </div>
+      <Floating_Nav
+        a_hrefs={["method", "data", "calculation options", "output"]}
+      />
+    </>
+  );
+};
+
+export default App_main;
+
+////
+// import {
+//   use_country_file_store,
+//   Uploaded_Country_File_State,
+// } from "../../../application/states/country.state";
+// import {
+//   use_world_file_store,
+//   Uploaded_World_File_State,
+// } from "../../../application/states/world.state";
+
+// // DATA
+// // COUNTRY
+// import {
+//   add_country_column_service,
+//   add_country_row_service,
+//   update_cell_country_service,
+//   read_country_file_service,
+//   initiate_country_self_input_service,
+//   clear_country_data_service,
+//   // get_country_years_service,
+// } from "../../../application/services/country_data.service";
+// // import {
+// //   Uploaded_Country_File_State,
+// //   use_country_file_store,
+// // } from "../../../application/states/country.state";
+// import {
+//   use_country_ui,
+//   Country_Ui_Interface,
+// } from "../../../application/states/country_ui.state";
+// import {
+//   clear_all_state_service,
+//   is_ext_allowed,
+// } from "../../../application/services/general_data.service";
+// import Data_Box_2 from "../../shared/data_box/Data_Box_2";
+// // COUNTRY
+// //
+
+// //
+// // WORLD
+// import {
+//   add_world_column_service,
+//   add_world_row_service,
+//   update_cell_world_service,
+//   read_world_file_service,
+//   initiate_world_self_input_service,
+//   clear_world_data_service,
+//   // get_world_years_service,
+// } from "../../../application/services/world_data.service";
+// import {
+//   use_world_ui,
+//   World_Ui_Interface,
+// } from "../../../application/states/world_ui.state";
 // import {
 //   Uploaded_World_File_State,
 //   use_world_file_store,
 // } from "../../../application/states/world.state";
 // WORLD
 //
-
 // // METHODS
 // // datas
 // import {
@@ -114,69 +184,6 @@ import {
 
 // // METHODS
 
-// OUTPUT
-import {
-  use_calculation_store,
-  Calculation_State_Interface,
-} from "../../../application/states/calculation.state";
-import Table from "../../shared/table/Table";
-import {
-  csv_string_to_csv_file,
-  data_to_csv_string,
-} from "../../../application/services/general_data.service";
-// OUTPUT
-
-// COMPONENTS
-import Section_data from "../../shared/section_data/Section_data";
-import Section_Method from "../../shared/section_methods/Section_Method";
-
-const App_main = () => {
-  // output state
-  const result = use_calculation_store(
-    (state: Calculation_State_Interface) => state.result_advance
-  );
-
-  // TEST
-  console.log("output", result);
-  // TEST
-
-  return (
-    <div className={classes.main_app}>
-      <Section_data />
-      {/* table here should be optimised (SLOW AS FECK), 
-      for ex: showing a limited number of data, and u 
-      can navigate with an arrow or using search box */}
-
-      {/* below need refactoring */}
-      <Section_Method />
-      <section>
-        <div className={classes.section_title}>
-          <div></div>
-          <h4>OUTPUT</h4>
-          <div></div>
-        </div>
-        <div className={classes.output_box}>
-          {result &&
-            Object.keys(result).map((method_key, idx) => (
-              <Table
-                key={idx}
-                table_name={method_key}
-                data={result[method_key]}
-                columns={Object.keys(result[method_key][0])}
-                csv_string_to_csv_file={csv_string_to_csv_file}
-                data_to_csv_string={data_to_csv_string}
-                is_download_able={true}
-              />
-            ))}
-        </div>
-      </section>
-    </div>
-  );
-};
-
-export default App_main;
-
-////
 // TRASH
 // <section>
 //   <div className={classes.section_title}>

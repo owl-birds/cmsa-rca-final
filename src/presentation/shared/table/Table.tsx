@@ -21,15 +21,15 @@ interface Data {
 }
 
 interface Props {
+  data: any[] | null; // problem here ANY, THE ROOT OF ALL EVIL
+  columns: string[] | null;
   table_name?: string;
   is_download_able?: boolean;
   is_edit_able?: boolean;
-  data: any[] | null; // problem here ANY, THE ROOT OF ALL EVIL
-  columns: string[] | null;
   add_row_service?: () => void;
   add_column_service?: (column_name: string) => void;
-  data_to_csv_string: (data: any[], columns: string[]) => string;
-  csv_string_to_csv_file: (
+  data_to_csv_string?: (data: any[], columns: string[]) => string;
+  csv_string_to_csv_file?: (
     csv_string: string,
     silent_a: HTMLAnchorElement
   ) => void;
@@ -91,7 +91,13 @@ const Table = (props: Props) => {
   };
 
   const download_data_to_csv = () => {
-    if (data && columns && data.length > 0) {
+    if (
+      data &&
+      columns &&
+      data.length > 0 &&
+      data_to_csv_string &&
+      csv_string_to_csv_file
+    ) {
       const csv_string = data_to_csv_string(data, columns);
       //console.log(csv_string);
       if (silent_a_ref) {
@@ -111,7 +117,8 @@ const Table = (props: Props) => {
 
   return (
     <div className={classes.table_box}>
-      <h4>{table_name ? table_name : "Table's Title"}</h4>
+      {/* <h4>{table_name ? table_name : "Table's Title"}</h4> */}
+      {table_name ? <h4>{table_name}</h4> : null}
       {data && is_edit_able ? (
         <div className={classes.table_control}>
           <button

@@ -49,7 +49,12 @@ import {
 } from "../../../application/states/world.state";
 // WORLD
 //
-const Section_data = () => {
+interface Props {
+  nav_id: string;
+}
+const Section_data = (props: Props) => {
+  const { nav_id } = props;
+  //
   const [is_country_data_selected, set_is_country_data_selected] =
     useState<Boolean>(true);
 
@@ -120,7 +125,7 @@ const Section_data = () => {
     set_is_country_data_selected(() => false);
   };
   return (
-    <section>
+    <section id={nav_id}>
       <div className={classes.section_title}>
         <div></div>
         <h4>DATA</h4>

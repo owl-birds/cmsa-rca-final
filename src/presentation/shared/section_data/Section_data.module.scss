@@ -8,6 +8,7 @@ section {
   .section_title {
     width: 100%;
     display: flex;
+    margin: 20px 0;
     div {
       border-bottom: 1px solid colors.$secondary-color;
       width: 100%;
@@ -20,7 +21,8 @@ section {
     align-items: center;
     .data_menu {
       width: fit-content;
-      margin-bottom: 5px;
+      // margin-bottom: 5px;
+      border-bottom: none;
       button {
         margin: 0;
         border-radius: 0;
