@@ -11,3 +11,5 @@ This template should help get you started developing with Tauri, React and Types
 // data
 // calculation options
 // output display
+
+// FIX THE NAVIGATIONS
