@@ -135,15 +135,16 @@ const CMSA_Calculation_Options = memo((props: Props) => {
         //   "../../../application/analyser_module/three_level"
         // );
 
-        const result = await calculation_cmsa_three_level_module_service(
-          world_data,
-          findColDataArr(country_data, country_selected)!,
-          country_selected,
-          `${first_period}`,
-          `${second_period}`,
-          true,
-          "total"
-        );
+        // const result = await calculation_cmsa_three_level_module_service(
+        //   world_data,
+        //   findColDataArr(country_data, country_selected)!,
+        //   country_selected,
+        //   `${first_period}`,
+        //   `${second_period}`,
+        //   true,
+        //   "total"
+        // );
+        const result: any[] = [];
         // await set_result_service([result]);
         await add_result_service(result);
         set_output_title(() => `CMSA for ${first_period}-${second_period}`);
