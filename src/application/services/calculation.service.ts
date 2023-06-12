@@ -291,3 +291,88 @@ export const calculation_rca_basic_service = async (
   }
 };
 /////////////////// RCA /////////////////////////
+// version two only give u commmodity and year(rca value)
+export const calculation_rca_basic_service_v2 = async (
+  world_data: { [index: string]: any }[], // what if the user doesnt want to find the total export,
+  country_data: { [index: string]: any }[],
+  country_name: string,
+  period: string,
+  country_columns: string[],
+  world_columns: string[],
+  unique_country_years: number[] | string[],
+  unique_world_years: number[] | string[],
+  unique_commodities: string[],
+  total_indicator: string = "total",
+  commodity_indicator: string = "commodity",
+  country_indicator: string = "country"
+) => {
+  // validate data
+  let validate_data_result: Validate_Data_Column;
+  // validate country
+  validate_data_result = validate_data_columns(
+    country_columns,
+    [country_indicator, commodity_indicator],
+    country_indicator
+  );
+  if (!validate_data_result.is_pass)
+    return { is_error: true, message: validate_data_result.message };
+
+  // validate world
+  validate_data_result = validate_data_columns(
+    world_columns,
+    [commodity_indicator],
+    "world"
+  );
+  if (!validate_data_result.is_pass)
+    return { is_error: true, message: validate_data_result.message };
+
+  // validate data
+
+  try {
+    const { rca_basic, total_col_export_year } = await import(
+      "../analyser_module/rca"
+    );
+    const country_total_export_com_year = total_col_export_year(
+      country_data,
+      unique_country_years,
+      commodity_indicator,
+      total_indicator
+    );
+    const world_total_export_com_year = total_col_export_year(
+      world_data,
+      unique_world_years,
+      commodity_indicator,
+      total_indicator
+    );
+    const result: { [index: string]: any }[] = [];
+    for (let commodity of unique_commodities) {
+      const rca_result = rca_basic(
+        country_total_export_com_year[commodity][period],
+        world_total_export_com_year[commodity][period],
+        country_total_export_com_year[total_indicator][period],
+        world_total_export_com_year[total_indicator][period]
+      );
+      const temp_row: { [index: string]: any } = {};
+      temp_row[commodity_indicator] = commodity;
+      temp_row[country_indicator] = country_name;
+      temp_row["period"] = period;
+      temp_row["rca"] = rca_result.toString();
+      result.push(temp_row);
+    }
+    return { is_error: false, result };
+
+    // console.log(total_export_com_year);
+    // // TEST
+    // return [
+    //   unique_commodities,
+    //   country_total_export_com_year,
+    //   world_total_export_com_year,
+    // ];
+    // // TEST
+  } catch (error: any) {
+    return {
+      is_error: true,
+      message: `DATA MUST BE IN NUMBER, error in calculation, ${error.message}`,
+    };
+  }
+};

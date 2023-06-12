@@ -13,3 +13,10 @@ This template should help get you started developing with Tauri, React and Types
 // output display
 
 // FIX THE NAVIGATIONS
+
+// IMPORT
+// BACK BUTTON ON THE INPUT SELECTIONS;;;;;; !!!!
+
+// if you can do it
+// MAKE REACT-SELECT
+// FOR PERIOD, COUNTRY SELECTIONS

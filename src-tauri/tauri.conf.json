@@ -28,7 +28,12 @@
         "icons/icon.ico"
       ],
       "identifier": "com.cmsa-rca.dev",
-      "targets": "all"
+      "targets": "all",
+      "windows": {
+        "webviewInstallMode": {
+          "type": "offlineInstaller"
+        }
+      }
     },
     "security": {
       "csp": null

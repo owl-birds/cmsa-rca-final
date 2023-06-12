@@ -27,6 +27,12 @@ export interface Uploaded_Country_File_State {
   add_column: (new_column: string) => void;
   get_years: () => number[];
   get_unique_values_columns: (col_name: string, is_lower: boolean) => string[];
+  // add a new function or attrubyte, that will provide value options for react-select
+  // const options = [
+  //   { value: 'chocolate', label: 'Chocolate' },
+  //   { value: 'strawberry', label: 'Strawberry' },
+  //   { value: 'vanilla', label: 'Vanilla' },
+  // ]; // LOOK LIKE THIOS
 }
 
 export const use_country_file_store = create<Uploaded_Country_File_State>()(
@@ -161,7 +167,8 @@ export const use_country_file_store = create<Uploaded_Country_File_State>()(
           const new_row: Data = {};
           if (state.columns && state.data) {
             for (const col of state.columns) {
-              new_row[col] = null;
+              // new_row[col] = null;
+              new_row[col] = "-";
             }
             state.data.push(new_row);
           }

@@ -161,7 +161,8 @@ export const use_world_file_store = create<Uploaded_World_File_State>()(
           const new_row: Data = {};
           if (state.columns && state.data) {
             for (const col of state.columns) {
-              new_row[col] = null;
+              // new_row[col] = null;
+              new_row[col] = "-";
             }
             state.data.push(new_row);
           }
