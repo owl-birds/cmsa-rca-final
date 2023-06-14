@@ -54,3 +54,23 @@ export const add_country_column_service = (new_column: string) => {
   const add_column = use_country_file_store.getState().add_column;
   add_column_service(new_column, add_column);
 };
+export const get_country_columns_modifed_service = (): string[] | null => {
+  let columns: string[] | null = null;
+
+  // string columns
+  const str_columns: string[] = use_country_file_store.getState().str_columns;
+  // number columns
+  const year_columns: number[] = use_country_file_store.getState().year;
+
+  if (str_columns.length > 0 || year_columns.length > 0) {
+    columns = [];
+    for (let str_col of str_columns) {
+      columns.push(str_col);
+    }
+    for (let year_col of year_columns) {
+      columns.push(`${year_col}`);
+    }
+  }
+
+  return columns;
+};

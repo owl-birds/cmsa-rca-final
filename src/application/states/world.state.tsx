@@ -8,6 +8,12 @@ export interface Data {
 export interface Uploaded_World_File_State {
   data: any[] | null; // BAND AID
   columns: string[] | null;
+  // MORE COMPLEXIIES YAY, AHAHHAHA
+  // not a number columns
+  str_columns: string[];
+  // a number columns
+  // num_columns: number[] | null;
+  // MORE COMPLEXIIES YAY, AHAHHAHA
   year: number[];
   add_year: (year_or_years: number[] | number | string | string[]) => void;
   clear_state: () => void;
@@ -34,6 +40,10 @@ export const use_world_file_store = create<Uploaded_World_File_State>()(
     // PROBLEM HERE, BAND AID, NEED TO FIND OUT MORE
     data: null,
     columns: null,
+    // MORE COMPLEXIIES YAY, AHAHHAHA
+    str_columns: [],
+    // num_columns: null,
+    // MORE COMPLEXIIES YAY, AHAHHAHA
     year: [],
     add_year: (year_or_years: number[] | number | string | string[]) =>
       set(
@@ -60,7 +70,8 @@ export const use_world_file_store = create<Uploaded_World_File_State>()(
           }
         })
       ),
-    clear_state: () => set(() => ({ data: null, columns: null, year: [] })),
+    clear_state: () =>
+      set(() => ({ data: null, columns: null, str_columns: [], year: [] })),
     initiate_data: (new_data: any[], new_columns: string[]) =>
       set(
         produce((state: Uploaded_World_File_State) => {
@@ -70,6 +81,9 @@ export const use_world_file_store = create<Uploaded_World_File_State>()(
             const temp_year: number = new Date(col).getFullYear();
             // if (Number(col)) years.push(Number(col));
             if (!Number.isNaN(temp_year)) state.year.push(temp_year);
+            // MORE COMPLEXIIES YAY, AHAHHAHA
+            else state.str_columns.push(col);
+            // MORE COMPLEXIIES YAY, AHAHHAHA
             state.year.sort((a, b) => a - b);
           }
         })
@@ -119,7 +133,13 @@ export const use_world_file_store = create<Uploaded_World_File_State>()(
           starting_row[col] = null;
         }
         starting_data.push(starting_row);
-        return { columns: new_columns, data: starting_data };
+        return {
+          columns: new_columns,
+          data: starting_data,
+          // MORE COMPLEXITIES
+          str_columns: new_columns,
+          // MORE COMPLEXITIES
+        };
       }),
     update_cell: (
       // REAL SLOW
@@ -180,6 +200,11 @@ export const use_world_file_store = create<Uploaded_World_File_State>()(
               state.year.push(year);
               state.year.sort((a, b) => a - b);
             }
+            // MORE COMPLEXIIES YAY, AHAHHAHA
+            else {
+              state.str_columns.push(new_column);
+            }
+            // MORE COMPLEXIIES YAY, AHAHHAHA
             for (const row of state.data) {
               row[new_column] = null;
             }

@@ -9,6 +9,7 @@ import {
   initiate_country_self_input_service,
   clear_country_data_service,
   // get_country_years_service,
+  get_country_columns_modifed_service,
 } from "../../../application/services/country_data.service";
 import {
   Uploaded_Country_File_State,
@@ -38,6 +39,7 @@ import {
   initiate_world_self_input_service,
   clear_world_data_service,
   // get_world_years_service,
+  get_world_columns_modifed_service,
 } from "../../../application/services/world_data.service";
 import {
   use_world_ui,
@@ -63,9 +65,10 @@ const Section_data = (props: Props) => {
   const country_data = use_country_file_store(
     (state: Uploaded_Country_File_State) => state.data
   );
-  const country_columns = use_country_file_store(
-    (state: Uploaded_Country_File_State) => state.columns
-  );
+  // const country_columns = use_country_file_store(
+  //   (state: Uploaded_Country_File_State) => state.columns
+  // );
+  const country_columns = get_country_columns_modifed_service();
   //
   // COUNTRY UI
   const clear_country_ui_state = use_country_ui(
@@ -93,9 +96,10 @@ const Section_data = (props: Props) => {
   const world_data = use_world_file_store(
     (state: Uploaded_World_File_State) => state.data
   );
-  const world_columns = use_world_file_store(
-    (state: Uploaded_World_File_State) => state.columns
-  );
+  // const world_columns = use_world_file_store(
+  //   (state: Uploaded_World_File_State) => state.columns
+  // );
+  const world_columns = get_world_columns_modifed_service();
   // WORLD UI
   const clear_world_ui_state = use_world_ui(
     (state: World_Ui_Interface) => state.clear_state

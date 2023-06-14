@@ -72,10 +72,14 @@ import {
   // rca basic
   // rca basic
 } from "../../../infrastructure/accepted_input_structure_data";
+import { avail_methods_desc } from "../../../infrastructure/all_methods_desc";
+
+//
 import Select from "../../shared/select/Select";
 import Formula_Desc from "../../shared/formula_desc/Formula_Desc";
 import Table from "../table/Table";
 import Use_Fetch_Hook from "../use_fetch_hook/Use_Fetch_Hook";
+import Simple_Info_box from "../simple_info_box/Simple_Info_box";
 
 interface Props {
   nav_id: string;
@@ -266,6 +270,19 @@ const Section_Method = (props: Props) => {
             </div>
           ) : null}
         </div>
+        {/* MAIN METHOD DESCRIPTION */}
+        {/* CMSA */}
+        {method === avail_methods[0] && (
+          <Simple_Info_box info_text={avail_methods_desc[0]} />
+        )}
+        {/* CMSA */}
+        {/* RCA */}
+        {method === avail_methods[1] && (
+          <Simple_Info_box info_text={avail_methods_desc[1]} />
+        )}
+        {/* RCA */}
+        {/* MAIN METHOD DESCRIPTION */}
+
         {/* SOME METHOD INFORMATIONS TAHT CAN BE TOGGLED */}
         {(method === avail_methods[0] &&
           method_sub_type !== null &&

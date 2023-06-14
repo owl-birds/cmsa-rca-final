@@ -121,18 +121,20 @@ const Table = (props: Props) => {
       {table_name ? <h4>{table_name}</h4> : null}
       {data && is_edit_able ? (
         <div className={classes.table_control}>
-          <button
-            className={`btn_default ${classes.btn_control}`}
-            onClick={clear_data_handler}
-          >
-            RESET DATA
-          </button>
-          <button
-            className={`btn_default ${classes.btn_control}`}
-            onClick={add_row}
-          >
-            ADD ROW
-          </button>
+          <div className={classes.table_buttons_box}>
+            <button
+              className={`btn_default ${classes.btn_control}`}
+              onClick={clear_data_handler}
+            >
+              RESET DATA
+            </button>
+            <button
+              className={`btn_default ${classes.btn_control}`}
+              onClick={add_row}
+            >
+              ADD ROW
+            </button>
+          </div>
           <div className={classes.add_column_wrapper}>
             <input
               type={"text"}

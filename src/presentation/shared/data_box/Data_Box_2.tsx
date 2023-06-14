@@ -71,8 +71,18 @@ const Data_Box_2 = memo((props: Props) => {
     clear_ui_state,
   } = props;
   // console.log(table_name);
+  const back_button_handler = () => {
+    clear_data_service();
+    clear_ui_state();
+  };
   return (
     <div id={id ? id : ""} className={classes.data_box}>
+      {/* back button here */}
+      {(is_choosed || (data && columns)) && (
+        <p onClick={back_button_handler} className={classes.back_button}>
+          back
+        </p>
+      )}
       {data ? null : (
         <div className={classes.input_data}>
           <h4>{data_box_title ? data_box_title : "DATA INPUT BOX"}</h4>

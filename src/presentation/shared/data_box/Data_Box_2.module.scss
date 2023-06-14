@@ -7,9 +7,16 @@
   display: grid;
   justify-items: center;
   align-items: center;
-  padding: 50px 20px;
+  padding: 15px 20px;
   border: 2px solid colors.$secondary-color;
   border-radius: 20px;
+  .back_button {
+    justify-self: left;
+  }
+  .back_button:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
   .input_data {
     h4 {
       text-align: center;

@@ -1,6 +1,11 @@
 import React from "react";
 import classes from "./App_main.module.scss";
 
+// SERVICES
+// import { clear_all_state_service } from "../../../application/services/general_data.service";
+// i cahnge it to refresh the page
+// SERVICES
+
 // OUTPUT
 import {
   use_calculation_store,
@@ -18,7 +23,7 @@ import Section_data from "../../shared/section_data/Section_data";
 import Section_Method from "../../shared/section_methods/Section_Method";
 import Section_Calc_Options from "../../shared/section_calc_options/Section_Calc_Options";
 import Floating_Nav from "../../shared/navigations/Floating_Nav";
-
+//
 const App_main = () => {
   // output state
   const result = use_calculation_store(
@@ -28,6 +33,10 @@ const App_main = () => {
   // TEST
   console.log("output", result);
   // TEST
+
+  // for restart
+  const refresh = () => window.location.reload();
+  // for restart
 
   return (
     <>
@@ -63,7 +72,13 @@ const App_main = () => {
         </section>
       </div>
       <Floating_Nav
-        a_hrefs={["method", "data", "calculation options", "output"]}
+        a_hrefs={[
+          ["restart", refresh],
+          ["method"],
+          ["data"],
+          ["calculation options"],
+          ["output"],
+        ]}
       />
     </>
   );
