@@ -20,3 +20,11 @@ This template should help get you started developing with Tauri, React and Types
 // if you can do it
 // MAKE REACT-SELECT
 // FOR PERIOD, COUNTRY SELECTIONS
+
+country === negara asal
+region === negara tujuan
+
+masukan sminar -> presentasikan hasil dari masukan seminar waktu sidang.
+-> simpan file pertanyaan/masukan seminar
+
+konfirmasi alur pengerjaan kepada pengguna
