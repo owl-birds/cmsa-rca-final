@@ -16,6 +16,20 @@ export const get_unique_values_country = (
     use_country_file_store.getState().get_unique_values_columns;
   return get_uniques_values(col_name, is_lower);
 };
+export const get_unique_values_country_v2 = (
+  col_name: string,
+  is_lower: boolean = true
+): { [index: string]: any }[] => {
+  const get_uniques_values =
+    use_country_file_store.getState().get_unique_values_columns;
+  const unique_values = get_uniques_values(col_name, is_lower);
+  const result: { [index: string]: any }[] = [];
+  for (let val of unique_values) {
+    const option: {} = { label: val, value: val };
+    result.push(option);
+  }
+  return result;
+};
 
 export const get_country_years_service = (): number[] => {
   const years: number[] = use_country_file_store.getState().get_years();

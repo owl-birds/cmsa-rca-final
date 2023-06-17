@@ -4,7 +4,9 @@ import { create } from "zustand";
 export interface Calculation_State_Interface {
   first_period: number | null;
   second_period: number | null;
+  second_period_arr: { [index: string]: string }[] | null;
   country: string | null;
+  country_arr: { [index: string]: string }[] | null;
   method_type: string | null;
   method_sub_type: string | null;
   year_interval: number | null;
@@ -14,6 +16,7 @@ export interface Calculation_State_Interface {
   set_first_period: (new_period: number) => void;
   set_second_period: (new_period: number) => void;
   set_country: (new_country: string) => void;
+  set_country_arr: (countries: { [index: string]: string }[]) => void;
   set_method_type: (new_method: string) => void;
   set_method_sub_type: (new_method_sub_type: string) => void;
   set_year_interval: (new_interval: number) => void;
@@ -35,13 +38,17 @@ export const use_calculation_store = create<Calculation_State_Interface>()(
   (set, get) => ({
     first_period: null,
     second_period: null,
+    second_period_arr: null,
     country: null,
+    country_arr: null,
     method_type: null,
     method_sub_type: null,
     year_interval: null,
     result: null,
     result_advance: null,
     set_country: (new_country: string) => set(() => ({ country: new_country })),
+    set_country_arr: (countries: { [index: string]: string }[]) =>
+      set(() => ({ country_arr: countries })),
     set_result: (new_result: any[]) => set(() => ({ result: new_result })),
     add_result: (new_result: {}) =>
       set(
