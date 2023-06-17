@@ -46,9 +46,13 @@ export const update_cell_world_service = (
   const update_cell = use_world_file_store.getState().update_cell_2;
   update_cell_service(new_value, row_index, column_name, update_cell);
 };
-export const add_world_row_service = () => {
+export const add_world_row_service = (how_many: number = 1) => {
   const add_row = use_world_file_store.getState().add_row;
-  add_row_service(add_row);
+  try {
+    add_row(how_many);
+  } catch (error) {
+    console.log(error);
+  }
 };
 export const add_world_column_service = (new_column: string) => {
   const add_column = use_world_file_store.getState().add_column;

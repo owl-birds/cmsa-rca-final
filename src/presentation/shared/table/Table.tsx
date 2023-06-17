@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 // import {
 //   add_column_service,
 //   add_row_service,
@@ -15,6 +15,7 @@ import React, { useRef } from "react";
 import Cell from "./Cell";
 import classes from "./Table.module.scss";
 import cell_classes from "./Cell.module.scss";
+import Modal_Num_Input from "../modal_num_input/Modal_Num_Input";
 
 interface Data {
   [col_name: string]: number | string | null;
@@ -26,7 +27,7 @@ interface Props {
   table_name?: string;
   is_download_able?: boolean;
   is_edit_able?: boolean;
-  add_row_service?: () => void;
+  add_row_service?: (how_many: number) => void;
   add_column_service?: (column_name: string) => void;
   data_to_csv_string?: (data: any[], columns: string[]) => string;
   csv_string_to_csv_file?: (
@@ -65,6 +66,10 @@ const Table = (props: Props) => {
   const silent_a_ref = useRef<HTMLAnchorElement | null>(null);
   const input_add_col_ref = useRef<HTMLInputElement | null>(null);
 
+  // input row state
+  // const [is_insert_row_open, set_is_insert_row_open] = useState<boolean>(false);
+  const input_add_row_ref = useRef<HTMLInputElement | null>(null);
+
   console.log("table's name", table_name);
   // console.log("data", data);
   //console.log("columns", columns);
@@ -72,7 +77,22 @@ const Table = (props: Props) => {
   const add_row = () => {
     //console.log("ADD ROW");
     // SERVICE
-    add_row_service && add_row_service();
+    // add_row_service && add_row_service();
+    // set_is_insert_row_open((prev_val) => !prev_val);
+    if (input_add_row_ref && input_add_row_ref.current) {
+      const input_html = input_add_row_ref.current as HTMLInputElement;
+      const value = input_html.value;
+      if (Number(value)) {
+        add_row_service && add_row_service(Number(value));
+      } else {
+        // input_html.value = "Input a NUMBER";
+        input_html.placeholder = "INPUT A NUMBER";
+        input_html.value = "";
+        return;
+      }
+      input_html.placeholder = "Type a number here";
+      input_html.value = "";
+    }
   };
 
   const add_column = () => {
@@ -87,6 +107,7 @@ const Table = (props: Props) => {
         // put some notification or some feedback to the user
         // if it failed or succeded
       }
+      input_new_column.value = "";
     }
   };
 
@@ -117,6 +138,13 @@ const Table = (props: Props) => {
 
   return (
     <div className={classes.table_box}>
+      {/* {add_row_service && is_insert_row_open && (
+        <Modal_Num_Input
+          modal_title={"INSERT ROW"}
+          do_this={add_row_service}
+          close_modal={set_is_insert_row_open}
+        />
+      )} */}
       {/* <h4>{table_name ? table_name : "Table's Title"}</h4> */}
       {table_name ? <h4>{table_name}</h4> : null}
       {data && is_edit_able ? (
@@ -128,21 +156,27 @@ const Table = (props: Props) => {
             >
               RESET DATA
             </button>
-            <button
-              className={`btn_default ${classes.btn_control}`}
-              onClick={add_row}
-            >
-              ADD ROW
-            </button>
           </div>
-          <div className={classes.add_column_wrapper}>
+          <div className={classes.input_wrapper}>
             <input
               type={"text"}
-              className={classes.input_add_column}
+              className={classes.input}
+              ref={input_add_row_ref}
+              placeholder={"Type a number here"}
+            />
+            <button className={`btn_default ${classes.btn}`} onClick={add_row}>
+              INSERT ROWS
+            </button>
+          </div>
+          <div className={classes.input_wrapper}>
+            <input
+              type={"text"}
+              className={classes.input}
               ref={input_add_col_ref}
+              placeholder={"Type a column name here"}
             />
             <button
-              className={`btn_default ${classes.btn_add_column}`}
+              className={`btn_default ${classes.btn}`}
               onClick={add_column}
             >
               ADD COLUMN

@@ -17,15 +17,15 @@
     .btn_control {
       margin: 0;
     }
-    .add_column_wrapper {
+    .input_wrapper {
       justify-self: center;
-      .btn_add_column {
+      .btn {
         margin: 0;
         //
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
       }
-      .input_add_column {
+      .input {
         font-weight: 700;
         padding: 10px;
         color: rgb(62, 62, 63);
@@ -36,7 +36,7 @@
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
       }
-      .input_add_column:focus {
+      .input:focus {
         outline: none;
       }
     }

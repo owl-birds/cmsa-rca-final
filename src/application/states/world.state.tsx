@@ -29,7 +29,7 @@ export interface Uploaded_World_File_State {
     row_index: number,
     col_name: string
   ) => void;
-  add_row: () => void;
+  add_row: (how_many: number) => void;
   add_column: (new_column: string) => void;
   get_years: () => number[];
   get_unique_values_columns: (col_name: string, is_lower: boolean) => string[];
@@ -175,16 +175,26 @@ export const use_world_file_store = create<Uploaded_World_File_State>()(
         })
       );
     },
-    add_row: () => {
+    add_row: (how_many: number) => {
       set(
         produce((state: Uploaded_World_File_State) => {
-          const new_row: Data = {};
-          if (state.columns && state.data) {
-            for (const col of state.columns) {
-              // new_row[col] = null;
-              new_row[col] = "-";
+          // const new_row: Data = {};
+          // if (state.columns && state.data) {
+          //   for (const col of state.columns) {
+          //     // new_row[col] = null;
+          //     new_row[col] = "-";
+          //   }
+          //   state.data.push(new_row);
+          // }
+          if (state.columns && state.data && state.columns.length > 0) {
+            for (let i = 0; i < how_many; i += 1) {
+              const new_row: Data = {};
+              for (const col of state.columns) {
+                // new_row[col] = null;
+                new_row[col] = "-";
+              }
+              state.data.push(new_row);
             }
-            state.data.push(new_row);
           }
         })
       );
