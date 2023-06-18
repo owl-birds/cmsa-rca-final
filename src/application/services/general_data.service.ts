@@ -25,6 +25,24 @@ export const get_years_intersection = () => {
 
   return result_year;
 };
+export const get_years_intersection_v2 = () => {
+  const country_years: number[] = use_country_file_store.getState().get_years();
+  const world_years: number[] = use_world_file_store.getState().get_years();
+  const world_years_set: Set<number> = new Set(world_years);
+  // const result_year: number[] = [];
+  const result_year: { [index: string]: number | string }[] = [];
+  // {value: THE_VALUE, label: THE_LABEL}[]
+
+  for (const year of country_years) {
+    if (world_years_set.has(year)) {
+      // result_year.push(year);
+      result_year.push({ value: year, label: year });
+    }
+  }
+
+  return result_year;
+};
+//both country and world
 
 export const clear_all_state_service = () => {
   const clear_world_ui = use_world_ui.getState().clear_state;

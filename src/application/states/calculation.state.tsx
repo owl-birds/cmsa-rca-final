@@ -3,8 +3,9 @@ import { create } from "zustand";
 
 export interface Calculation_State_Interface {
   first_period: number | null;
+  first_period_obj: { [index: string]: string | number } | null;
   second_period: number | null;
-  second_period_arr: { [index: string]: string }[] | null;
+  second_period_arr: { [index: string]: string | number }[] | null;
   country: string | null;
   country_arr: { [index: string]: string }[] | null;
   method_type: string | null;
@@ -14,7 +15,13 @@ export interface Calculation_State_Interface {
   result_advance: null | { [method_and_sub_type: string]: any[] };
   clear_state: () => void;
   set_first_period: (new_period: number) => void;
+  set_first_period_obj: (new_periods: {
+    [index: string]: string | number;
+  }) => void;
   set_second_period: (new_period: number) => void;
+  set_second_period_arr: (
+    new_periods: { [index: string]: string | number }[]
+  ) => void;
   set_country: (new_country: string) => void;
   set_country_arr: (countries: { [index: string]: string }[]) => void;
   set_method_type: (new_method: string) => void;
@@ -37,6 +44,7 @@ export interface Calculation_State_Interface {
 export const use_calculation_store = create<Calculation_State_Interface>()(
   (set, get) => ({
     first_period: null,
+    first_period_obj: null,
     second_period: null,
     second_period_arr: null,
     country: null,
@@ -108,8 +116,11 @@ export const use_calculation_store = create<Calculation_State_Interface>()(
     clear_state: () =>
       set(() => ({
         first_period: null,
+        first_period_obj: null,
         second_period: null,
+        second_period_arr: null,
         country: null,
+        country_arr: null,
         method_type: null,
         method_sub_type: null,
         year_interval: null,
@@ -118,8 +129,13 @@ export const use_calculation_store = create<Calculation_State_Interface>()(
       })),
     set_first_period: (new_period: number) =>
       set(() => ({ first_period: new_period })),
+    set_first_period_obj: (new_periods: { [index: string]: number | string }) =>
+      set(() => ({ first_period_obj: new_periods })),
     set_second_period: (new_period: number) =>
       set(() => ({ second_period: new_period })),
+    set_second_period_arr: (
+      new_periods: { [index: string]: number | string }[]
+    ) => set(() => ({ second_period_arr: new_periods })),
     set_method_type: (new_method: string) =>
       set(() => ({ method_type: new_method })),
     set_method_sub_type: (new_method_sub_type: string) =>
