@@ -1,6 +1,6 @@
 import classes from "./Section_Calc_Options.module.scss";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   use_country_file_store,
   Uploaded_Country_File_State,
@@ -49,6 +49,7 @@ import {
   // uniqueCols,
 } from "../../../application/analyser_module/helpers";
 import Multi_Dropdown_checkbox from "../multi_dropdown_select_checkbox/Multi_Dropdown_checkbox";
+import Simple_One_Checkbox from "../simple_one_checkbox/Simple_One_Checkbox";
 
 interface Props {
   nav_id: string;
@@ -76,7 +77,7 @@ const Section_Calc_Options = (props: Props) => {
   const years_in_both_v2 = get_years_intersection_v2();
 
   //
-  // global state zustand
+  // global state zustand ::: FOR CALCULATION STATE
   //
   const first_period = use_calculation_store(
     (state: Calculation_State_Interface) => state.first_period
@@ -115,12 +116,14 @@ const Section_Calc_Options = (props: Props) => {
   // console.log("SELECTEDS COUNTRY NAME :::: SINGLE", country_name);
   // console.log(unique_countries_v2);
   //
-  console.log("new years_v2", years_in_both_v2);
-  console.log("second period::MULTIPLE", second_period_arr);
+  // console.log("new years_v2", years_in_both_v2);
+  // console.log("second period::MULTIPLE", second_period_arr);
   // console.log("NEW FIRST PERIOD:::", first_period_obj);
   //
   //
   //
+
+  // CALCULATION STATE FUNCTIONS
   const set_first_period = use_calculation_store(
     (state: Calculation_State_Interface) => state.set_first_period
   );
@@ -139,6 +142,11 @@ const Section_Calc_Options = (props: Props) => {
   const set_country_arr = use_calculation_store(
     (state: Calculation_State_Interface) => state.set_country_arr
   );
+  // CLEAN STATE EXCEPT METHOD and RESULT
+  const clean_calc_state_ex_result_method = use_calculation_store(
+    (state: Calculation_State_Interface) =>
+      state.clear_state_except_result_method
+  );
   //
   // result
   const add_result_advance = use_calculation_store(
@@ -155,6 +163,15 @@ const Section_Calc_Options = (props: Props) => {
   // calculation process state
   const [calculation_msg, set_calculation_msg] = useState<string | null>(null);
   const [is_error, set_is_error] = useState<boolean | null>(null);
+  // const [is_check_inc_second_period, set_is_check_inc_second_period] =
+  //   useState<boolean>(false);
+
+  // INCREMENT OPTIONS
+  const [is_check_inc_both_period, set_is_check_inc_both_period] =
+    useState<boolean>(false);
+  // REF FOR INCREMENTS
+  const first_period_increment_input = useRef<null | HTMLInputElement>(null);
+  const second_period_increment_input = useRef<null | HTMLInputElement>(null);
 
   const start_calculation = async () => {
     // there is a bug in here
@@ -180,6 +197,7 @@ const Section_Calc_Options = (props: Props) => {
     // validate the method options
     if (method === avail_methods[0]) {
       // CMSA
+
       // cheking the periods
       // if (
       //   !first_period ||
@@ -192,16 +210,55 @@ const Section_Calc_Options = (props: Props) => {
         set_is_error(() => true);
         return;
       }
-      if (!second_period_arr || second_period_arr?.length === 0) {
-        set_calculation_msg(() => "SELECT SECOND PERIOD");
-        set_is_error(() => true);
-        return;
-      } else if (second_period_arr && second_period_arr.length > 0) {
-        // check the seconc period
-        for (let year_arr of second_period_arr) {
-          if (Number(first_period) >= Number(year_arr.value)) {
+      if (!is_check_inc_both_period) {
+        if (!second_period_arr || second_period_arr?.length === 0) {
+          set_calculation_msg(() => "SELECT SECOND PERIOD");
+          set_is_error(() => true);
+          return;
+        } else if (second_period_arr && second_period_arr.length > 0) {
+          // check the seconc period
+          for (let year_arr of second_period_arr) {
+            if (Number(first_period) >= Number(year_arr.value)) {
+              set_calculation_msg(
+                () =>
+                  "SECOND PERIOD CANT BE THE SAME OR LOWER THEN FIRST PERIOD"
+              );
+              set_is_error(() => true);
+              return;
+            }
+          }
+        }
+      } else if (is_check_inc_both_period) {
+        if (!second_period) {
+          set_calculation_msg(() => "SELECT SECOND PERIODS");
+          set_is_error(() => true);
+          return;
+        }
+        if (first_period === second_period) {
+          set_calculation_msg(
+            () => "SECOND PERIOD CANT BE THE SAME AS FIRST PERIOD"
+          );
+          set_is_error(() => true);
+          return;
+        }
+        if (first_period_increment_input && second_period_increment_input) {
+          const first_inc =
+            first_period_increment_input.current as HTMLInputElement;
+          const second_inc =
+            second_period_increment_input.current as HTMLInputElement;
+          if (!Number(first_inc.value)) {
+            set_calculation_msg(() => "PLEASE A INPUT NUMBER IN INCREMENT_1");
+            set_is_error(() => true);
+            return;
+          }
+          if (!Number(second_inc.value)) {
+            set_calculation_msg(() => "PLEASE A INPUT NUMBER IN INCREMENT_2");
+            set_is_error(() => true);
+            return;
+          }
+          if (Number(first_inc.value) > Number(second_inc.value)) {
             set_calculation_msg(
-              () => "SECOND PERIOD CANT BE THE SAME OR LOWER THEN FIRST PERIOD"
+              () => "INCREMENT_2 MUST BIGGER THEN OR THE SAME AS INCREMENT_1"
             );
             set_is_error(() => true);
             return;
@@ -248,7 +305,11 @@ const Section_Calc_Options = (props: Props) => {
     //////
 
     // start calcuilation
-    if (method === avail_methods[0] && country_arr && second_period_arr) {
+    if (
+      method === avail_methods[0] &&
+      country_arr
+      // && second_period_arr
+    ) {
       // CMSA
       switch (method_sub_type) {
         case cmsa_types[0]:
@@ -257,33 +318,105 @@ const Section_Calc_Options = (props: Props) => {
           // should be some kinf of error cathing here
           // to give feedback to the user
           // console.log("HELLOOOOOOOOOO");
-          for (let selected of country_arr) {
-            for (let second_period_obj of second_period_arr) {
-              const result_three =
-                await calculation_cmsa_three_level_module_service(
-                  world_data!,
-                  findColDataArr(country_data, selected.value, "country")!,
-                  selected.value,
-                  `${first_period}`,
-                  `${second_period_obj.value}`,
-                  country_data_columns!,
-                  world_data_columns!
-                );
-              // console.log(result_three);
-              if (result_three.is_error) {
-                set_calculation_msg(() => `${result_three.message}`);
-                set_is_error(() => true);
-                return;
+          if (!is_check_inc_both_period && second_period_arr) {
+            for (let selected of country_arr) {
+              const country_selected_data = findColDataArr(
+                country_data,
+                selected.value,
+                "country"
+              )!;
+              for (let second_period_obj of second_period_arr) {
+                const result_three =
+                  await calculation_cmsa_three_level_module_service(
+                    world_data!,
+                    // findColDataArr(country_data, selected.value, "country")!,
+                    country_selected_data,
+                    selected.value,
+                    `${first_period}`,
+                    `${second_period_obj.value}`,
+                    country_data_columns!,
+                    world_data_columns!
+                  );
+                // console.log(result_three);
+                if (result_three.is_error) {
+                  set_calculation_msg(() => `${result_three.message}`);
+                  set_is_error(() => true);
+                  return;
+                }
+                // ADDING TO GLOBAL STATE
+                result_three.result &&
+                  add_result_advance(
+                    result_three.result,
+                    method,
+                    method_sub_type
+                  );
+                // ADDING TO GLOBAL STATE
               }
-              // ADDING TO GLOBAL STATE
-              result_three.result &&
-                add_result_advance(
-                  result_three.result,
-                  method,
-                  method_sub_type
-                );
-              // ADDING TO GLOBAL STATE
             }
+          } else if (is_check_inc_both_period) {
+            const first_inc = first_period_increment_input.current
+              ? Number(first_period_increment_input.current.value)
+              : 1;
+            const second_inc = second_period_increment_input.current
+              ? Number(second_period_increment_input.current.value)
+              : 1;
+            const max_year = Math.max(...years_in_both);
+
+            for (let selected of country_arr) {
+              const country_selected_data = findColDataArr(
+                country_data,
+                selected.value,
+                "country"
+              )!;
+              let start_first = Number(first_period);
+              let start_second = Number(second_period);
+              while (
+                start_first < start_second &&
+                start_first < max_year &&
+                start_second <= max_year
+              ) {
+                //chech
+                if (
+                  !country_selected_data[0][start_first] ||
+                  !country_selected_data[0][start_second]
+                ) {
+                  start_first += first_inc;
+                  start_second += second_inc;
+                  continue;
+                }
+                //check
+                const result_three =
+                  await calculation_cmsa_three_level_module_service(
+                    world_data!,
+                    // findColDataArr(country_data, selected.value, "country")!,
+                    country_selected_data,
+                    selected.value,
+                    `${start_first}`,
+                    `${start_second}`,
+                    country_data_columns!,
+                    world_data_columns!
+                  );
+                // console.log(result_three);
+                if (result_three.is_error) {
+                  set_calculation_msg(() => `${result_three.message}`);
+                  set_is_error(() => true);
+                  return;
+                }
+                // ADDING TO GLOBAL STATE
+                result_three.result &&
+                  add_result_advance(
+                    result_three.result,
+                    method,
+                    method_sub_type
+                  );
+                // ADDING TO GLOBAL STATE
+                start_first += first_inc;
+                start_second += second_inc;
+              }
+            }
+            // console.log(
+            //   `MAX${max_year}\nfirst${start_first}\nsecond${start_second}`
+            // );
           }
           // const result_three =
           //   await calculation_cmsa_three_level_module_service(
@@ -309,97 +442,322 @@ const Section_Calc_Options = (props: Props) => {
         case cmsa_types[1]:
           console.log("CMSA TWO COM");
 
-          for (let selected of country_arr) {
-            for (let second_period_obj of second_period_arr) {
-              const result_two_com =
-                await calculation_cmsa_two_level_module_service(
-                  world_data,
-                  // // TEST
-                  // findColDataArr(country_data!, "dunia", "country")!,
-                  // // TEST
-                  findColDataArr(country_data, selected.value, "country")!,
-                  selected.value,
-                  `${first_period}`,
-                  `${second_period_obj.value}`,
-                  country_data_columns!,
-                  world_data_columns!,
-                  method_sub_type
-                );
-              // console.log(result_two_com);
-              if (result_two_com.is_error) {
-                set_calculation_msg(() => `${result_two_com.message}`);
-                set_is_error(() => true);
-                return;
+          if (!is_check_inc_both_period && second_period_arr) {
+            for (let selected of country_arr) {
+              const country_selected_data = findColDataArr(
+                country_data,
+                selected.value,
+                "country"
+              )!;
+              for (let second_period_obj of second_period_arr) {
+                const result_two_com =
+                  await calculation_cmsa_two_level_module_service(
+                    world_data,
+                    // // TEST
+                    // findColDataArr(country_data!, "dunia", "country")!,
+                    // // TEST
+                    // findColDataArr(country_data, selected.value, "country")!,
+                    country_selected_data,
+                    selected.value,
+                    `${first_period}`,
+                    `${second_period_obj.value}`,
+                    country_data_columns!,
+                    world_data_columns!,
+                    method_sub_type
+                  );
+                // console.log(result_two_com);
+                if (result_two_com.is_error) {
+                  set_calculation_msg(() => `${result_two_com.message}`);
+                  set_is_error(() => true);
+                  return;
+                }
+                // ADDING TO GLOBAL STATE
+                result_two_com.result &&
+                  add_result_advance(
+                    result_two_com.result,
+                    method,
+                    method_sub_type
+                  );
+                // ADDING TO GLOBAL STATE
               }
-              // ADDING TO GLOBAL STATE
-              result_two_com.result &&
-                add_result_advance(
-                  result_two_com.result,
-                  method,
-                  method_sub_type
-                );
-              // ADDING TO GLOBAL STATE
             }
+          } else if (is_check_inc_both_period) {
+            const first_inc = first_period_increment_input.current
+              ? Number(first_period_increment_input.current.value)
+              : 1;
+            const second_inc = second_period_increment_input.current
+              ? Number(second_period_increment_input.current.value)
+              : 1;
+            const max_year = Math.max(...years_in_both);
+
+            for (let selected of country_arr) {
+              const country_selected_data = findColDataArr(
+                country_data,
+                selected.value,
+                "country"
+              )!;
+              let start_first = Number(first_period);
+              let start_second = Number(second_period);
+              while (
+                start_first < start_second &&
+                start_first < max_year &&
+                start_second <= max_year
+              ) {
+                //chech
+                if (
+                  !country_selected_data[0][start_first] ||
+                  !country_selected_data[0][start_second]
+                ) {
+                  start_first += first_inc;
+                  start_second += second_inc;
+                  continue;
+                }
+                //check
+                const result_two_com =
+                  await calculation_cmsa_two_level_module_service(
+                    world_data,
+                    // // TEST
+                    // findColDataArr(country_data!, "dunia", "country")!,
+                    // // TEST
+                    // findColDataArr(country_data, selected.value, "country")!,
+                    country_selected_data,
+                    selected.value,
+                    `${start_first}`,
+                    `${start_second}`,
+                    country_data_columns!,
+                    world_data_columns!,
+                    method_sub_type
+                  );
+                // console.log(result_two_com);
+                if (result_two_com.is_error) {
+                  set_calculation_msg(() => `${result_two_com.message}`);
+                  set_is_error(() => true);
+                  return;
+                }
+                // ADDING TO GLOBAL STATE
+                result_two_com.result &&
+                  add_result_advance(
+                    result_two_com.result,
+                    method,
+                    method_sub_type
+                  );
+                // ADDING TO GLOBAL STATE
+                start_first += first_inc;
+                start_second += second_inc;
+              }
+            }
+            // console.log(
+            //   `MAX${max_year}\nfirst${start_first}\nsecond${start_second}`
+            // );
           }
           break;
         case cmsa_types[2]:
           console.log("CMSA TWO REG/PART");
 
-          for (let selected of country_arr) {
-            for (let second_period_obj of second_period_arr) {
-              const result_two_reg =
-                await calculation_cmsa_two_level_module_service(
-                  world_data,
-                  findColDataArr(country_data, selected.value, "country")!,
-                  selected.value,
-                  `${first_period}`,
-                  `${second_period_obj.value}`,
-                  country_data_columns!,
-                  world_data_columns!,
-                  method_sub_type
-                );
-              // console.log(result_two_reg);
-              if (result_two_reg.is_error) {
-                set_calculation_msg(() => `${result_two_reg.message}`);
-                set_is_error(() => true);
-                return;
+          if (!is_check_inc_both_period && second_period_arr) {
+            for (let selected of country_arr) {
+              const country_selected_data = findColDataArr(
+                country_data,
+                selected.value,
+                "country"
+              )!;
+              for (let second_period_obj of second_period_arr) {
+                const result_two_reg =
+                  await calculation_cmsa_two_level_module_service(
+                    world_data,
+                    // findColDataArr(country_data, selected.value, "country")!,
+                    country_selected_data,
+                    selected.value,
+                    `${first_period}`,
+                    `${second_period_obj.value}`,
+                    country_data_columns!,
+                    world_data_columns!,
+                    method_sub_type
+                  );
+                // console.log(result_two_reg);
+                if (result_two_reg.is_error) {
+                  set_calculation_msg(() => `${result_two_reg.message}`);
+                  set_is_error(() => true);
+                  return;
+                }
+                // ADDING TO GLOBAL STATE
+                result_two_reg.result &&
+                  add_result_advance(
+                    result_two_reg.result,
+                    method,
+                    method_sub_type
+                  );
+                // ADDING TO GLOBAL STATE
               }
-              // ADDING TO GLOBAL STATE
-              result_two_reg.result &&
-                add_result_advance(
-                  result_two_reg.result,
-                  method,
-                  method_sub_type
-                );
-              // ADDING TO GLOBAL STATE
             }
+          } else if (is_check_inc_both_period) {
+            const first_inc = first_period_increment_input.current
+              ? Number(first_period_increment_input.current.value)
+              : 1;
+            const second_inc = second_period_increment_input.current
+              ? Number(second_period_increment_input.current.value)
+              : 1;
+            const max_year = Math.max(...years_in_both);
+
+            for (let selected of country_arr) {
+              const country_selected_data = findColDataArr(
+                country_data,
+                selected.value,
+                "country"
+              )!;
+              let start_first = Number(first_period);
+              let start_second = Number(second_period);
+              while (
+                start_first < start_second &&
+                start_first < max_year &&
+                start_second <= max_year
+              ) {
+                //chech
+                if (
+                  !country_selected_data[0][start_first] ||
+                  !country_selected_data[0][start_second]
+                ) {
+                  start_first += first_inc;
+                  start_second += second_inc;
+                  continue;
+                }
+                //check
+                const result_two_reg =
+                  await calculation_cmsa_two_level_module_service(
+                    world_data,
+                    // findColDataArr(country_data, selected.value, "country")!,
+                    country_selected_data,
+                    selected.value,
+                    `${start_first}`,
+                    `${start_second}`,
+                    country_data_columns!,
+                    world_data_columns!,
+                    method_sub_type
+                  );
+                // console.log(result_two_reg);
+                if (result_two_reg.is_error) {
+                  set_calculation_msg(() => `${result_two_reg.message}`);
+                  set_is_error(() => true);
+                  return;
+                }
+                // ADDING TO GLOBAL STATE
+                result_two_reg.result &&
+                  add_result_advance(
+                    result_two_reg.result,
+                    method,
+                    method_sub_type
+                  );
+                // ADDING TO GLOBAL STATE
+                start_first += first_inc;
+                start_second += second_inc;
+              }
+            }
+            // console.log(
+            //   `MAX${max_year}\nfirst${start_first}\nsecond${start_second}`
+            // );
           }
           break;
         case cmsa_types[3]:
           console.log("CMSA ONE");
 
-          for (let selected of country_arr) {
-            for (let second_period_obj of second_period_arr) {
-              const result_one =
-                await calculation_cmsa_one_level_module_service(
-                  world_data[0], // need to reconsidered again
-                  findColDataArr(country_data, selected.value, "country")![0],
-                  selected.value,
-                  `${first_period}`,
-                  `${second_period_obj.value}`,
-                  country_data_columns!
-                );
-              // console.log(result_one);
-              if (result_one.is_error) {
-                set_calculation_msg(() => `${result_one.message}`);
-                set_is_error(() => true);
-                return;
+          if (!is_check_inc_both_period && second_period_arr) {
+            for (let selected of country_arr) {
+              const country_selected_data = findColDataArr(
+                country_data,
+                selected.value,
+                "country"
+              )!;
+              for (let second_period_obj of second_period_arr) {
+                const result_one =
+                  await calculation_cmsa_one_level_module_service(
+                    world_data[0], // need to reconsidered again
+                    // findColDataArr(country_data, selected.value, "country")![0],
+                    country_selected_data[0],
+                    selected.value,
+                    `${first_period}`,
+                    `${second_period_obj.value}`,
+                    country_data_columns!
+                  );
+                // console.log(result_one);
+                if (result_one.is_error) {
+                  set_calculation_msg(() => `${result_one.message}`);
+                  set_is_error(() => true);
+                  return;
+                }
+                // ADDING TO GLOBAL STATE
+                result_one.result &&
+                  add_result_advance(
+                    result_one.result,
+                    method,
+                    method_sub_type
+                  );
+                // ADDING TO GLOBAL STATE
               }
-              // ADDING TO GLOBAL STATE
-              result_one.result &&
-                add_result_advance(result_one.result, method, method_sub_type);
-              // ADDING TO GLOBAL STATE
             }
+          } else if (is_check_inc_both_period) {
+            const first_inc = first_period_increment_input.current
+              ? Number(first_period_increment_input.current.value)
+              : 1;
+            const second_inc = second_period_increment_input.current
+              ? Number(second_period_increment_input.current.value)
+              : 1;
+            const max_year = Math.max(...years_in_both);
+
+            for (let selected of country_arr) {
+              const country_selected_data = findColDataArr(
+                country_data,
+                selected.value,
+                "country"
+              )!;
+              let start_first = Number(first_period);
+              let start_second = Number(second_period);
+              while (
+                start_first < start_second &&
+                start_first < max_year &&
+                start_second <= max_year
+              ) {
+                //chech
+                if (
+                  !country_selected_data[0][start_first] ||
+                  !country_selected_data[0][start_second]
+                ) {
+                  start_first += first_inc;
+                  start_second += second_inc;
+                  continue;
+                }
+                //check
+                const result_one =
+                  await calculation_cmsa_one_level_module_service(
+                    world_data[0], // need to reconsidered again
+                    // findColDataArr(country_data, selected.value, "country")![0],
+                    country_selected_data[0],
+                    selected.value,
+                    `${start_first}`,
+                    `${start_second}`,
+                    country_data_columns!
+                  );
+                // console.log(result_one);
+                if (result_one.is_error) {
+                  set_calculation_msg(() => `${result_one.message}`);
+                  set_is_error(() => true);
+                  return;
+                }
+                // ADDING TO GLOBAL STATE
+                result_one.result &&
+                  add_result_advance(
+                    result_one.result,
+                    method,
+                    method_sub_type
+                  );
+                // ADDING TO GLOBAL STATE
+
+                start_first += first_inc;
+                start_second += second_inc;
+              }
+            }
+            // console.log(
+            //   `MAX${max_year}\nfirst${start_first}\nsecond${start_second}`
+            // );
           }
           break;
         default:
@@ -496,36 +854,100 @@ const Section_Calc_Options = (props: Props) => {
             <>
               <div className={classes.year_options}>
                 <h1>{`${method} ${method_sub_type}`}</h1>
+                <Simple_One_Checkbox
+                  is_check={is_check_inc_both_period}
+                  set_is_check={set_is_check_inc_both_period}
+                  label={"INCREMENT FOR BOTH PERIODS"}
+                  function_need_to_run={clean_calc_state_ex_result_method}
+                />
                 <h4>Choose First and Second Period</h4>
                 <div className={classes.year_box}>
-                  <Select
-                    options={years_in_both}
-                    default_value="choose first period"
-                    set_selected_opt={set_first_period}
-                  />
+                  {!is_check_inc_both_period && (
+                    <>
+                      <Select
+                        options={years_in_both}
+                        default_value="choose first period"
+                        set_selected_opt={set_first_period}
+                      />
+                      <Multi_Dropdown_checkbox
+                        options={years_in_both_v2}
+                        placeholder={"second period"}
+                        set_selected={set_second_period_arr}
+                      />
+                    </>
+                  )}
+
+                  {is_check_inc_both_period && (
+                    <>
+                      <div className={classes.inc_selects}>
+                        <Select
+                          options={years_in_both}
+                          default_value="choose starting first period"
+                          set_selected_opt={set_first_period}
+                        />
+                        <label>
+                          increment_1:
+                          <input
+                            ref={first_period_increment_input}
+                            type="number"
+                            min={1}
+                            max={
+                              years_in_both[years_in_both.length - 1] -
+                              years_in_both[0]
+                            }
+                            defaultValue={1}
+                          />
+                        </label>
+                      </div>
+                      <div className={classes.inc_selects}>
+                        <Select
+                          options={years_in_both}
+                          default_value="choose starting second period"
+                          set_selected_opt={set_second_period}
+                        />
+                        <label>
+                          increment_2:
+                          <input
+                            ref={second_period_increment_input}
+                            type="number"
+                            min={1}
+                            max={
+                              years_in_both[years_in_both.length - 1] -
+                              years_in_both[0]
+                            }
+                            defaultValue={1}
+                          />
+                        </label>
+                      </div>
+                    </>
+                  )}
                   {/* <Select
                     options={years_in_both}
                     default_value="choose second period"
                     set_selected_opt={set_second_period}
                   /> */}
-                  <Multi_Dropdown_checkbox
-                    options={years_in_both_v2}
-                    placeholder={"second period"}
-                    set_selected={set_second_period_arr}
-                  />
                 </div>
-                <h4>Choose a country</h4>
-                <Multi_Dropdown_checkbox
-                  options={unique_countries_v2}
-                  placeholder={"country"}
-                  set_selected={set_country_arr}
-                />
                 {/* <Select
                   options={unique_countries}
                   default_value="choose a country"
                   set_selected_opt={set_country_name}
                 /> */}
               </div>
+              <h4>Choose a country</h4>
+              {!is_check_inc_both_period && (
+                <Multi_Dropdown_checkbox
+                  options={unique_countries_v2}
+                  placeholder={"country"}
+                  set_selected={set_country_arr}
+                />
+              )}
+              {is_check_inc_both_period && (
+                <Multi_Dropdown_checkbox
+                  options={unique_countries_v2}
+                  placeholder={"country"}
+                  set_selected={set_country_arr}
+                />
+              )}
               <div className={classes.btn_box}>
                 <button onClick={start_calculation} className="btn_default">
                   process
@@ -558,13 +980,13 @@ const Section_Calc_Options = (props: Props) => {
                     set_selected_opt={set_first_period}
                   /> */}
                 </div>
-                <h4>Choose a country</h4>
-                <Multi_Dropdown_checkbox
-                  options={unique_countries_v2}
-                  placeholder={"year"}
-                  set_selected={set_country_arr}
-                />
               </div>
+              <h4>Choose a country</h4>
+              <Multi_Dropdown_checkbox
+                options={unique_countries_v2}
+                placeholder={"year"}
+                set_selected={set_country_arr}
+              />
               <div className={classes.btn_box}>
                 <button onClick={start_calculation} className="btn_default">
                   process

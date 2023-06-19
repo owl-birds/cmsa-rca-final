@@ -14,6 +14,7 @@ export interface Calculation_State_Interface {
   result: any[] | null;
   result_advance: null | { [method_and_sub_type: string]: any[] };
   clear_state: () => void;
+  clear_state_except_result_method: () => void;
   set_first_period: (new_period: number) => void;
   set_first_period_obj: (new_periods: {
     [index: string]: string | number;
@@ -126,6 +127,16 @@ export const use_calculation_store = create<Calculation_State_Interface>()(
         year_interval: null,
         result: null,
         result_advance: null,
+      })),
+    clear_state_except_result_method: () =>
+      set(() => ({
+        first_period: null,
+        first_period_obj: null,
+        second_period: null,
+        second_period_arr: null,
+        country: null,
+        country_arr: null,
+        year_interval: null,
       })),
     set_first_period: (new_period: number) =>
       set(() => ({ first_period: new_period })),

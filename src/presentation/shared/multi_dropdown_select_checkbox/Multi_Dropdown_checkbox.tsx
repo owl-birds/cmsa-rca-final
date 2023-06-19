@@ -60,6 +60,7 @@ const Multi_Dropdown_checkbox = (props: Props) => {
           Option,
         }}
         onChange={handle_change}
+        isSearchable={true}
         // allowSelectAll={true}
         // value={selecteds}
       />

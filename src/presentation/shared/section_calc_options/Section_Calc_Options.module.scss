@@ -24,6 +24,9 @@ section {
     justify-content: center;
     align-content: center;
     gap: 1rem;
+    h4 {
+      text-align: center;
+    }
     .year_options {
       display: flex;
       justify-content: center;
@@ -34,6 +37,17 @@ section {
         display: flex;
         justify-content: center;
         gap: 0.25rem;
+      }
+    }
+    .inc_selects {
+      display: flex;
+      flex-direction: column;
+      select {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+      input {
+        width: 50px;
       }
     }
     .btn_box {
