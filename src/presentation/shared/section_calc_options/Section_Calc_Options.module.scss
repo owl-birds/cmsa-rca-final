@@ -36,18 +36,26 @@ section {
       .year_box {
         display: flex;
         justify-content: center;
-        gap: 0.25rem;
-      }
-    }
-    .inc_selects {
-      display: flex;
-      flex-direction: column;
-      select {
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
-      }
-      input {
-        width: 50px;
+        gap: 1.25rem;
+        .inc_selects {
+          display: grid;
+          justify-items: flex-end;
+          label {
+            margin-top: 10px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            width: fit-content;
+            span {
+              justify-self: flex-end;
+            }
+            input {
+              justify-self: flex-end;
+              padding: 10px 5px;
+              width: 50px;
+            }
+          }
+        }
       }
     }
     .btn_box {

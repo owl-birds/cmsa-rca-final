@@ -24,13 +24,13 @@
     font-size: 1rem;
     // background-color: colors.$font-color;
     background-color: rgba(0, 0, 0, 0.5);
-    color: colors.$font-color;
+    color: colors.$main-color;
     font-weight: bold;
     text-decoration: none;
     text-align: center;
-    width: 100px;
+    min-width: 100px;
     &:hover {
-      color: colors.$main-color;
+      color: colors.$font-color;
       background-color: colors.$hover-color;
     }
     &.active {

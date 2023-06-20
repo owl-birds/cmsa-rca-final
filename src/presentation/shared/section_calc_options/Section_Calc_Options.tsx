@@ -241,6 +241,13 @@ const Section_Calc_Options = (props: Props) => {
           set_is_error(() => true);
           return;
         }
+        if (Number(first_period) > Number(second_period)) {
+          set_calculation_msg(
+            () => "FIRST PERIOD CANT BE LOWER THEN FIRST PERIOD"
+          );
+          set_is_error(() => true);
+          return;
+        }
         if (first_period_increment_input && second_period_increment_input) {
           const first_inc =
             first_period_increment_input.current as HTMLInputElement;
@@ -886,7 +893,7 @@ const Section_Calc_Options = (props: Props) => {
                           set_selected_opt={set_first_period}
                         />
                         <label>
-                          increment_1:
+                          <span>increment_1:</span>
                           <input
                             ref={first_period_increment_input}
                             type="number"
@@ -906,7 +913,7 @@ const Section_Calc_Options = (props: Props) => {
                           set_selected_opt={set_second_period}
                         />
                         <label>
-                          increment_2:
+                          <span>increment_2:</span>
                           <input
                             ref={second_period_increment_input}
                             type="number"

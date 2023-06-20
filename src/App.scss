@@ -4,13 +4,18 @@
   font-family: "Montserrat-regular";
   src: url("fonts/Montserrat-Regular.ttf");
 }
+@font-face {
+  font-family: "Roboto Mono-regular";
+  src: url("fonts/RobotoMono-Regular.ttf");
+}
 
 html {
   // background-color: #d9d9d9;
   // background-color: #090011;
   background-color: colors.$main-color;
   color: colors.$font-color;
-  font-family: "Montserrat-regular";
+  // font-family: "Montserrat-regular";
+  font-family: "Roboto Mono-regular";
   scroll-behavior: smooth;
 }
 html,

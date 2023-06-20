@@ -1,3 +1,4 @@
+@use "../../../scss-global/colors";
 .select_box {
   width: fit-content;
   select {
@@ -6,6 +7,8 @@
     border-radius: 5px;
     // border: none;
     border-color: #fff;
+    border: none;
+    border: 0.5px solid colors.$third-color;
   }
   select:hover {
     cursor: pointer;
