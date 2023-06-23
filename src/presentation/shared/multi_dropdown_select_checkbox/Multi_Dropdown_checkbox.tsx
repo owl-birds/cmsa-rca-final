@@ -63,6 +63,7 @@ const Multi_Dropdown_checkbox = (props: Props) => {
         isSearchable={true}
         // allowSelectAll={true}
         // value={selecteds}
+        className={classes.select_costum_style}
       />
     </div>
   );

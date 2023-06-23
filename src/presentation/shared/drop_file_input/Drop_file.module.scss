@@ -23,13 +23,13 @@
   }
   .drop_zone:hover {
     transition: 300ms;
-    color: colors.$main-color;
-    background-color: colors.$hover-color;
+    color: colors.$font-color;
+    background-color: colors.$main-color;
   }
   .file_hover {
     transition: 300ms;
-    color: colors.$main-color;
-    background-color: colors.$hover-color;
+    color: colors.$font-color;
+    background-color: colors.$main-color;
   }
   .file_not_allowed {
     transition: 300ms;

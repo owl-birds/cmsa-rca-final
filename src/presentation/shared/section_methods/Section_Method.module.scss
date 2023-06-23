@@ -15,6 +15,14 @@ section {
     }
   }
 
+  // data input
+  .data_input_structure {
+    border: 2px solid colors.$secondary-color;
+    border-radius: 10px;
+    background-color: colors.$component-color-1;
+    padding: 10px;
+  }
+
   // METHOD
   .method_selection {
     margin: 10px 0;

@@ -8,7 +8,8 @@
     // border: none;
     border-color: #fff;
     border: none;
-    border: 0.5px solid colors.$third-color;
+    // border: 0.5px solid colors.$third-color;
+    border: 1px solid colors.$secondary-color;
   }
   select:hover {
     cursor: pointer;

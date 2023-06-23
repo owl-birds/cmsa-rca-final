@@ -104,6 +104,11 @@
       align-items: center;
       flex-direction: column;
       margin-bottom: 50px;
+      background-color: colors.$component-color-1;
+      width: fit-content;
+      height: fit-content;
+      border: 2px solid colors.$secondary-color;
+      border-radius: 10px;
     }
     // .data {
     //   margin: 20px 0;

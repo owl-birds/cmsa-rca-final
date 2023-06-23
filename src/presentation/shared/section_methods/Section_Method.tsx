@@ -387,81 +387,104 @@ const Section_Method = (props: Props) => {
             {method === avail_methods[0] &&
             method_sub_type === cmsa_types[0] ? (
               <>
-                <Table
-                  data={three_level_country_data}
-                  columns={three_level_country_data_columns}
-                  table_name={`country data must look like this`}
-                />
-                <Table
-                  data={three_level_world_data}
-                  columns={three_level_world_data_columns}
-                  table_name={`world data must look like this`}
-                />
+                <div className={classes.data_input_structure}>
+                  <Table
+                    data={three_level_country_data}
+                    columns={three_level_country_data_columns}
+                    table_name={`country data must look like this`}
+                  />
+                  <span>country : the country that doing exports.</span>
+                  <br />
+                  <span>region : the places that the country exported to.</span>
+                  <Table
+                    data={three_level_world_data}
+                    columns={three_level_world_data_columns}
+                    table_name={`world data must look like this`}
+                  />
+                </div>
               </>
             ) : null}
             {method === avail_methods[0] &&
             method_sub_type === cmsa_types[1] ? (
               <>
-                <Table
-                  data={two_level_com_country_data}
-                  columns={two_level_com_country_data_columns}
-                  table_name={`country data must look like this`}
-                />
-                <Table
-                  data={two_level_com_world_data}
-                  columns={two_level_com_world_data_columns}
-                  table_name={`world data must look like this`}
-                />
+                <div className={classes.data_input_structure}>
+                  <Table
+                    data={two_level_com_country_data}
+                    columns={two_level_com_country_data_columns}
+                    table_name={`country data must look like this`}
+                  />
+                  <span>country : the country that doing exports.</span>
+                  <br />
+                  <Table
+                    data={two_level_com_world_data}
+                    columns={two_level_com_world_data_columns}
+                    table_name={`world data must look like this`}
+                  />
+                </div>
               </>
             ) : null}
             {method === avail_methods[0] &&
             method_sub_type === cmsa_types[2] ? (
               <>
-                <Table
-                  data={two_level_reg_country_data}
-                  columns={two_level_reg_country_data_columns}
-                  table_name={`country data must look like this`}
-                />
-                <Table
-                  data={two_level_reg_world_data}
-                  columns={two_level_reg_world_data_columns}
-                  table_name={`world data must look like this`}
-                />
+                <div className={classes.data_input_structure}>
+                  <Table
+                    data={two_level_reg_country_data}
+                    columns={two_level_reg_country_data_columns}
+                    table_name={`country data must look like this`}
+                  />
+                  <span>country : the country that doing exports.</span>
+                  <br />
+                  <span>region : the places that the country exported to.</span>
+                  <Table
+                    data={two_level_reg_world_data}
+                    columns={two_level_reg_world_data_columns}
+                    table_name={`world data must look like this`}
+                  />
+                </div>
               </>
             ) : null}
             {method === avail_methods[0] &&
             method_sub_type === cmsa_types[3] ? (
               <>
-                <Table
-                  data={one_level_country_data}
-                  columns={one_level_country_data_columns}
-                  table_name={`country data must look like this`}
-                />
-                <Table
-                  data={one_level_world_data}
-                  columns={one_level_world_data_columns}
-                  table_name={`world data must look like this`}
-                />
+                <div className={classes.data_input_structure}>
+                  <Table
+                    data={one_level_country_data}
+                    columns={one_level_country_data_columns}
+                    table_name={`country data must look like this`}
+                  />
+                  <span>country : the country that doing exports.</span>
+                  <br />
+                  <Table
+                    data={one_level_world_data}
+                    columns={one_level_world_data_columns}
+                    table_name={`world data must look like this`}
+                  />
+                </div>
               </>
             ) : null}
             {/* RCA */}
             {method === avail_methods[1] && method_sub_type === rca_types[0] ? (
               <>
-                <Table
-                  data={three_level_country_data}
-                  columns={three_level_country_data_columns}
-                  table_name={`country data must look like this`}
-                />
-                <Table
-                  data={two_level_com_country_data}
-                  columns={two_level_com_country_data_columns}
-                  table_name={`or country data must look like this`}
-                />
-                <Table
-                  data={three_level_world_data}
-                  columns={three_level_world_data_columns}
-                  table_name={`world data must look like this`}
-                />
+                <div className={classes.data_input_structure}>
+                  <Table
+                    data={three_level_country_data}
+                    columns={three_level_country_data_columns}
+                    table_name={`country data must look like this`}
+                  />
+
+                  <Table
+                    data={two_level_com_country_data}
+                    columns={two_level_com_country_data_columns}
+                    table_name={`or country data must look like this`}
+                  />
+                  <span>country : the country that doing exports.</span>
+                  <br />
+                  <Table
+                    data={three_level_world_data}
+                    columns={three_level_world_data_columns}
+                    table_name={`world data must look like this`}
+                  />
+                </div>
               </>
             ) : null}
           </>

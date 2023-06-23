@@ -1,4 +1,8 @@
-// @use "../../../scss-global/colors";
+@use "../../../scss-global/colors";
 .multiple_select_checkboxs {
-  color: #000;
+  color: colors.$font-color;
+  .select_costum_style {
+    border: 1px solid colors.$secondary-color;
+    border-radius: 3.5px;
+  }
 }
