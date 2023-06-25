@@ -12,3 +12,5 @@ projek tugas akhir
 
 how to run or build the app, read link below
 https://tauri.app/v1/guides/
+
+WHATTTTTTTTTTTTTTTTTTTTTTTT TESTTTTT
