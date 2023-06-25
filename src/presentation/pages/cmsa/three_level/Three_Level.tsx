@@ -319,13 +319,13 @@ const Three_Level = () => {
           </div>
         )} */}
       </section>
-      <Floating_Nav
+      {/* <Floating_Nav
         a_hrefs={
           country_data && world_data
             ? ["top", "country", "world", "analyse"]
             : ["top", "country", "world"]
         }
-      />
+      /> */}
     </>
   );
 };

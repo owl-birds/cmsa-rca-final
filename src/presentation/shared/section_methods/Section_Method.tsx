@@ -139,97 +139,97 @@ const Section_Method = (props: Props) => {
   // console.log("result advamce", result_advance);
   // TEST
 
-  // FOR TESTING USER ACCEPTANCE PURPOSES
-  const initiate_country_data = use_country_file_store(
-    (state: Uploaded_Country_File_State) => state.initiate_data
-  );
-  const clear_country_state = use_country_file_store(
-    (state: Uploaded_Country_File_State) => state.clear_state
-  );
-  const initiate_world_data = use_world_file_store(
-    (state: Uploaded_World_File_State) => state.initiate_data
-  );
-  const clear_world_state = use_world_file_store(
-    (state: Uploaded_World_File_State) => state.clear_state
-  );
-  const [_response_country, do_fetch_country] = Use_Fetch_Hook(
-    initiate_country_data,
-    clear_country_state
-  );
-  const [_response_world, do_fetch_world] = Use_Fetch_Hook(
-    initiate_world_data,
-    clear_world_state
-  );
-  // console.log("country", response_country);
-  // console.log("world", response_world);
-  // console.log(set_url);
-  useEffect(() => {
-    //
-    const country_csv_urls = [
-      "https://raw.githubusercontent.com/owl-birds/testing-csv-json-files/main/three-level.csv",
-      "https://raw.githubusercontent.com/owl-birds/testing-csv-json-files/main/two-level-commodity.csv",
-      "https://raw.githubusercontent.com/owl-birds/testing-csv-json-files/main/two-level-region-partner.csv",
-      "https://raw.githubusercontent.com/owl-birds/testing-csv-json-files/main/one-level.csv",
-    ];
-    const world_csv_urls = [
-      "https://raw.githubusercontent.com/owl-birds/testing-csv-json-files/main/world-data-commodity.csv",
-      "https://raw.githubusercontent.com/owl-birds/testing-csv-json-files/main/world-data-region-partner.csv",
-      "https://raw.githubusercontent.com/owl-birds/testing-csv-json-files/main/world-data-one-level.csv",
-    ];
-    console.log("USE EFFECT : ", method, method_sub_type);
-    switch (method) {
-      case avail_methods[0]:
-        switch (method_sub_type) {
-          case cmsa_types[0]:
-            // console.log(country_csv_urls[0]);
-            do_fetch_country(country_csv_urls[0]);
-            // console.log(world_csv_urls[0]);
-            do_fetch_world(world_csv_urls[0]);
-            break;
-          case cmsa_types[1]:
-            // console.log(country_csv_urls[1]);
-            do_fetch_country(country_csv_urls[1]);
-            // console.log(world_csv_urls[0]);
-            do_fetch_world(world_csv_urls[0]);
-            break;
-          case cmsa_types[2]:
-            // console.log(country_csv_urls[2]);
-            do_fetch_country(country_csv_urls[2]);
-            // console.log(world_csv_urls[1]);
-            do_fetch_world(world_csv_urls[1]);
-            break;
-          case cmsa_types[3]:
-            // console.log(country_csv_urls[3]);
-            do_fetch_country(country_csv_urls[3]);
-            // console.log(world_csv_urls[2]);
-            do_fetch_world(world_csv_urls[2]);
-            break;
-          default:
-            console.log(method, " sub-method not found");
-            break;
-        }
-        break;
-      case avail_methods[1]:
-        switch (method_sub_type) {
-          case rca_types[0]:
-            // console.log(country_csv_urls[0]);
-            // console.log(country_csv_urls[1]);
-            // console.log(country_csv_urls[0]);
-            // do_fetch_country(country_csv_urls[0]);
-            do_fetch_country(country_csv_urls[1]);
-            do_fetch_world(world_csv_urls[0]);
-            break;
-          default:
-            console.log(method, " sub-method not found");
-            break;
-        }
-        break;
-      default:
-        console.log("MAIN METHOD NOT FOUND");
-        break;
-    }
-  }, [method, method_sub_type]);
-  // FOR TESTING USER ACCEPTANCE PURPOSES
+  // // FOR TESTING USER ACCEPTANCE PURPOSES
+  // const initiate_country_data = use_country_file_store(
+  //   (state: Uploaded_Country_File_State) => state.initiate_data
+  // );
+  // const clear_country_state = use_country_file_store(
+  //   (state: Uploaded_Country_File_State) => state.clear_state
+  // );
+  // const initiate_world_data = use_world_file_store(
+  //   (state: Uploaded_World_File_State) => state.initiate_data
+  // );
+  // const clear_world_state = use_world_file_store(
+  //   (state: Uploaded_World_File_State) => state.clear_state
+  // );
+  // const [_response_country, do_fetch_country] = Use_Fetch_Hook(
+  //   initiate_country_data,
+  //   clear_country_state
+  // );
+  // const [_response_world, do_fetch_world] = Use_Fetch_Hook(
+  //   initiate_world_data,
+  //   clear_world_state
+  // );
+  // // console.log("country", response_country);
+  // // console.log("world", response_world);
+  // // console.log(set_url);
+  // useEffect(() => {
+  //   //
+  //   const country_csv_urls = [
+  //     "https://raw.githubusercontent.com/owl-birds/testing-csv-json-files/main/three-level.csv",
+  //     "https://raw.githubusercontent.com/owl-birds/testing-csv-json-files/main/two-level-commodity.csv",
+  //     "https://raw.githubusercontent.com/owl-birds/testing-csv-json-files/main/two-level-region-partner.csv",
+  //     "https://raw.githubusercontent.com/owl-birds/testing-csv-json-files/main/one-level.csv",
+  //   ];
+  //   const world_csv_urls = [
+  //     "https://raw.githubusercontent.com/owl-birds/testing-csv-json-files/main/world-data-commodity.csv",
+  //     "https://raw.githubusercontent.com/owl-birds/testing-csv-json-files/main/world-data-region-partner.csv",
+  //     "https://raw.githubusercontent.com/owl-birds/testing-csv-json-files/main/world-data-one-level.csv",
+  //   ];
+  //   console.log("USE EFFECT : ", method, method_sub_type);
+  //   switch (method) {
+  //     case avail_methods[0]:
+  //       switch (method_sub_type) {
+  //         case cmsa_types[0]:
+  //           // console.log(country_csv_urls[0]);
+  //           do_fetch_country(country_csv_urls[0]);
+  //           // console.log(world_csv_urls[0]);
+  //           do_fetch_world(world_csv_urls[0]);
+  //           break;
+  //         case cmsa_types[1]:
+  //           // console.log(country_csv_urls[1]);
+  //           do_fetch_country(country_csv_urls[1]);
+  //           // console.log(world_csv_urls[0]);
+  //           do_fetch_world(world_csv_urls[0]);
+  //           break;
+  //         case cmsa_types[2]:
+  //           // console.log(country_csv_urls[2]);
+  //           do_fetch_country(country_csv_urls[2]);
+  //           // console.log(world_csv_urls[1]);
+  //           do_fetch_world(world_csv_urls[1]);
+  //           break;
+  //         case cmsa_types[3]:
+  //           // console.log(country_csv_urls[3]);
+  //           do_fetch_country(country_csv_urls[3]);
+  //           // console.log(world_csv_urls[2]);
+  //           do_fetch_world(world_csv_urls[2]);
+  //           break;
+  //         default:
+  //           console.log(method, " sub-method not found");
+  //           break;
+  //       }
+  //       break;
+  //     case avail_methods[1]:
+  //       switch (method_sub_type) {
+  //         case rca_types[0]:
+  //           // console.log(country_csv_urls[0]);
+  //           // console.log(country_csv_urls[1]);
+  //           // console.log(country_csv_urls[0]);
+  //           // do_fetch_country(country_csv_urls[0]);
+  //           do_fetch_country(country_csv_urls[1]);
+  //           do_fetch_world(world_csv_urls[0]);
+  //           break;
+  //         default:
+  //           console.log(method, " sub-method not found");
+  //           break;
+  //       }
+  //       break;
+  //     default:
+  //       console.log("MAIN METHOD NOT FOUND");
+  //       break;
+  //   }
+  // }, [method, method_sub_type]);
+  // // FOR TESTING USER ACCEPTANCE PURPOSES
 
   return (
     <>

@@ -31,7 +31,7 @@ const App_main = () => {
   );
 
   // TEST
-  console.log("output", result);
+  // console.log("output", result);
   // TEST
 
   // for restart
